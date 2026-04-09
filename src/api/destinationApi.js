@@ -8,8 +8,3 @@ export const destinationApi = {
   update: (id, data) => apiClient.put(`/Destination/${id}`, data),
   delete: (id) => apiClient.delete(`/Destination/${id}`),
 }
-
-// src/api/categoryApi.js
-export const categoryApi = {
-  getAll: () => apiClient.get('/Category'),
-}

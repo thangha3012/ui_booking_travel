@@ -1,76 +1,78 @@
 <template>
   <div class="auth-page">
-    <div class="auth-page__bg">
-      <div class="auth-page__bg-img" />
-      <div class="auth-page__bg-overlay" />
-    </div>
+    <div class="container auth-container">
+      <!-- Breadcrumb Simplified -->
+      <nav class="auth-breadcrumb">
+        <RouterLink to="/">{{ t('nav.home') }}</RouterLink>
+        <i class="pi pi-chevron-right separator"></i>
+        <RouterLink to="/login">{{ t('nav.login') }}</RouterLink>
+        <i class="pi pi-chevron-right separator"></i>
+        <span>{{ t('auth.forgotTitle') }}</span>
+      </nav>
 
-    <div class="auth-card animate-fade-in-up">
-      <RouterLink to="/" class="auth-card__logo">✈️ Voyage<span>VN</span></RouterLink>
-
-      <!-- STEP 1: Nhập Email -->
-      <template v-if="step === 1">
-        <h1 class="auth-card__title">{{ t('auth.forgotTitle') }}</h1>
-        <p class="auth-card__desc">{{ t('auth.forgotDesc') }}</p>
-        <form class="auth-form" @submit.prevent="sendOtp">
-          <BaseInput v-model="email" :label="t('auth.email')" type="email" :placeholder="t('auth.email')" :error="errors.email" required>
-            <template #icon-left>📧</template>
-          </BaseInput>
-          <BaseButton variant="primary" size="lg" :loading="loading" block type="submit">
-            {{ t('auth.sendOtp') }}
-          </BaseButton>
-        </form>
-      </template>
-
-      <!-- STEP 2: Nhập OTP -->
-      <template v-else-if="step === 2">
-        <h1 class="auth-card__title">{{ t('auth.verifyOtp') }}</h1>
-        <p class="auth-card__desc">{{ t('auth.otpSent') }}: <strong>{{ email }}</strong></p>
-        <form class="auth-form" @submit.prevent="verifyOtp">
-          <div class="otp-inputs">
-            <input
-              v-for="(_, i) in otpDigits"
-              :key="i"
-              :ref="el => otpRefs[i] = el"
-              v-model="otpDigits[i]"
-              class="otp-input"
-              maxlength="1"
-              type="text"
-              inputmode="numeric"
-              pattern="[0-9]"
-              @input="onOtpInput(i)"
-              @keydown.backspace="onOtpBackspace(i)"
-            />
+      <div class="auth-card">
+        <div class="auth-card__content">
+          <div class="auth-card__header">
+            <h1 class="auth-title" v-if="step === 1">{{ t('auth.forgotTitle') }}</h1>
+            <h1 class="auth-title" v-else-if="step === 2">{{ t('auth.verifyIdentity') }}</h1>
+            <h1 class="auth-title" v-else>{{ t('auth.newPassword') }}</h1>
+            
+            <p class="auth-subtitle" v-if="step === 1">{{ t('auth.forgotDesc') }}</p>
+            <p class="auth-subtitle" v-else-if="step === 2">{{ t('auth.otpSent') }}: <strong>{{ email }}</strong></p>
+            <p class="auth-subtitle" v-else>{{ t('auth.resetPassword') }}</p>
           </div>
-          <p v-if="errors.otp" class="input-error">{{ errors.otp }}</p>
-          <BaseButton variant="primary" size="lg" :loading="loading" block type="submit">
-            {{ t('auth.verifyOtp') }}
-          </BaseButton>
-          <button type="button" class="resend-btn" @click="step = 1">← {{ t('common.back') }}</button>
-        </form>
-      </template>
 
-      <!-- STEP 3: Đổi mật khẩu mới -->
-      <template v-else-if="step === 3">
-        <h1 class="auth-card__title">{{ t('auth.newPassword') }}</h1>
-        <p class="auth-card__desc">{{ t('auth.resetPassword') }}</p>
-        <form class="auth-form" @submit.prevent="resetPassword">
-          <BaseInput v-model="newPassword" :label="t('auth.newPassword')" type="password" :placeholder="t('auth.newPassword')" :error="errors.password" required />
-          <BaseButton variant="primary" size="lg" :loading="loading" block type="submit">
-            {{ t('auth.resetPassword') }}
-          </BaseButton>
-        </form>
-      </template>
+          <!-- STEP 1: Enter Email -->
+          <form v-if="step === 1" @submit.prevent="sendOtp" class="auth-form">
+            <div class="field">
+              <label for="email">{{ t('auth.email') }}</label>
+              <div class="p-input-icon-left w-full relative">
+                <i class="pi pi-envelope absolute z-10 left-3 top-1/2 -translate-y-1/2 opacity-50"></i>
+                <InputText id="email" v-model="email" type="email" :placeholder="t('auth.email')"
+                  :invalid="!!errors.email" fluid class="pl-10" />
+              </div>
+              <small v-if="errors.email" class="p-error">{{ errors.email }}</small>
+            </div>
+            <Button type="submit" :label="t('auth.step1Btn')" :loading="loading" icon="pi pi-send" raised class="w-full auth-btn" />
+          </form>
 
-      <!-- STEP INDICATOR -->
-      <div class="step-indicator">
-        <div v-for="n in 3" :key="n" :class="['step-dot', { 'step-dot--active': step >= n }]" />
+          <!-- STEP 2: Enter OTP -->
+          <form v-else-if="step === 2" @submit.prevent="verifyOtp" class="auth-form">
+            <div class="otp-container py-4 flex flex-col items-center">
+              <InputOtp v-model="otpCode" :length="6" integerOnly class="mb-4" />
+              <small v-if="errors.otp" class="p-error text-center block">{{ errors.otp }}</small>
+            </div>
+            <Button type="submit" :label="t('auth.step2Btn')" :loading="loading" icon="pi pi-check-circle" raised class="w-full auth-btn" />
+            <Button type="button" :label="t('auth.changeEmail')" icon="pi pi-arrow-left" text class="w-full mt-2" @click="step = 1" />
+          </form>
+
+          <!-- STEP 3: New Password -->
+          <form v-else-if="step === 3" @submit.prevent="resetPassword" class="auth-form">
+            <div class="field">
+              <label for="newPass">{{ t('auth.newSecurePass') }}</label>
+              <Password id="newPass" v-model="newPassword" :placeholder="t('auth.enterNewPass')"
+                toggleMask :invalid="!!errors.password" inputClass="w-full" fluid />
+              <small v-if="errors.password" class="p-error">{{ errors.password }}</small>
+            </div>
+            <Button type="submit" :label="t('auth.step3Btn')" :loading="loading" icon="pi pi-refresh" raised class="w-full auth-btn" />
+          </form>
+
+          <!-- PROGRESS INDICATOR -->
+          <div class="step-indicator">
+            <div v-for="n in 3" :key="n" :class="['step-dot', { 'step-dot--active': step === n, 'step-dot--completed': step > n }]" />
+          </div>
+
+          <div class="auth-footer">
+            <p>
+              {{ t('auth.haveAccount') }}
+              <RouterLink to="/login" class="login-link">{{ t('nav.login') }}</RouterLink>
+            </p>
+          </div>
+        </div>
       </div>
-
-      <p class="auth-card__footer">
-        <RouterLink to="/login" class="auth-link">← {{ t('nav.login') }}</RouterLink>
-      </p>
     </div>
+
+    <Toast position="top-right" />
   </div>
 </template>
 
@@ -79,9 +81,13 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { authApi } from '@/api/authApi'
-import { useToast } from '@/composables/useToast'
-import BaseInput from '@/components/base/BaseInput.vue'
-import BaseButton from '@/components/base/BaseButton.vue'
+
+import InputText from 'primevue/inputtext'
+import Password from 'primevue/password'
+import InputOtp from 'primevue/inputotp'
+import Button from 'primevue/button'
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -91,24 +97,8 @@ const step = ref(1)
 const loading = ref(false)
 const email = ref('')
 const newPassword = ref('')
+const otpCode = ref('')
 const errors = reactive({ email: '', otp: '', password: '' })
-
-// OTP 6 ô riêng biệt
-const otpDigits = ref(['', '', '', '', '', ''])
-const otpRefs = ref([])
-const otpValue = () => otpDigits.value.join('')
-
-function onOtpInput(idx) {
-  const val = otpDigits.value[idx]
-  if (val && idx < 5) otpRefs.value[idx + 1]?.focus()
-}
-
-function onOtpBackspace(idx) {
-  if (!otpDigits.value[idx] && idx > 0) {
-    otpDigits.value[idx - 1] = ''
-    otpRefs.value[idx - 1]?.focus()
-  }
-}
 
 async function sendOtp() {
   errors.email = ''
@@ -116,37 +106,37 @@ async function sendOtp() {
   loading.value = true
   try {
     const res = await authApi.forgotPassword({ email: email.value })
-    if (res.success) { toast.success(t('auth.otpSent')); step.value = 2 }
-    else toast.error(res.message)
+    toast.add({ severity: 'info', summary: t('auth.otpSent'), detail: res.message || t('auth.otpSent'), life: 3000 })
+    loading.value = false
+    step.value = 2
   } catch (err) {
-    toast.error(err.message)
+    toast.add({ severity: 'error', summary: t('common.error'), detail: err.message, life: 4000 })
   } finally { loading.value = false }
 }
 
 async function verifyOtp() {
   errors.otp = ''
-  if (otpValue().length < 6) { errors.otp = 'Vui lòng nhập đủ 6 số OTP'; return }
+  if (!otpCode.value || otpCode.value.length < 6) { errors.otp = 'Please enter 6-digit OTP'; return }
   loading.value = true
   try {
-    const res = await authApi.verifyOtp({ email: email.value, token: otpValue() })
-    if (res.success) { step.value = 3 }
-    else { errors.otp = res.message || 'OTP không đúng hoặc đã hết hạn' }
+    const res = await authApi.verifyOtp({ email: email.value, token: otpCode.value })
+    step.value = 3
+    toast.add({ severity: 'success', summary: t('auth.verified'), detail: res.message, life: 3000 })
   } catch (err) { errors.otp = err.message }
   finally { loading.value = false }
 }
 
 async function resetPassword() {
   errors.password = ''
-  if (!newPassword.value || newPassword.value.length < 6) { errors.password = 'Mật khẩu ít nhất 6 ký tự'; return }
+  if (!newPassword.value || newPassword.value.length < 6) { errors.password = t('auth.min6Chars'); return }
   loading.value = true
   try {
-    const res = await authApi.resetPassword({ email: email.value, token: otpValue(), newPassword: newPassword.value })
-    if (res.success) {
-      toast.success(t('auth.resetSuccess'))
-      router.push({ name: 'login' })
-    } else toast.error(res.message)
-  } catch (err) { toast.error(err.message) }
-  finally { loading.value = false }
+    const res = await authApi.resetPassword({ email: email.value, token: otpCode.value, newPassword: newPassword.value })
+    toast.add({ severity: 'success', summary: t('auth.resetSuccess'), detail: res.message || t('auth.resetSuccess'), life: 3000 })
+    setTimeout(() => router.push('/login'), 1500)
+  } catch (err) {
+    toast.add({ severity: 'error', summary: t('common.error'), detail: err.message, life: 4000 })
+  } finally { loading.value = false }
 }
 </script>
 
@@ -155,56 +145,134 @@ async function resetPassword() {
 @use '@/assets/styles/mixins' as *;
 
 .auth-page {
-  min-height: 100vh; @include flex-center; position: relative; padding: $space-4;
-  &__bg { position: fixed; inset: 0; z-index: 0; }
-  &__bg-img { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1555921015-5532091f6026?w=1920&q=80') center/cover; }
-  &__bg-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(10,35,66,0.92), rgba(15,15,26,0.88)); }
+  background-color: #f8fafc;
+  min-height: calc(100vh - #{$navbar-height});
+  display: flex;
+  flex-direction: column;
+  padding: $space-16 0 $space-24;
+}
+
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-6;
+}
+
+.auth-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: 14px;
+  color: $color-text-secondary;
+  
+  a {
+    color: inherit;
+    text-decoration: none;
+    &:hover { color: $color-primary; }
+  }
+  
+  .separator {
+    font-size: 10px;
+    opacity: 0.5;
+  }
+  
+  span {
+    color: $color-primary;
+    font-weight: 600;
+  }
 }
 
 .auth-card {
-  position: relative; z-index: 1; @include glass(rgba(15,15,26,0.85));
-  border-radius: $border-radius-xl; padding: $space-10; width: 100%; max-width: 460px;
+  background: white;
+  border-radius: $border-radius-xl;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 450px;
+  overflow: hidden;
+  border: 1px solid #f1f5f9;
 
-  &__logo { display: block; font-family: $font-heading; font-size: $font-size-xl; font-weight: $font-weight-bold; color: $color-text-primary; text-decoration: none; margin-bottom: $space-8; span { color: $color-accent; } }
-  &__title { font-family: $font-heading; font-size: $font-size-3xl; color: $color-text-primary; margin-bottom: $space-2; }
-  &__desc { color: $color-text-secondary; font-size: $font-size-sm; margin-bottom: $space-8; strong { color: $color-accent; } }
-  &__footer { text-align: center; margin-top: $space-6; font-size: $font-size-sm; color: $color-text-muted; }
+  &__content {
+    padding: $space-10 $space-8;
+    @include md { padding: $space-12 $space-12; }
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: $space-8;
+  }
 }
 
-.auth-form { display: flex; flex-direction: column; gap: $space-5; }
-
-.otp-inputs {
-  display: flex; gap: $space-3; justify-content: center;
+.auth-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: $color-text-primary;
+  margin-bottom: $space-2;
+  letter-spacing: -0.02em;
 }
 
-.otp-input {
-  width: 48px; height: 56px;
-  text-align: center;
-  font-size: $font-size-2xl;
-  font-weight: $font-weight-bold;
-  @include input-base;
-  border-radius: $border-radius-md;
-  padding: 0;
+.auth-subtitle {
+  font-size: 0.95rem;
+  color: $color-text-secondary;
+  line-height: 1.5;
 }
 
-.input-error { font-size: $font-size-xs; color: $color-danger; text-align: center; }
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+}
 
-.resend-btn {
-  background: none; border: none; cursor: pointer;
-  color: $color-text-muted; font-size: $font-size-sm;
-  text-align: center; padding: $space-2;
-  &:hover { color: $color-text-primary; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+}
+
+.auth-btn {
+  padding: 0.75rem !important;
+  font-weight: 700 !important;
+  border-radius: $border-radius-lg !important;
 }
 
 .step-indicator {
-  display: flex; justify-content: center; gap: $space-2; margin-top: $space-8;
+  display: flex;
+  justify-content: center;
+  gap: $space-2;
+  margin-top: $space-8;
 }
 
 .step-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: $color-text-muted; transition: $transition-base;
-  &--active { background: $color-accent; width: 24px; border-radius: 4px; }
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  transition: all 0.3s;
+  &--active { background: $color-primary; width: 24px; border-radius: 4px; }
+  &--completed { background: $color-success; }
 }
 
-.auth-link { font-size: $font-size-sm; color: $color-text-secondary; text-decoration: none; transition: $transition-fast; &:hover { color: $color-accent; } }
+.auth-footer {
+  margin-top: $space-8;
+  text-align: center;
+  font-size: 14px;
+  color: $color-text-secondary;
+  
+  .login-link {
+    color: $color-accent;
+    font-weight: 700;
+    margin-left: 4px;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+}
+
+:deep(.p-password) { width: 100%; }
+.p-error { font-size: 12px; margin-top: 2px; color: $color-danger; }
 </style>

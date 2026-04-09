@@ -15,14 +15,27 @@ export const useAuthStore = defineStore('auth', () => {
 
   // ---- ACTIONS ----
   async function login(credentials) {
-    const res = await authApi.login(credentials)
-    if (res.success) {
-      token.value = res.data.token
-      user.value = res.data.user
-      localStorage.setItem('auth_token', res.data.token)
-      localStorage.setItem('auth_user', JSON.stringify(res.data.user))
+    try {
+      const res = await authApi.login(credentials)
+      // Axios interceptor trả về thẳng data body của C# (bao gồm { message, data })
+      if (res && res.data && res.data.accessToken) {
+        const tokenString = res.data.accessToken
+        const userData = {
+          email: res.data.email,
+          fullName: res.data.fullName,
+          role: res.data.roleId // C# AuthResponse trả về roleId
+        }
+        token.value = tokenString
+        user.value = userData
+        localStorage.setItem('auth_token', tokenString)
+        localStorage.setItem('auth_user', JSON.stringify(userData))
+        
+        return { success: true, message: res.message || 'Đăng nhập thành công' }
+      }
+      return { success: false, message: 'Dữ liệu phản hồi không hợp lệ.' }
+    } catch (err) {
+      return { success: false, message: err.message || 'Lỗi đăng nhập.' }
     }
-    return res
   }
 
   async function register(userData) {

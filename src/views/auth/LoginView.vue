@@ -1,56 +1,53 @@
 <template>
   <div class="auth-page">
-    <!-- BG -->
-    <div class="auth-page__bg">
-      <div class="auth-page__bg-img" />
-      <div class="auth-page__bg-overlay" />
-    </div>
+    <div class="container auth-container">
+      <!-- Breadcrumb Simplified -->
+      <nav class="auth-breadcrumb">
+        <RouterLink to="/">{{ t('nav.home') }}</RouterLink>
+        <i class="pi pi-chevron-right separator"></i>
+        <span>{{ t('nav.login') }}</span>
+      </nav>
 
-    <!-- CARD -->
-    <div class="auth-card animate-fade-in-up">
-      <!-- Logo -->
-      <RouterLink to="/" class="auth-card__logo">✈️ Voyage<span>VN</span></RouterLink>
+      <div class="auth-card">
+        <div class="auth-card__content">
+          <div class="auth-card__header">
+            <h1 class="auth-title">{{ t('auth.loginTitle') }}</h1>
+            <p class="auth-subtitle">{{ t('auth.loginDesc') }}</p>
+          </div>
 
-      <h1 class="auth-card__title">{{ t('auth.loginTitle') }}</h1>
-      <p class="auth-card__desc">{{ t('auth.loginDesc') }}</p>
+          <form @submit.prevent="handleLogin" class="auth-form">
+            <div class="field">
+              <label for="email">{{ t('auth.email') }}</label>
+              <InputText id="email" type="email" v-model="form.email" :placeholder="t('auth.email')"
+                :invalid="!!errors.email" fluid />
+              <small v-if="errors.email" class="p-error">{{ errors.email }}</small>
+            </div>
 
-      <form class="auth-form" @submit.prevent="handleLogin">
-        <BaseInput
-          v-model="form.email"
-          :label="t('auth.email')"
-          type="email"
-          :placeholder="`${t('auth.email')}...`"
-          :error="errors.email"
-          required
-        >
-          <template #icon-left>📧</template>
-        </BaseInput>
+            <div class="field">
+              <label for="password">{{ t('auth.password') }}</label>
+              <Password id="password" v-model="form.password" :placeholder="t('auth.password')"
+                :feedback="false" toggleMask :invalid="!!errors.password" inputClass="w-full" fluid />
+              <small v-if="errors.password" class="p-error">{{ errors.password }}</small>
+            </div>
 
-        <BaseInput
-          v-model="form.password"
-          :label="t('auth.password')"
-          type="password"
-          :placeholder="`${t('auth.password')}...`"
-          :error="errors.password"
-          required
-        />
+            <div class="form-options">
+              <RouterLink to="/forgot-password" class="forgot-link">{{ t('auth.forgotPassword') }}</RouterLink>
+            </div>
 
-        <div class="auth-form__row">
-          <RouterLink to="/forgot-password" class="auth-link">
-            {{ t('auth.forgotPassword') }}
-          </RouterLink>
+            <Button type="submit" :label="t('auth.loginBtn')" :loading="loading" icon="pi pi-sign-in" raised class="w-full login-btn" />
+          </form>
+
+          <div class="auth-footer">
+            <p>
+              {{ t('auth.noAccount') }}
+              <RouterLink to="/register" class="signup-link">{{ t('nav.register') }}</RouterLink>
+            </p>
+          </div>
         </div>
-
-        <BaseButton variant="primary" size="lg" :loading="loading" block type="submit">
-          {{ t('auth.loginBtn') }}
-        </BaseButton>
-      </form>
-
-      <p class="auth-card__footer">
-        {{ t('auth.noAccount') }}
-        <RouterLink to="/register" class="auth-link auth-link--accent">{{ t('nav.register') }}</RouterLink>
-      </p>
+      </div>
     </div>
+
+    <Toast position="top-right" />
   </div>
 </template>
 
@@ -59,9 +56,12 @@ import { ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/authStore'
-import { useToast } from '@/composables/useToast'
-import BaseInput from '@/components/base/BaseInput.vue'
-import BaseButton from '@/components/base/BaseButton.vue'
+
+import InputText from 'primevue/inputtext'
+import Password from 'primevue/password'
+import Button from 'primevue/button'
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -77,8 +77,11 @@ function validateForm() {
   errors.email = ''
   errors.password = ''
   let valid = true
+
   if (!form.email) { errors.email = t('common.required'); valid = false }
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) { errors.email = t('common.invalidEmail'); valid = false }
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    errors.email = t('common.invalidEmail'); valid = false
+  }
   if (!form.password) { errors.password = t('common.required'); valid = false }
   return valid
 }
@@ -89,17 +92,16 @@ async function handleLogin() {
   try {
     const res = await auth.login({ email: form.email, password: form.password })
     if (res.success) {
-      toast.success(`Chào mừng trở lại! 🎉`)
-      const redirect = route.query.redirect || '/'
+      toast.add({ severity: 'success', summary: t('auth.loginTitle'), detail: t('auth.loginSuccess'), life: 3000 })
+      let redirect = route.query.redirect
+      if (!redirect) redirect = auth.isAdmin ? '/admin' : '/'
       router.push(redirect)
     } else {
-      toast.error(res.message || t('common.error'))
+      toast.add({ severity: 'error', summary: t('common.error'), detail: res.message || t('common.error'), life: 4000 })
     }
   } catch (err) {
-    toast.error(err.message || t('common.error'))
-  } finally {
-    loading.value = false
-  }
+    toast.add({ severity: 'error', summary: 'Error', detail: err.message || t('common.error'), life: 4000 })
+  } finally { loading.value = false }
 }
 </script>
 
@@ -108,85 +110,129 @@ async function handleLogin() {
 @use '@/assets/styles/mixins' as *;
 
 .auth-page {
-  min-height: 100vh;
-  @include flex-center;
-  position: relative;
-  padding: $space-4;
+  background-color: #f8fafc;
+  min-height: calc(100vh - #{$navbar-height});
+  display: flex;
+  flex-direction: column;
+  padding: $space-16 0 $space-24;
+}
 
-  &__bg {
-    position: fixed; inset: 0; z-index: 0;
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-6;
+}
+
+.auth-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: 14px;
+  color: $color-text-secondary;
+  
+  a {
+    color: inherit;
+    text-decoration: none;
+    &:hover { color: $color-primary; }
   }
-
-  &__bg-img {
-    position: absolute; inset: 0;
-    background: url('https://images.unsplash.com/photo-1573390016527-19ef6f38ebe3?w=1920&q=80') center/cover;
+  
+  .separator {
+    font-size: 10px;
+    opacity: 0.5;
   }
-
-  &__bg-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(10,35,66,0.92) 0%, rgba(15,15,26,0.88) 100%);
+  
+  span {
+    color: $color-primary;
+    font-weight: 600;
   }
 }
 
 .auth-card {
-  position: relative; z-index: 1;
-  @include glass(rgba(15,15,26,0.85));
+  background: white;
   border-radius: $border-radius-xl;
-  padding: $space-10;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
   width: 100%;
-  max-width: 460px;
-  box-shadow: $shadow-lg;
+  max-width: 450px;
+  overflow: hidden;
+  border: 1px solid #f1f5f9;
 
-  &__logo {
-    display: block;
-    font-family: $font-heading;
-    font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
-    color: $color-text-primary;
-    text-decoration: none;
-    margin-bottom: $space-8;
-    span { color: $color-accent; }
+  &__content {
+    padding: $space-10 $space-8;
+    @include md { padding: $space-12 $space-12; }
   }
 
-  &__title {
-    font-family: $font-heading;
-    font-size: $font-size-3xl;
-    color: $color-text-primary;
-    margin-bottom: $space-2;
-  }
-
-  &__desc {
-    color: $color-text-secondary;
-    font-size: $font-size-sm;
-    margin-bottom: $space-8;
-  }
-
-  &__footer {
+  &__header {
     text-align: center;
-    margin-top: $space-6;
-    font-size: $font-size-sm;
-    color: $color-text-muted;
+    margin-bottom: $space-10;
   }
+}
+
+.auth-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: $color-text-primary;
+  margin-bottom: $space-2;
+  letter-spacing: -0.02em;
+}
+
+.auth-subtitle {
+  font-size: 0.95rem;
+  color: $color-text-secondary;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: $space-5;
+  gap: $space-6;
+}
 
-  &__row {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: -$space-2;
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    color: $color-text-primary;
   }
 }
 
-.auth-link {
-  font-size: $font-size-sm;
+.form-options {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -$space-2;
+}
+
+.forgot-link {
+  font-size: 13px;
   color: $color-text-secondary;
   text-decoration: none;
-  transition: $transition-fast;
-  &:hover { color: $color-text-primary; }
-  &--accent { color: $color-accent; margin-left: $space-1; font-weight: $font-weight-semibold; }
+  &:hover { color: $color-primary; text-decoration: underline; }
 }
+
+.login-btn {
+  padding: 0.75rem !important;
+  font-weight: 700 !important;
+  border-radius: $border-radius-lg !important;
+}
+
+.auth-footer {
+  margin-top: $space-8;
+  text-align: center;
+  font-size: 14px;
+  color: $color-text-secondary;
+  
+  .signup-link {
+    color: $color-accent;
+    font-weight: 700;
+    margin-left: 4px;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+}
+
+:deep(.p-password) { width: 100%; }
+.p-error { font-size: 12px; margin-top: 2px; }
 </style>

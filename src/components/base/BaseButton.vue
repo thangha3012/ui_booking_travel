@@ -37,31 +37,32 @@ defineProps({
 
   // --- VARIANTS ---
   &--primary {
-    background: linear-gradient(135deg, $color-gradient-start, $color-gradient-end);
+    background: $gradient-primary;
     color: #fff;
+    box-shadow: 0 4px 14px rgba(35, 87, 137, 0.25);
     &:hover:not(:disabled) {
       box-shadow: $shadow-gradient;
-      filter: brightness(1.1);
+      transform: translateY(-1px);
     }
   }
 
   &--accent {
     background: $color-accent;
-    color: $color-primary;
+    color: #fff;
     font-weight: $font-weight-bold;
-    &:hover:not(:disabled) { box-shadow: $shadow-accent; filter: brightness(1.1); }
+    &:hover:not(:disabled) { box-shadow: $shadow-accent; transform: translateY(-1px); }
   }
 
   &--secondary {
-    background: $color-bg-surface-hover;
+    background: $color-bg-surface;
     color: $color-text-primary;
     border: 1px solid $color-border;
-    &:hover:not(:disabled) { background: rgba(255,255,255,0.12); }
+    &:hover:not(:disabled) { background: $color-border; }
   }
 
   &--ghost {
     background: transparent;
-    color: $color-text-secondary;
+    color: $color-text-body;
     &:hover:not(:disabled) { color: $color-text-primary; background: $color-bg-surface; }
   }
 

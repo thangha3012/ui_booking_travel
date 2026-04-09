@@ -1,0 +1,64 @@
+// src/assets/styles/_admin-modal.scss
+// Shared modal styles for all admin views — Stitch Triptopia Design
+@use 'variables' as *;
+
+// Modal — Glassmorphism overlay
+.modal-overlay { 
+  position: fixed; inset: 0; 
+  background: rgba(26, 32, 44, 0.4); 
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center; z-index: 1000; 
+}
+.modal-box { 
+  background: $color-bg-card; width: 100%; max-width: 640px; max-height: 90vh; 
+  display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: $border-radius-xl; 
+  box-shadow: $shadow-xl;
+}
+.modal-header { 
+  padding: 24px 28px; border-bottom: none; background: $color-bg-surface;
+  display: flex; justify-content: space-between; align-items: center; 
+  h2 { margin: 0; font-size: 18px; color: $color-text-primary; font-weight: 700; letter-spacing: -0.02em; } 
+  .close-btn { 
+    background: $color-border; border: none; font-size: 16px; cursor: pointer; color: $color-text-secondary; 
+    width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+    transition: $transition-base; 
+    &:hover { background: #d0d6de; } 
+  } 
+}
+.modal-body { padding: 28px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+.form-group { 
+  display: flex; flex-direction: column; gap: 8px; 
+  label { font-size: 11px; font-weight: 600; color: $color-text-secondary; text-transform: uppercase; letter-spacing: 0.06em; } 
+  input, textarea, select { 
+    padding: 12px 14px; border: none; border-bottom: 2px solid rgba(226,232,240,0.5); border-radius: 0; 
+    font-size: 14px; outline: none; transition: $transition-base; background: transparent; color: $color-text-primary;
+    font-family: $font-body;
+    &:focus { border-bottom-color: $color-primary; }
+    &::placeholder { color: $color-text-muted; }
+  } 
+  select { appearance: auto; cursor: pointer; }
+}
+.row { flex-direction: row; gap: 20px; display: flex; .col { flex: 1; display: flex; flex-direction: column; gap: 8px; } }
+.modal-footer { padding: 0 28px 24px; display: flex; justify-content: flex-end; gap: 12px; }
+.btn-cancel { 
+  background: $color-bg-surface; border: none; padding: 11px 22px; border-radius: $border-radius-full; 
+  color: $color-text-body; font-weight: 600; cursor: pointer; transition: $transition-base; font-size: 13px;
+  &:hover { background: $color-border; } 
+}
+
+// Toolbar search 
+.table-toolbar { 
+  display: flex; gap: 16px; margin-bottom: 24px;
+  .search-box input, .filter-box select { 
+    padding: 11px 18px; border: none; border-radius: $border-radius-full; outline: none; 
+    background: $color-bg-surface; font-size: 13px; color: $color-text-primary; width: 280px;
+    transition: $transition-base;
+    &::placeholder { color: $color-text-secondary; }
+    &:focus { background: $color-border; box-shadow: 0 0 0 3px rgba(35,87,137,0.1); }
+  }
+  .filter-box select { background: $color-bg-surface; cursor: pointer; padding-right: 32px; width: auto; }
+}
+.text-center { text-align: center; }
+.py-8 { padding-top: 40px; padding-bottom: 40px; color: $color-text-secondary; font-size: 14px; }
+.text-danger { color: $color-danger; }
+.t-thumbnail { width: 56px; height: 40px; border-radius: $border-radius-md; object-fit: cover; }

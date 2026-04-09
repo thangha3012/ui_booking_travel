@@ -2,25 +2,25 @@
   "hero": {
     "northernVietnam": "Northern Vietnam",
     "explore": "Explore",
-    "topDestinations": "Top Destinations",
-    "destinationDesc": "From the legendary Ha Long Bay to the poetic rice terraces of Sapa",
+    "topDestinations": "Popular Destinations",
+    "destinationDesc": "From legendary Ha Long Bay to poetic Sapa rice terraces",
     "trending": "Trending Now",
     "whyUs": "Why choose us",
-    "whyUsTitle": "What Makes Us Different",
-    "why1Title": "Quality Guaranteed",
-    "why1Desc": "All tours are verified and 100% quality assured",
-    "why2Title": "Best Prices",
-    "why2Desc": "Guaranteed best market prices with no hidden fees",
-    "why3Title": "Eco-Friendly",
-    "why3Desc": "Sustainable tourism, respecting Northern Vietnam's natural beauty",
+    "whyUsTitle": "We Are Different",
+    "why1Title": "Quality Guarantee",
+    "why1Desc": "All tours are curated and 100% quality guaranteed",
+    "why2Title": "Best Price",
+    "why2Desc": "Market leading prices with no hidden fees",
+    "why3Title": "Eco Friendly",
+    "why3Desc": "Sustainable travel, respecting Northern Vietnam nature",
     "why4Title": "24/7 Support",
-    "why4Desc": "Our support team is always ready to help you anytime, anywhere",
+    "why4Desc": "Our support team is always ready to help you anywhere",
     "ctaTitle": "Ready to Explore?",
-    "ctaDesc": "Hundreds of journeys are waiting for you. Book your tour today!",
-    "statTours": "Tours Available",
+    "ctaDesc": "Hundreds of journeys are waiting. Book your tour today!",
+    "statTours": "Available Tours",
     "statDestinations": "Destinations",
     "statCustomers": "Happy Customers",
-    "statRating": "Average Rating"
+    "statRating": "Avg Rating"
   },
   "nav": {
     "home": "Home",
@@ -29,32 +29,60 @@
     "about": "About Us",
     "contact": "Contact",
     "login": "Login",
-    "register": "Sign Up",
+    "register": "Register",
     "logout": "Logout",
     "myBookings": "My Bookings",
     "admin": "Admin"
   },
   "home": {
-    "heroTitle": "Explore The World",
+    "heroTitle": "Discover The World",
     "heroSubtitle": "With Us",
-    "heroDesc": "Hundreds of amazing journeys await you. Book your tour today for the best deals.",
-    "searchPlaceholder": "Where do you want to go?",
-    "searchBtn": "Search",
-    "featuredTours": "Featured Tours",
-    "featuredDesc": "The most loved journeys",
-    "viewAll": "View all"
+    "heroDesc": "Hundreds of amazing journeys are waiting for you. Book your tour today for the best deals.",
+    "startTravelling": "Start Travelling with us",
+    "enjoyTrip": "Let's enjoy your desired trip with",
+    "search": {
+      "destination": "Destination",
+      "duration": "Duration",
+      "type": "Travel Type",
+      "travellers": "Travellers",
+      "findBtn": "Find Availability"
+    },
+    "services": {
+      "label": "CATEGORIES",
+      "title": "We Offer The Best Service",
+      "weather": { "title": "Calculated Weather", "desc": "Built Wicket longer admire do barton vanity itself do in it" },
+      "flight": { "title": "Best Flight", "desc": "Engrossed listening. Park gate sell they west hard for" },
+      "events": { "title": "Local Events", "desc": "Barton vanity itself do in it. Prefer to men it engrossed" },
+      "custom": { "title": "Customize Tour", "desc": "We deliver outsourced aviation services for" }
+    },
+    "about": {
+      "label": "ABOUT US",
+      "title": "We Are The Best Travel Agency",
+      "desc1": "The traveller where you can select your desired activity and destinations of your choice for vacations.",
+      "readMore": "Read More About Us"
+    },
+    "featured": {
+      "label": "TOP SELLING",
+      "title": "Top Destinations",
+      "viewAll": "View All Tours"
+    },
+    "proOffers": {
+      "title": "Get our pro offers",
+      "desc": "Create a visual identity for your company, and an overall branding that stands out.",
+      "subscribe": "Subscribe"
+    }
   },
   "tour": {
     "from": "From",
     "perPerson": "/ person",
     "days": "days",
     "nights": "nights",
-    "seats": "seats available",
-    "noSeats": "Sold Out",
+    "seats": "seats left",
+    "noSeats": "Sold out",
     "bookNow": "Book Now",
     "viewDetail": "View Details",
-    "departure": "Departure Date",
-    "return": "Return Date",
+    "departure": "Departure",
+    "return": "Return",
     "itinerary": "Itinerary",
     "highlights": "Highlights",
     "policy": "Policies",
@@ -63,14 +91,46 @@
     "infant": "Infant",
     "status": {
       "draft": "Draft",
-      "published": "On Sale",
+      "published": "Published",
       "archived": "Archived"
+    },
+    "detail": {
+      "breadcrumb": "Details",
+      "loading": "Looking for the perfect itinerary...",
+      "notFound": "Tour not found.",
+      "backToList": "Back to Tours",
+      "reviews": "Reviews",
+      "tabs": {
+        "desc": "Description",
+        "schedules": "Schedules",
+        "amenities": "Amenities",
+        "priceHistory": "Price history"
+      },
+      "noSchedules": "No specific schedules published yet.",
+      "seatsLeft": "seats left",
+      "available": "Available",
+      "amenitiesTitle": "Hotel features",
+      "noPriceHistory": "No price fluctuations recently.",
+      "faqs": "Frequently Asked Questions",
+      "booking": {
+        "checkIn": "Check In",
+        "checkOut": "Check Out",
+        "guests": "Guests",
+        "extras": "Extra Features",
+        "summary": "Base Price",
+        "discount": "Member Discount",
+        "total": "Total Payment",
+        "bookNow": "Book Now",
+        "payLater": "Book now and pay later. No charges until departure.",
+        "guarantee": "Triptopia Guarantee",
+        "trustDesc": "Safe payments & 24/7 support"
+      }
     }
   },
   "auth": {
     "loginTitle": "Welcome Back",
-    "loginDesc": "Sign in to continue your journey",
-    "registerTitle": "Create Account",
+    "loginDesc": "Login to continue your journey",
+    "registerTitle": "Create New Account",
     "registerDesc": "Start exploring the world with us",
     "email": "Email",
     "password": "Password",
@@ -78,19 +138,32 @@
     "fullName": "Full Name",
     "phone": "Phone Number",
     "loginBtn": "Login",
-    "registerBtn": "Sign Up",
+    "registerBtn": "Register",
     "forgotPassword": "Forgot password?",
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "forgotTitle": "Forgot Password",
-    "forgotDesc": "Enter your email to receive an OTP to reset your password",
+    "forgotDesc": "Enter your email to receive OTP for password reset",
     "sendOtp": "Send OTP",
     "verifyOtp": "Verify OTP",
     "otpSent": "OTP has been sent to your email",
     "enterOtp": "Enter 6-digit OTP",
     "newPassword": "New Password",
     "resetPassword": "Reset Password",
-    "resetSuccess": "Password reset successfully!"
+    "resetSuccess": "Password reset successful!",
+    "min6Chars": "Min 6 characters",
+    "passNotMatch": "Passwords do not match",
+    "loginSuccess": "Login Success",
+    "registerSuccess": "Register Success",
+    "verifyIdentity": "Verify Identity",
+    "step1Btn": "Send Reset Code",
+    "step2Btn": "Verify Code",
+    "step3Btn": "Update Password",
+    "changeEmail": "Change Email",
+    "enterOtp6": "Please enter 6-digit OTP",
+    "newSecurePass": "New Secure Password",
+    "enterNewPass": "Enter new password",
+    "verified": "Verified"
   },
   "booking": {
     "title": "Book Tour",
@@ -98,17 +171,87 @@
     "passengerInfo": "Passenger Information",
     "addPassenger": "Add Passenger",
     "removePassenger": "Remove",
-    "passengerName": "Full Name",
+    "passengerName": "Passenger Name",
     "gender": "Gender",
     "male": "Male",
     "female": "Female",
+    "other": "Other",
     "dob": "Date of Birth",
-    "idDoc": "ID / Passport Number",
+    "idDoc": "ID/Passport Number",
     "type": "Passenger Type",
     "totalAmount": "Total Amount",
     "confirm": "Confirm Booking",
-    "success": "Booking successful! Please complete payment within 15 minutes.",
-    "lockTime": "Time remaining to pay"
+    "success": "Booking successful! Please complete payment within 150 minutes.",
+    "lockTime": "Time remaining to pay",
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "checkout": {
+      "title": "CHECKOUT",
+      "breadcrumb": "Payment & Confirmation",
+      "noTour": "No tour selected for checkout.",
+      "browseTours": "Browse Tours",
+      "confirmPay": "Confirm and Pay",
+      "contactDetails": "Booking Information",
+      "primaryPassenger": "Passenger 1 (Primary)",
+      "paymentMethods": "Payment Methods",
+      "paypal": "Pay with PayPal",
+      "paypalDesc": "Fast, safe and secure. You will be redirected to PayPal.",
+      "card": "Credit / Debit Card",
+      "cardDesc": "We support Visa, Mastercard, and American Express.",
+      "vnpay": "VNPay Checkout",
+      "vnpayDesc": "Pay via local banks, QR code or e-wallet in Vietnam.",
+      "summary": "Order Summary",
+      "serviceFee": "Service Fee",
+      "total": "Total Price",
+      "vat": "VAT Included",
+      "complete": "Complete Booking",
+      "agreeTerms": "By clicking \"Complete Booking\", you agree to Triptopia's Term of Service and Privacy Policy.",
+      "authRequired": "Authentication Required",
+      "loginToBook": "Please login to continue booking",
+      "validationError": "Validation Error",
+      "bookingSuccess": "Booking Success",
+      "adventureConfirmed": "Your adventure is confirmed!",
+      "recommended": "RECOMMENDED",
+      "notes": "Notes (Optional)",
+      "anyRequests": "Any special requests?",
+      "idPlaceholder": "As per ID/Passport",
+      "cardNumber": "Card Number",
+      "expiryDate": "Expiry Date",
+      "cvc": "CVC / CVV",
+      "basedOnReviews": "(Based on {count} reviews)"
+    },
+    "myBookings": {
+      "title": "My Bookings",
+      "subtitle": "Track and manage your travel reservations",
+      "tabs": {
+        "all": "All",
+        "upcoming": "Upcoming",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "loading": "Loading your bookings...",
+      "empty": {
+        "title": "No Journeys Yet",
+        "desc": "Your travel story starts here. Explore our curated destinations.",
+        "explore": "Explore Tours"
+      },
+      "ticket": {
+        "label": "BOOKING",
+        "booked": "Booked",
+        "travelers": "Travelers",
+        "payNow": "Pay Now →"
+      },
+      "status": {
+        "pending": "Pending Payment",
+        "confirmed": "Confirmed",
+        "cancelled": "Cancelled",
+        "completed": "Completed",
+        "unknown": "Unknown"
+      }
+    }
   },
   "common": {
     "loading": "Loading...",
@@ -127,6 +270,173 @@
     "next": "Next",
     "noData": "No data available",
     "required": "This field is required",
-    "invalidEmail": "Invalid email address"
+    "invalidEmail": "Invalid email address",
+    "pages": "Pages"
+  },
+  "footer": {
+    "description": "Triptopia - Journey to discover the most amazing destinations in Vietnam. We bring professional and dedicated travel experiences.",
+    "aboutTitle": "Information",
+    "contactTitle": "Contact",
+    "galleryTitle": "Gallery",
+    "aboutUs": "About Us",
+    "services": "Services",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use"
+  },
+  "admin": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "tours": "Manage Tours",
+      "categories": "Categories",
+      "destinations": "Destinations",
+      "users": "Manage Users",
+      "bookings": "Bookings",
+      "logout": "Logout"
+    },
+    "header": {
+      "breadcrumb": "Admin Area",
+      "userProfile": "Administrator",
+      "logoutSuccess": "Successfully logged out from Admin area"
+    },
+    "dashboard": {
+      "title": "Dashboard Overview",
+      "refresh": "Refresh Stats",
+      "generateReport": "Generate Report",
+      "revenue": "Total Revenue",
+      "tours": "Total Tours",
+      "users": "Registered Users",
+      "pending": "Pending Bookings",
+      "vsLastMonth": "vs last month",
+      "activeSystem": "Active system",
+      "userAccounts": "User accounts",
+      "actionRequired": "Action required",
+      "allCaughtUp": "All caught up",
+      "recent Bookings": "Recent Bookings",
+      "viewAll": "View All",
+      "columns": {
+        "id": "Booking ID",
+        "customer": "Customer",
+        "tour": "Tour",
+        "date": "Date",
+        "status": "Status",
+        "amount": "Amount"
+      }
+    },
+    "tours": {
+      "title": "Manage Tours",
+      "addTour": "Add Tour",
+      "searchPlaceholder": "Search tours...",
+      "allStatus": "All Status",
+      "noTours": "No tours found.",
+      "columns": {
+        "id": "ID",
+        "cover": "Cover",
+        "name": "Tour Name",
+        "location": "Location",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "dialog": {
+        "create": "Create New Tour",
+        "edit": "Edit Tour",
+        "tourTitle": "Tour Title",
+        "enterName": "Enter tour name",
+        "category": "Category",
+        "selectCategory": "Select category",
+        "destination": "Destination",
+        "selectDestination": "Select destination",
+        "description": "Description",
+        "overview": "Overview of the tour...",
+        "highlights": "Highlights",
+        "policies": "Policies",
+        "itinerary": "Itinerary",
+        "saving": "Saving...",
+        "save": "Save Tour"
+      },
+      "schedules": {
+        "title": "Schedules",
+        "existing": "Existing Schedules",
+        "noSchedules": "No schedules yet.",
+        "departure": "Departure",
+        "return": "Return",
+        "seats": "Seats",
+        "prices": "Prices",
+        "adult": "Adult",
+        "child": "Child",
+        "infant": "Infant",
+        "addNew": "Add New Schedule",
+        "totalSeats": "Total Seats",
+        "addBtn": "Add Schedule"
+      }
+    },
+    "users": {
+        "title": "Manage Users",
+        "addUser": "Add User",
+        "searchPlaceholder": "Search name or email...",
+        "allRoles": "All Roles",
+        "noUsers": "No users found.",
+        "columns": {
+            "user": "User",
+            "contact": "Contact Info",
+            "role": "Role",
+            "status": "Status",
+            "joined": "Joined Date",
+            "actions": "Actions"
+        },
+        "status": {
+            "active": "Active",
+            "locked": "Locked"
+        },
+        "roles": {
+            "admin": "Admin",
+            "standard": "Standard User"
+        },
+        "noPhone": "No phone number",
+        "lockTooltip": "Lock Account",
+        "unlockTooltip": "Unlock Account"
+    },
+    "categories": {
+      "title": "Manage Categories",
+      "addBtn": "Add Category",
+      "searchPlaceholder": "Search categories...",
+      "noData": "No categories found.",
+      "columns": {
+        "name": "Category Name",
+        "description": "Description",
+        "status": "Status"
+      },
+      "dialog": {
+        "create": "Create New Category",
+        "edit": "Edit Category",
+        "name": "Category Name",
+        "enterName": "Enter category name",
+        "order": "Display Order",
+        "descPlaceholder": "Category description...",
+        "save": "Save Category"
+      }
+    },
+    "destinations": {
+      "title": "Manage Destinations",
+      "addBtn": "Add Destination",
+      "searchPlaceholder": "Search destinations...",
+      "noData": "No destinations found.",
+      "columns": {
+        "name": "Name",
+        "location": "Location",
+        "province": "Province/State",
+        "country": "Country"
+      },
+      "dialog": {
+        "create": "Create Destination",
+        "edit": "Edit Destination",
+        "name": "Name",
+        "coverUrl": "Cover Image URL",
+        "province": "Province/State",
+        "country": "Country",
+        "desc": "Description",
+        "descPlaceholder": "Description...",
+        "save": "Save"
+      }
+    }
   }
 }

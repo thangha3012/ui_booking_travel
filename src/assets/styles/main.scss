@@ -23,7 +23,7 @@ html {
 
 body {
   font-family: $font-body;
-  background-color: $color-bg-dark;
+  background-color: $color-bg-page;
   color: $color-text-primary;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -33,7 +33,7 @@ body {
 
 // ---- SCROLLBAR ----
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: $color-bg-dark; }
+::-webkit-scrollbar-track { background: $color-bg-page; }
 ::-webkit-scrollbar-thumb { background: $color-text-muted; border-radius: $border-radius-full; }
 ::-webkit-scrollbar-thumb:hover { background: $color-text-secondary; }
 
@@ -75,3 +75,107 @@ main {
   flex: 1;
   padding-top: $navbar-height;
 }
+
+// =============================================
+// PrimeVue — Stitch Triptopia Overrides
+// Make PrimeVue components match our design system
+// =============================================
+:root {
+  // Override PrimeVue font to Inter
+  --p-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --p-text-color: #{$color-text-primary};
+  --p-text-muted-color: #{$color-text-secondary};
+
+  // Smooth transitions
+  --p-transition-duration: 0.2s;
+}
+
+// DataTable — no-border editorial style
+.p-datatable {
+  .p-datatable-header {
+    background: transparent;
+    border: none;
+    padding: 0 0 1rem;
+  }
+  .p-datatable-thead > tr > th {
+    background: #{$color-bg-surface};
+    color: #{$color-text-secondary};
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: none !important;
+    padding: 0.75rem 1rem;
+  }
+  .p-datatable-tbody > tr > td {
+    padding: 0.875rem 1rem;
+    font-size: 14px;
+    border-color: #{$color-border-light};
+  }
+  .p-datatable-tbody > tr:hover {
+    background: rgba(35, 87, 137, 0.03) !important;
+  }
+  .p-paginator {
+    border: none;
+    background: transparent;
+    padding: 1rem 0 0;
+  }
+}
+
+// Dialog — ambient shadow + glassmorphism feel
+.p-dialog {
+  .p-dialog-header {
+    border-bottom: none;
+    .p-dialog-title {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+  }
+  .p-dialog-footer {
+    border-top: none;
+    padding-top: 0.5rem;
+  }
+}
+
+// Toast
+.p-toast-message {
+  backdrop-filter: blur(12px);
+}
+
+// Tag badges
+.p-tag {
+  font-family: 'Inter', sans-serif;
+}
+
+// Input focus brand glow
+.p-inputtext:enabled:focus {
+  box-shadow: 0 0 0 3px rgba(35, 87, 137, 0.1);
+}
+
+// Select
+.p-select:not(.p-disabled).p-focus {
+  box-shadow: 0 0 0 3px rgba(35, 87, 137, 0.1);
+}
+
+// Admin page shared styles
+.admin-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  .page-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: $color-text-primary;
+    letter-spacing: -0.02em;
+  }
+}
+
+.admin-card {
+  background: $color-bg-card;
+  border-radius: $border-radius-lg;
+  padding: 24px;
+  box-shadow: $shadow-card;
+}
+

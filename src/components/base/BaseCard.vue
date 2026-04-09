@@ -24,7 +24,7 @@ defineProps({
   }
 
   &--solid {
-    background: lighten(#0F0F1A, 5%);
+    background: $color-bg-card;
     border: 1px solid $color-border;
   }
 

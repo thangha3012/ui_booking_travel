@@ -1,33 +1,45 @@
 // src/assets/styles/_variables.scss
 // =============================================
-// DESIGN TOKENS - Nguồn sự thật duy nhất về Design System
+// DESIGN TOKENS — Stitch "Triptopia North" Design System
+// Brand: Northern Vietnam Travel Booking Platform
 // =============================================
 
-// ---- COLORS ----
-$color-bg-dark: #0F0F1A;
-$color-bg-surface: rgba(255, 255, 255, 0.04);
-$color-bg-surface-hover: rgba(255, 255, 255, 0.08);
+// ---- BRAND COLORS ----
+$color-primary: #235789;           // Deep ocean blue - main brand
+$color-primary-dark: #1a3a5c;     // Darker shade for sidebars
+$color-primary-light: #2d6da3;    // Lighter shade for hover states
+$color-secondary: #243119;         // Deep forest green - accent
+$color-accent: #FF6B35;            // Warm orange - CTAs & highlights
 
-$color-primary: #0A2342;
-$color-accent: #D4AF37;
-$color-accent-light: #F0D060;
+$color-bg-page: #f7f7ff;           // Very light lavender - page backgrounds
+$color-bg-card: #ffffff;           // Pure white - card surfaces
+$color-bg-surface: #f1f3f8;       // Subtle gray-blue - secondary surfaces
+$color-bg-dark: #1a1a2e;          // Dark navy - footer, dark sections
 
-$color-gradient-start: #6366F1;
-$color-gradient-end: #0EA5E9;
+// Gradient
+$gradient-hero: linear-gradient(135deg, #235789 0%, #243119 100%);
+$gradient-primary: linear-gradient(135deg, #235789, #1a3a5c);
+$gradient-sidebar: linear-gradient(180deg, #235789 0%, #1a3a5c 100%);
 
-$color-text-primary: #F8FAFC;
-$color-text-secondary: #94A3B8;
-$color-text-muted: #475569;
+// Text
+$color-text-primary: #1a202c;      // Near-black for headings
+$color-text-body: #4a5568;         // Dark gray for body text
+$color-text-secondary: #718096;    // Medium gray for secondary text
+$color-text-muted: #a0aec0;        // Muted for placeholders
 
-$color-border: rgba(255, 255, 255, 0.1);
-$color-border-focus: rgba(99, 102, 241, 0.6);
-
+// Status
 $color-success: #10B981;
 $color-danger: #EF4444;
 $color-warning: #F59E0B;
+$color-info: #3B82F6;
+
+// Borders
+$color-border: #e2e8f0;
+$color-border-light: #f1f5f9;
+$color-border-focus: rgba(35, 87, 137, 0.4);
 
 // ---- TYPOGRAPHY ----
-$font-heading: 'Playfair Display', Georgia, serif;
+$font-heading: 'Inter', -apple-system, sans-serif;
 $font-body: 'Inter', -apple-system, sans-serif;
 
 $font-size-xs: 0.75rem;    // 12px
@@ -39,6 +51,7 @@ $font-size-2xl: 1.5rem;    // 24px
 $font-size-3xl: 1.875rem;  // 30px
 $font-size-4xl: 2.25rem;   // 36px
 $font-size-5xl: 3rem;      // 48px
+$font-size-hero: 3.75rem;  // 60px — Hero headline
 
 $font-weight-normal: 400;
 $font-weight-medium: 500;
@@ -63,25 +76,26 @@ $space-24: 6rem;     // 96px
 $border-radius-sm: 6px;
 $border-radius-md: 12px;
 $border-radius-lg: 16px;
-$border-radius-xl: 24px;
+$border-radius-xl: 20px;
 $border-radius-full: 9999px;
 
-// ---- SHADOWS ----
-$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-$shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
-$shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
-$shadow-accent: 0 8px 32px rgba(212, 175, 55, 0.25);
-$shadow-gradient: 0 8px 32px rgba(99, 102, 241, 0.3);
+// ---- SHADOWS (Ambient style) ----
+$shadow-sm: 0 2px 8px rgba(26, 32, 44, 0.06);
+$shadow-md: 0 8px 24px rgba(26, 32, 44, 0.08);
+$shadow-lg: 0 20px 40px rgba(26, 32, 44, 0.06);
+$shadow-xl: 0 20px 60px rgba(26, 32, 44, 0.1);
+$shadow-card: 0 4px 16px rgba(26, 32, 44, 0.05);
+$shadow-card-hover: 0 12px 32px rgba(26, 32, 44, 0.1);
 
 // ---- TRANSITIONS ----
 $transition-fast: all 0.15s ease;
-$transition-base: all 0.3s ease;
+$transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 $transition-slow: all 0.5s ease;
 
 // ---- GLASSMORPHISM ----
-$glass-bg: rgba(255, 255, 255, 0.05);
-$glass-border: rgba(255, 255, 255, 0.1);
-$glass-blur: blur(16px);
+$glass-bg: rgba(255, 255, 255, 0.72);
+$glass-border: rgba(226, 232, 240, 0.3);
+$glass-blur: blur(20px);
 
 // ---- BREAKPOINTS ----
 $bp-sm: 640px;
@@ -93,3 +107,14 @@ $bp-2xl: 1536px;
 // ---- LAYOUT ----
 $container-max-width: 1280px;
 $navbar-height: 72px;
+$sidebar-width: 260px;
+
+// ---- BACKWARD-COMPAT ALIASES ----
+$color-gradient-start: $color-primary;
+$color-gradient-end: $color-secondary;
+$color-accent-light: #ff8a5c;
+$color-bg-dark-old: $color-bg-dark;
+$shadow-gradient: 0 8px 20px rgba(35, 87, 137, 0.3);
+$shadow-accent: 0 8px 20px rgba(255, 107, 53, 0.3);
+$color-bg-surface-hover: rgba(241, 243, 248, 0.8);
+$color-primary-rgb: 35, 87, 137;

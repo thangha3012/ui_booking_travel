@@ -38,11 +38,39 @@
     "heroTitle": "Khám Phá Thế Giới",
     "heroSubtitle": "Cùng chúng tôi",
     "heroDesc": "Hàng trăm hành trình tuyệt vời đang chờ đón bạn. Đặt tour ngay hôm nay để nhận ưu đãi tốt nhất.",
-    "searchPlaceholder": "Bạn muốn đi đâu?",
-    "searchBtn": "Tìm kiếm",
-    "featuredTours": "Tour Nổi Bật",
-    "featuredDesc": "Những hành trình được yêu thích nhất",
-    "viewAll": "Xem tất cả"
+    "startTravelling": "Bắt đầu hành trình cùng chúng tôi",
+    "enjoyTrip": "Thưởng thức chuyến đi trong mơ với",
+    "search": {
+      "destination": "Điểm đến",
+      "duration": "Thời gian",
+      "type": "Loại hình",
+      "travellers": "Số người",
+      "findBtn": "Tìm kiếm tour"
+    },
+    "services": {
+      "label": "DANH MỤC",
+      "title": "Chúng Tôi Cung Cấp Dịch Vụ Tốt Nhất",
+      "weather": { "title": "Thời tiết thuận lợi", "desc": "Dự báo thời tiết chính xác cho hành trình của bạn" },
+      "flight": { "title": "Chuyến bay tốt nhất", "desc": "Hệ thống đặt vé máy bay nhanh chóng, giá rẻ" },
+      "events": { "title": "Sự kiện địa phương", "desc": "Khám phá các lễ hội và sự kiện đặc sắc" },
+      "custom": { "title": "Tùy chỉnh tour", "desc": "Thiết kế hành trình riêng theo ý muốn của bạn" }
+    },
+    "about": {
+      "label": "VỀ CHÚNG TÔI",
+      "title": "Đại Lý Du Lịch Tốt Nhất Cho Bạn",
+      "desc1": "Chúng tôi mang đến những trải nghiệm du lịch độc đáo và đáng nhớ nhất tại Việt Nam.",
+      "readMore": "Tìm hiểu thêm"
+    },
+    "featured": {
+      "label": "BÁN CHẠY NHẤT",
+      "title": "Điểm Đến Phổ Biến",
+      "viewAll": "Xem tất cả tour"
+    },
+    "proOffers": {
+      "title": "Nhận ưu đãi đặc biệt",
+      "desc": "Đăng ký nhận bản tin để không bỏ lỡ các chương trình khuyến mãi và tour mới nhất.",
+      "subscribe": "Đăng ký ngay"
+    }
   },
   "tour": {
     "from": "Từ",
@@ -65,6 +93,38 @@
       "draft": "Nháp",
       "published": "Đang bán",
       "archived": "Đã lưu trữ"
+    },
+    "detail": {
+      "breadcrumb": "Chi tiết",
+      "loading": "Đang tìm kiếm lịch trình hoàn hảo...",
+      "notFound": "Không tìm thấy tour.",
+      "backToList": "Quay lại danh sách tour",
+      "reviews": "Đánh giá",
+      "tabs": {
+        "desc": "Mô tả",
+        "schedules": "Lịch khởi hành",
+        "amenities": "Tiện ích",
+        "priceHistory": "Lịch sử giá"
+      },
+      "noSchedules": "Chưa có lịch khởi hành nào được công bố.",
+      "seatsLeft": "chỗ còn lại",
+      "available": "Còn chỗ",
+      "amenitiesTitle": "Đặc điểm nổi bật",
+      "noPriceHistory": "Không có biến động giá gần đây.",
+      "faqs": "Câu hỏi thường gặp",
+      "booking": {
+        "checkIn": "Ngày đi",
+        "checkOut": "Ngày về",
+        "guests": "Số khách",
+        "extras": "Dịch vụ thêm",
+        "summary": "Tạm tính",
+        "discount": "Giảm giá thành viên",
+        "total": "Tổng cộng",
+        "bookNow": "Đặt ngay",
+        "payLater": "Đặt ngay, thanh toán sau. Không tính phí cho đến khi khởi hành.",
+        "guarantee": "Đảm bảo từ Triptopia",
+        "trustDesc": "Thanh toán an toàn & hỗ trợ 24/7"
+      }
     }
   },
   "auth": {
@@ -90,7 +150,20 @@
     "enterOtp": "Nhập mã OTP 6 chữ số",
     "newPassword": "Mật khẩu mới",
     "resetPassword": "Đặt lại mật khẩu",
-    "resetSuccess": "Đặt lại mật khẩu thành công!"
+    "resetSuccess": "Đặt lại mật khẩu thành công!",
+    "min6Chars": "Tối thiểu 6 ký tự",
+    "passNotMatch": "Mật khẩu không khớp",
+    "loginSuccess": "Đăng nhập thành công",
+    "registerSuccess": "Đăng ký thành công",
+    "verifyIdentity": "Xác minh danh tính",
+    "step1Btn": "Gửi mã xác nhận",
+    "step2Btn": "Xác minh mã",
+    "step3Btn": "Cập nhật mật khẩu",
+    "changeEmail": "Đổi email",
+    "enterOtp6": "Vui lòng nhập mã OTP 6 chữ số",
+    "newSecurePass": "Mật khẩu bảo mật mới",
+    "enterNewPass": "Nhập mật khẩu mới",
+    "verified": "Đã xác minh"
   },
   "booking": {
     "title": "Đặt Tour",
@@ -102,13 +175,83 @@
     "gender": "Giới tính",
     "male": "Nam",
     "female": "Nữ",
+    "other": "Khác",
     "dob": "Ngày sinh",
     "idDoc": "Số CMND/CCCD/Hộ chiếu",
     "type": "Loại hành khách",
     "totalAmount": "Tổng tiền",
     "confirm": "Xác nhận đặt chỗ",
     "success": "Đặt chỗ thành công! Vui lòng thanh toán trong 15 phút.",
-    "lockTime": "Thời gian giữ chỗ còn lại"
+    "lockTime": "Thời gian giữ chỗ còn lại",
+    "status": {
+      "completed": "Hoàn thành",
+      "pending": "Chờ xử lý",
+      "cancelled": "Đã hủy"
+    },
+    "checkout": {
+      "title": "THANH TOÁN",
+      "breadcrumb": "Thanh toán & Xác nhận",
+      "noTour": "Chưa có tour nào được chọn để thanh toán.",
+      "browseTours": "Tìm kiếm tour",
+      "confirmPay": "Xác nhận và Thanh toán",
+      "contactDetails": "Thông tin liên hệ",
+      "primaryPassenger": "Hành khách 1 (Chính)",
+      "paymentMethods": "Phương thức thanh toán",
+      "paypal": "Thanh toán qua PayPal",
+      "paypalDesc": "Nhanh chóng, an toàn và bảo mật. Bạn sẽ được chuyển hướng đến PayPal.",
+      "card": "Thẻ tín dụng / Ghi nợ",
+      "cardDesc": "Chúng tôi hỗ trợ Visa, Mastercard và American Express.",
+      "vnpay": "Thanh toán qua VNPay",
+      "vnpayDesc": "Thanh toán qua ngân hàng nội địa, mã QR hoặc ví điện tử tại Việt Nam.",
+      "summary": "Tóm tắt đơn hàng",
+      "serviceFee": "Phí dịch vụ",
+      "total": "Tổng tiền thanh toán",
+      "vat": "Đã bao gồm VAT",
+      "complete": "Hoàn tất đặt chỗ",
+      "agreeTerms": "Bằng cách nhấn \"Hoàn tất đặt chỗ\", bạn đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của Triptopia.",
+      "authRequired": "Yêu cầu đăng nhập",
+      "loginToBook": "Vui lòng đăng nhập để tiếp tục đặt tour",
+      "validationError": "Lỗi dữ liệu",
+      "bookingSuccess": "Đặt chỗ thành công!",
+      "adventureConfirmed": "Hành trình của bạn đã được xác nhận!",
+      "recommended": "KHUYÊN DÙNG",
+      "notes": "Ghi chú (Tùy chọn)",
+      "anyRequests": "Bạn có yêu cầu đặc biệt nào không?",
+      "idPlaceholder": "Theo CMND/CCCD/Hộ chiếu",
+      "cardNumber": "Số thẻ",
+      "expiryDate": "Ngày hết hạn",
+      "cvc": "Mã CVC/CVV",
+      "basedOnReviews": "(Dựa trên {count} đánh giá)"
+    },
+    "myBookings": {
+      "title": "Đặt chỗ của tôi",
+      "subtitle": "Theo dõi và quản lý các chuyến đi của bạn",
+      "tabs": {
+        "all": "Tất cả",
+        "upcoming": "Sắp tới",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã hủy"
+      },
+      "loading": "Đang tải danh sách đặt chỗ...",
+      "empty": {
+        "title": "Chưa có hành trình nào",
+        "desc": "Câu chuyện du lịch của bạn bắt đầu từ đây. Hãy khám phá các điểm đến hấp dẫn của chúng tôi.",
+        "explore": "Khám phá Tour"
+      },
+      "ticket": {
+        "label": "ĐẶT CHỖ",
+        "booked": "Đã đặt",
+        "travelers": "Khách",
+        "payNow": "Thanh toán ngay →"
+      },
+      "status": {
+        "pending": "Chờ thanh toán",
+        "confirmed": "Đã xác nhận",
+        "cancelled": "Đã hủy",
+        "completed": "Hoàn thành",
+        "unknown": "Không xác định"
+      }
+    }
   },
   "common": {
     "loading": "Đang tải...",
@@ -127,6 +270,173 @@
     "next": "Tiếp theo",
     "noData": "Không có dữ liệu",
     "required": "Trường này là bắt buộc",
-    "invalidEmail": "Email không hợp lệ"
+    "invalidEmail": "Email không hợp lệ",
+    "pages": "Trang"
+  },
+  "footer": {
+    "description": "Triptopia - Hành trình khám phá những điểm đến tuyệt vời nhất tại Việt Nam. Chúng tôi mang đến trải nghiệm du lịch chuyên nghiệp và tận tâm.",
+    "aboutTitle": "Thông tin",
+    "contactTitle": "Liên hệ",
+    "galleryTitle": "Bộ sưu tập",
+    "aboutUs": "Về chúng tôi",
+    "services": "Dịch vụ",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản sử dụng"
+  },
+  "admin": {
+    "sidebar": {
+      "dashboard": "Bảng điều khiển",
+      "tours": "Quản lý Tour",
+      "categories": "Danh mục",
+      "destinations": "Điểm đến",
+      "users": "Quản lý Người dùng",
+      "bookings": "Đặt chỗ",
+      "logout": "Đăng xuất"
+    },
+    "header": {
+      "breadcrumb": "Quản trị",
+      "userProfile": "Người quản trị",
+      "logoutSuccess": "Đã đăng xuất khỏi khu vực Admin"
+    },
+    "dashboard": {
+      "title": "Tổng quan Dashboard",
+      "refresh": "Làm mới số liệu",
+      "generateReport": "Tạo báo cáo",
+      "revenue": "Tổng doanh thu",
+      "tours": "Tổng số Tour",
+      "users": "Người dùng đăng ký",
+      "pending": "Đặt chỗ chờ xử lý",
+      "vsLastMonth": "so với tháng trước",
+      "activeSystem": "Hệ thống đang hoạt động",
+      "userAccounts": "Tài khoản người dùng",
+      "actionRequired": "Cần xử lý",
+      "allCaughtUp": "Đã hoàn thành hết",
+      "recent Bookings": "Recent Bookings",
+      "viewAll": "View All",
+      "columns": {
+        "id": "Mã đặt chỗ",
+        "customer": "Khách hàng",
+        "tour": "Tour",
+        "date": "Date",
+        "status": "Trạng thái",
+        "amount": "Tổng tiền"
+      }
+    },
+    "tours": {
+      "title": "Quản lý Tour",
+      "addTour": "Thêm Tour mới",
+      "searchPlaceholder": "Tìm kiếm tour...",
+      "allStatus": "Tất cả trạng thái",
+      "noTours": "Không tìm thấy tour nào.",
+      "columns": {
+        "id": "ID",
+        "cover": "Ảnh bìa",
+        "name": "Tên Tour",
+        "location": "Vị trí",
+        "status": "Trạng thái",
+        "actions": "Hành động"
+      },
+      "dialog": {
+        "create": "Tạo Tour mới",
+        "edit": "Chỉnh sửa Tour",
+        "tourTitle": "Tiêu đề Tour",
+        "enterName": "Nhập tên tour",
+        "category": "Danh mục",
+        "selectCategory": "Chọn danh mục",
+        "destination": "Điểm đến",
+        "selectDestination": "Chọn điểm đến",
+        "description": "Mô tả",
+        "overview": "Tổng quan về tour...",
+        "highlights": "Điểm nổi bật",
+        "policies": "Chính sách",
+        "itinerary": "Lịch trình",
+        "saving": "Đang lưu...",
+        "save": "Lưu Tour"
+      },
+      "schedules": {
+        "title": "Lịch khởi hành",
+        "existing": "Lịch hiện có",
+        "noSchedules": "Chưa có lịch khởi hành nào.",
+        "departure": "Ngày đi",
+        "return": "Ngày về",
+        "seats": "Số chỗ",
+        "prices": "Giá vé",
+        "adult": "Người lớn",
+        "child": "Trẻ em",
+        "infant": "Em bé",
+        "addNew": "Thêm lịch mới",
+        "totalSeats": "Tổng số chỗ",
+        "addBtn": "Thêm lịch"
+      }
+    },
+    "users": {
+        "title": "Quản lý Người dùng",
+        "addUser": "Thêm Người dùng",
+        "searchPlaceholder": "Tìm tên hoặc email...",
+        "allRoles": "Tất cả vai trò",
+        "noUsers": "Không tìm thấy người dùng phù hợp.",
+        "columns": {
+            "user": "Người dùng",
+            "contact": "Thông tin liên hệ",
+            "role": "Vai trò",
+            "status": "Trạng thái",
+            "joined": "Ngày tham gia",
+            "actions": "Hành động"
+        },
+        "status": {
+            "active": "Đang hoạt động",
+            "locked": "Đã khóa"
+        },
+        "roles": {
+            "admin": "Quản trị viên",
+            "standard": "Người dùng phổ thông"
+        },
+        "noPhone": "Chưa có số điện thoại",
+        "lockTooltip": "Khóa tài khoản",
+        "unlockTooltip": "Mở khóa tài khoản"
+    },
+    "categories": {
+        "title": "Quản lý Danh mục",
+        "addBtn": "Thêm Danh mục",
+        "searchPlaceholder": "Tìm kiếm danh mục...",
+        "noData": "Không có danh mục nào.",
+        "columns": {
+            "name": "Tên danh mục",
+            "description": "Mô tả",
+            "status": "Trạng thái"
+        },
+        "dialog": {
+            "create": "Tạo danh mục mới",
+            "edit": "Chỉnh sửa danh mục",
+            "name": "Tên danh mục",
+            "enterName": "Nhập tên danh mục",
+            "order": "Thứ tự hiển thị",
+            "descPlaceholder": "Mô tả danh mục...",
+            "save": "Lưu danh mục"
+        }
+    },
+    "destinations": {
+      "title": "Quản lý Điểm đến",
+      "addBtn": "Thêm điểm đến",
+      "searchPlaceholder": "Tìm kiếm địa điểm...",
+      "noData": "Không tìm thấy địa điểm nào.",
+      "columns": {
+        "name": "Tên địa điểm",
+        "location": "Vị trí",
+        "province": "Tỉnh/Thành phố",
+        "country": "Quốc gia"
+      },
+      "dialog": {
+        "create": "Tạo địa điểm mới",
+        "edit": "Chỉnh sửa địa điểm",
+        "name": "Tên địa điểm",
+        "coverUrl": "URL ảnh bìa",
+        "province": "Tỉnh/Thành phố",
+        "country": "Quốc gia",
+        "desc": "Mô tả",
+        "descPlaceholder": "Mô tả về địa điểm...",
+        "save": "Lưu địa điểm"
+      }
+    }
   }
 }
