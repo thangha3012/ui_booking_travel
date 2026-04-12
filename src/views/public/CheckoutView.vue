@@ -15,7 +15,7 @@
 
     <!-- MAIN CONTENT -->
     <div class="container checkout-main">
-      <div v-if="!tour && !loading" class="error-state py-20 text-center">
+      <div v-if="!booking && !loading" class="error-state py-20 text-center">
          <i class="pi pi-search text-4xl text-slate-300 mb-4"></i>
          <p class="text-slate-500">{{ $t('booking.checkout.noTour') }}</p>
          <Button :label="$t('booking.checkout.browseTours')" icon="pi pi-arrow-left" text @click="router.push('/tours')" />
@@ -29,52 +29,26 @@
              <h2 class="section-heading mb-0">{{ $t('booking.checkout.confirmPay') }}</h2>
           </div>
 
-          <!-- Section 1: Information -->
+          <!-- Section 1: Information summary -->
           <div class="checkout-section">
             <h3 class="section-title">
               <span class="icon-circle">1</span> {{ $t('booking.contactInfo') }}
             </h3>
             
-            <div class="form-block">
-               <h4 class="block-title">{{ $t('booking.checkout.contactDetails') }}</h4>
-               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                 <div class="field">
-                    <label>{{ $t('auth.fullName') }} *</label>
-                    <InputText v-model="contactForm.contactName" :placeholder="$t('auth.fullName')" fluid />
-                 </div>
-                 <div class="field">
-                    <label>{{ $t('auth.phone') }} *</label>
-                    <InputText v-model="contactForm.contactPhone" :placeholder="$t('auth.phone')" fluid />
-                 </div>
-               </div>
-               <div class="field mb-4">
-                 <label>{{ $t('auth.email') }} *</label>
-                 <InputText v-model="contactForm.contactEmail" type="email" :placeholder="$t('auth.email')" fluid />
-               </div>
-               <div class="field">
-                 <label>{{ $t('booking.checkout.notes') }}</label>
-                 <Textarea v-model="contactForm.notes" rows="3" :placeholder="$t('booking.checkout.anyRequests')" autoResize fluid />
-               </div>
-            </div>
-
-            <div class="form-block mt-10 p-6 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-               <div class="flex justify-between items-center mb-4">
-                 <h4 class="block-title mb-0">{{ $t('booking.checkout.primaryPassenger') }}</h4>
-                 <Tag :value="$t('tour.adult')" severity="info" rounded />
-               </div>
+            <div class="form-block p-6 bg-slate-50 rounded-xl border border-slate-200">
                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div class="field">
-                    <label>{{ $t('auth.fullName') }} *</label>
-                    <InputText v-model="passengers[0].fullName" :placeholder="$t('booking.checkout.idPlaceholder')" fluid />
+                 <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">{{ $t('auth.fullName') }}</label>
+                    <div class="font-semibold text-slate-800">{{ booking?.contactName }}</div>
                  </div>
-                 <div class="field">
-                    <label>{{ $t('booking.gender') }} *</label>
-                    <Select v-model="passengers[0].gender" :options="[t('booking.male'), t('booking.female'), t('booking.other')]" :placeholder="$t('common.search')" fluid />
+                 <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">{{ $t('auth.phone') }}</label>
+                    <div class="font-semibold text-slate-800">{{ booking?.contactPhone }}</div>
                  </div>
-               </div>
-               <div class="field mt-4">
-                 <label>{{ $t('booking.idDoc') }}</label>
-                 <InputText v-model="passengers[0].idDocument" :placeholder="$t('admin.destinations.dialog.descPlaceholder')" fluid />
+                 <div class="md:col-span-2">
+                    <label class="text-xs font-bold text-slate-500 uppercase">{{ $t('auth.email') }}</label>
+                    <div class="font-semibold text-slate-800">{{ booking?.contactEmail }}</div>
+                 </div>
                </div>
             </div>
           </div>
@@ -151,20 +125,19 @@
                {{ $t('booking.checkout.summary') }}
             </h3>
             
-            <div v-if="tour" class="summary-tour-card mb-6">
-               <img :src="tour.coverImage || 'https://images.unsplash.com/photo-1528127269322-539801943592?w=200&q=80'" alt="Tour" />
+            <div v-if="booking" class="summary-tour-card mb-6">
+               <img src="https://images.unsplash.com/photo-1528127269322-539801943592?w=200&q=80" alt="Tour" />
                <div class="tour-info mt-3">
-                 <h4 class="font-bold text-slate-800 leading-tight mb-1">{{ tour.title }}</h4>
+                 <h4 class="font-bold text-slate-800 leading-tight mb-1">{{ booking.tourName }}</h4>
                  <div class="flex items-center gap-2">
-                    <Rating :modelValue="5" readonly :cancel="false" class="text-xs" />
-                    <span class="text-[10px] text-slate-400 font-bold">(Based on 234 reviews)</span>
+                    <span class="text-[12px] text-slate-500"><i class="pi pi-calendar mr-1"></i> {{ new Date(booking.departureDate).toLocaleDateString() }}</span>
                  </div>
                </div>
             </div>
 
             <div class="price-breakdown space-y-3 mb-8">
                <div class="flex justify-between text-sm">
-                  <span class="text-slate-500">{{ $t('tour.adult') }} x1</span>
+                  <span class="text-slate-500">{{ booking?.numberOfPassengers || 1 }} x Passengers</span>
                   <span class="font-bold text-slate-700">${{ totalAmountComputed }}</span>
                </div>
                <div class="flex justify-between text-sm">
@@ -205,10 +178,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { tourApi } from '@/api/tourApi'
 import { bookingApi } from '@/api/bookingApi'
+import { paymentApi } from '@/api/paymentApi'
 import { useAuthStore } from '@/stores/authStore'
 import { useI18n } from 'vue-i18n'
 
@@ -231,36 +204,21 @@ const authStore = useAuthStore()
 const { t } = useI18n()
 
 const loading = ref(false)
-const tour = ref(null)
+const booking = ref(null)
 const paymentType = ref('vnpay')
 
-const contactForm = reactive({
-  contactName: '',
-  contactPhone: '',
-  contactEmail: '',
-  notes: ''
-})
-
-const passengers = ref([
-  { fullName: '', gender: 'Male', dateOfBirth: '1990-01-01', idDocument: '', type: 1 }
-])
-
 const totalAmountComputed = computed(() => {
-  const schedule = tour.value?.schedules?.[0]
-  if (schedule) {
-    return schedule.pricings?.find(p => p.passengerType === 1)?.price || 150
-  }
-  return 150
+  return booking.value ? booking.value.totalAmount : 0
 })
 
-async function loadTourInfo() {
-  const tId = route.query.tourId
-  if (!tId) return
+async function loadBookingInfo() {
+  const bId = route.query.bookingId
+  if (!bId) return
   loading.value = true
   try {
-    const res = await tourApi.getById(tId)
+    const res = await bookingApi.getById(bId)
     if (res.success) {
-      tour.value = res.data
+      booking.value = res.data
     }
   } catch (err) {
     console.error(err)
@@ -276,36 +234,18 @@ async function handleVNPayCheckout() {
     return
   }
 
-  if (!contactForm.contactName || !contactForm.contactPhone) {
-    toast.add({ severity: 'error', summary: t('booking.checkout.validationError'), detail: t('admin.tours.dialog.enterName'), life: 3000 })
+  if (paymentType.value !== 'vnpay') {
+    toast.add({ severity: 'info', summary: 'Coming Soon', detail: 'This payment method is not supported yet. Please use VNPay.', life: 3000 })
     return
   }
 
   loading.value = true
   try {
-    const schedule = tour.value?.schedules?.[0]
-    if (!schedule) {
-      toast.add({ severity: 'error', summary: 'Error', detail: 'No departures found for this tour', life: 3000 })
-      return
-    }
-
-    const bookingData = {
-      tourId: tour.value.id,
-      departureScheduleId: schedule.id,
-      contactName: contactForm.contactName,
-      contactPhone: contactForm.contactPhone,
-      contactEmail: contactForm.contactEmail,
-      notes: contactForm.notes,
-      scheduleRowVersion: schedule.rowVersion || "",
-      passengers: passengers.value
-    }
-
-    const res = await bookingApi.create(bookingData)
-    if (res.success) {
-      toast.add({ severity: 'success', summary: t('booking.checkout.bookingSuccess'), detail: t('booking.checkout.adventureConfirmed'), life: 3000 })
-      setTimeout(() => router.push('/my-bookings'), 1500)
+    const res = await paymentApi.createVNPayUrl(booking.value.id)
+    if (res.url) {
+      window.location.href = res.url // Redirect sang trang VNPay
     } else {
-      toast.add({ severity: 'error', summary: t('common.error'), detail: res.message, life: 4000 })
+      toast.add({ severity: 'error', summary: t('common.error'), detail: 'Không thể tạo URL thanh toán VNPay', life: 4000 })
     }
   } catch (error) {
     toast.add({ severity: 'error', summary: t('common.error'), detail: error.message, life: 4000 })
@@ -315,7 +255,7 @@ async function handleVNPayCheckout() {
 }
 
 onMounted(() => {
-  loadTourInfo()
+  loadBookingInfo()
 })
 </script>
 

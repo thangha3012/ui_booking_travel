@@ -4,39 +4,45 @@
     <div class="bookings-hero">
       <div class="hero-overlay"></div>
       <div class="hero-content">
-        <h1 class="hero-title">{{ $t('booking.myBookings.title') }}</h1>
-        <p class="hero-subtitle">{{ $t('booking.myBookings.subtitle') }}</p>
+        <h1 class="hero-title">{{ t('booking.myBookings.title') }}</h1>
+        <p class="hero-subtitle">{{ t('booking.myBookings.subtitle') }}</p>
       </div>
     </div>
 
     <div class="container bookings-container">
       <!-- Filter tabs -->
-      <div class="filter-tabs">
-        <button v-for="tab in tabs" :key="tab.value"
-          class="tab-btn" :class="{ active: activeTab === tab.value }" @click="activeTab = tab.value">
-          {{ tab.label }}
-        </button>
+      <div class="tabs-container">
+        <Tabs v-model:value="activeTab">
+          <TabList>
+            <Tab v-for="tab in tabs" :key="tab.value" :value="tab.value">
+              {{ tab.label }}
+            </Tab>
+          </TabList>
+        </Tabs>
       </div>
 
-      <div v-if="loading" class="loading-state">
-        <div class="spinner"></div>
-        <p>{{ $t('booking.myBookings.loading') }}</p>
+      <div v-if="loading" class="bookings-grid">
+         <div v-for="n in 3" :key="n" class="skeleton-ticket mb-6">
+            <Skeleton height="150px" borderRadius="16px"></Skeleton>
+         </div>
       </div>
 
       <div v-else-if="filteredBookings.length === 0" class="empty-state">
-        <div class="empty-icon">✈️</div>
-        <h3>{{ $t('booking.myBookings.empty.title') }}</h3>
-        <p>{{ $t('booking.myBookings.empty.desc') }}</p>
-        <RouterLink to="/tours" class="explore-btn">{{ $t('booking.myBookings.empty.explore') }}</RouterLink>
+        <div class="empty-icon">
+           <i class="pi pi-map-marker"></i>
+        </div>
+        <h3>{{ t('booking.myBookings.empty.title') }}</h3>
+        <p>{{ t('booking.myBookings.empty.desc') }}</p>
+        <Button label="Explore Tours" icon="pi pi-compass" raised @click="router.push('/tours')" />
       </div>
 
       <div v-else class="bookings-list">
-        <div v-for="booking in filteredBookings" :key="booking.id" class="ticket-card">
+        <div v-for="booking in filteredBookings" :key="booking.id" class="ticket-card animate-fade-in">
           <!-- Left: Ticket stub -->
           <div class="ticket-left">
-            <div class="ticket-label">{{ $t('booking.myBookings.ticket.label') }}</div>
+            <div class="ticket-label">TICKET</div>
             <div class="ticket-id">#{{ booking.id }}</div>
-            <div class="ticket-date-label">{{ $t('booking.myBookings.ticket.booked') }}</div>
+            <div class="ticket-date-label">BOOKED ON</div>
             <div class="ticket-date">{{ formatDate(booking.createdAt) }}</div>
           </div>
 
@@ -52,40 +58,77 @@
             <div class="ticket-main">
               <h3 class="tour-name">{{ booking.tourName }}</h3>
               <div class="tour-details">
-                <span class="detail-pill">📅 {{ formatDate(booking.departureDate) }}</span>
-                <span class="detail-pill">👥 {{ booking.numberOfPassengers }} {{ $t('booking.myBookings.ticket.travelers') }}</span>
+                <span class="detail-pill"><i class="pi pi-calendar-plus mr-1"></i> {{ formatDate(booking.departureDate) }}</span>
+                <span class="detail-pill"><i class="pi pi-users mr-1"></i> {{ booking.numberOfPassengers }} Travelers</span>
+                <span class="detail-pill currency"><i class="pi pi-wallet mr-1"></i> ${{ booking.totalAmount?.toLocaleString() }}</span>
               </div>
             </div>
-            <div class="ticket-price-block">
-              <div class="ticket-status" :class="getStatusClass(booking.status)">
-                {{ getStatusLabel(booking.status) }}
+            
+            <div class="ticket-actions">
+              <div class="status-wrap mb-4">
+                 <Tag :value="getStatusLabel(booking.status)" :severity="getStatusSeverity(booking.status)" rounded />
               </div>
-              <div class="ticket-price">
-                <span class="price-amount">${{ booking.totalAmount?.toLocaleString() }}</span>
+              
+              <div class="flex gap-2">
+                 <!-- Pay Now for Pending/Awaiting -->
+                 <Button v-if="booking.status === 1 || booking.status === 2" 
+                    label="Pay Now" 
+                    icon="pi pi-credit-card" 
+                    size="small"
+                    @click="router.push({ name: 'checkout', query: { bookingId: booking.id } })" />
+                 
+                 <!-- Cancel for Pending/Awaiting -->
+                 <Button v-if="booking.status === 1 || booking.status === 2" 
+                    label="Cancel" 
+                    icon="pi pi-times" 
+                    severity="danger" 
+                    size="small"
+                    outlined
+                    @click="confirmCancel(booking)" />
+                 
+                 <!-- Track/Details for others -->
+                 <Button v-if="booking.status === 3 || booking.status === 5" 
+                    label="Itinerary" 
+                    icon="pi pi-map" 
+                    severity="secondary" 
+                    size="small"
+                    text />
               </div>
-              <button v-if="booking.status === 1" class="pay-now-btn">{{ $t('booking.myBookings.ticket.payNow') }}</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Floating Chatbot Button -->
-    <div class="chatbot-fab" title="Chat with us">
-      💬
-      <span class="fab-dot"></span>
-    </div>
+    
+    <!-- Confirm Dialog -->
+    <ConfirmDialog />
+    <Toast />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { bookingApi } from '@/api/bookingApi'
-import { useToast } from '@/composables/useToast'
+
+// PrimeVue
+import Tabs from 'primevue/tabs'
+import TabList from 'primevue/tablist'
+import Tab from 'primevue/tab'
+import Button from 'primevue/button'
+import Tag from 'primevue/tag'
+import Skeleton from 'primevue/skeleton'
+import Toast from 'primevue/toast'
+import ConfirmDialog from 'primevue/confirmdialog'
+import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
 
 const { t, locale } = useI18n()
+const router = useRouter()
 const toast = useToast()
+const confirm = useConfirm()
+
 const bookings = ref([])
 const loading = ref(true)
 const activeTab = ref('All')
@@ -102,14 +145,15 @@ async function fetchMyBookings() {
   try {
     const res = await bookingApi.getMyBookings()
     bookings.value = res.data || res || []
-  } catch { toast.error(t('common.error')) }
-  finally { loading.value = false }
+  } catch (err) { 
+    toast.add({ severity: 'error', summary: 'Error', detail: t('common.error'), life: 3000 })
+  } finally { loading.value = false }
 }
 
 const filteredBookings = computed(() => {
   if (activeTab.value === 'All') return bookings.value
-  const statusMap = { Upcoming: 1, Completed: 4, Cancelled: 3 }
-  return bookings.value.filter(b => b.status === statusMap[activeTab.value])
+  const statusMap = { Upcoming: [1, 2, 3], Completed: [5], Cancelled: [4] }
+  return bookings.value.filter(b => statusMap[activeTab.value]?.includes(b.status))
 })
 
 function formatDate(d) {
@@ -120,16 +164,37 @@ function formatDate(d) {
 }
 
 function getStatusLabel(s) {
-  return { 
-    1: t('booking.myBookings.status.pending'), 
-    2: t('booking.myBookings.status.confirmed'), 
-    3: t('booking.myBookings.status.cancelled'), 
-    4: t('booking.myBookings.status.completed') 
-  }[s] || t('booking.myBookings.status.unknown')
+  return {
+    1: t('booking.myBookings.status.pending'),
+    2: 'Awaiting Confirmation',
+    3: t('booking.myBookings.status.confirmed'),
+    4: t('booking.myBookings.status.cancelled'),
+    5: t('booking.myBookings.status.completed')
+  }[s] || 'Unknown'
 }
 
-function getStatusClass(s) {
-  return { 1: 'status-pending', 2: 'status-confirmed', 3: 'status-cancelled', 4: 'status-completed' }[s] || ''
+function getStatusSeverity(s) {
+  return { 1: 'warn', 2: 'info', 3: 'success', 4: 'danger', 5: 'secondary' }[s] || 'secondary'
+}
+
+function confirmCancel(booking) {
+  confirm.require({
+    message: `Are you sure you want to cancel booking #${booking.id}? This action cannot be undone and reserved seats will be released.`,
+    header: 'Hủy đơn hàng',
+    icon: 'pi pi-exclamation-triangle',
+    rejectLabel: 'Quay lại',
+    acceptLabel: 'Hủy ngay',
+    acceptClass: 'p-button-danger',
+    accept: async () => {
+      try {
+        await bookingApi.cancel(booking.id)
+        toast.add({ severity: 'success', summary: 'Canceled', detail: 'Đơn hàng đã được hủy thành công', life: 3000 })
+        fetchMyBookings()
+      } catch (err) {
+        toast.add({ severity: 'error', summary: 'Error', detail: err.response?.data?.message || 'Không thể hủy đơn hàng', life: 4000 })
+      }
+    }
+  })
 }
 
 onMounted(fetchMyBookings)
@@ -137,134 +202,80 @@ onMounted(fetchMyBookings)
 
 <style lang="scss" scoped>
 @use '@/assets/styles/variables' as *;
+@use '@/assets/styles/mixins' as *;
 
-.my-bookings-page {
-  min-height: 100vh;
-  background: $color-bg-page;
-  font-family: $font-body;
-}
+.my-bookings-page { background: #f8fafc; min-height: 100vh; padding-bottom: $space-20; }
 
-// ---- Hero ----
 .bookings-hero {
-  position: relative;
-  height: 280px;
+  position: relative; height: 260px;
   background: url('https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1920&q=80') center/cover;
-  display: flex; align-items: center; justify-content: center;
-  padding-top: $navbar-height;
+  display: flex; align-items: center; justify-content: center; padding-top: $navbar-height;
 }
-.hero-overlay {
-  position: absolute; inset: 0;
-  background: $gradient-hero;
-  opacity: 0.92;
-}
+.hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(35, 87, 137, 0.9), rgba(0, 0, 0, 0.6)); }
 .hero-content { position: relative; z-index: 1; text-align: center; color: white; }
-.hero-title { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; letter-spacing: -0.03em; margin: 0 0 8px; }
-.hero-subtitle { font-size: 15px; opacity: 0.75; font-weight: 400; }
+.hero-title { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+.hero-subtitle { font-size: 1rem; opacity: 0.8; }
 
-// ---- Container ----
-.bookings-container { max-width: 920px; margin: -40px auto 0; padding: 0 24px 80px; position: relative; z-index: 10; }
+.bookings-container { max-width: 1000px; margin: -40px auto 0; position: relative; z-index: 10; }
 
-// ---- Filter Tabs ----
-.filter-tabs {
-  display: flex; gap: 8px; margin-bottom: 28px; justify-content: center;
-}
-.tab-btn {
-  padding: 8px 20px; border-radius: $border-radius-full; border: none; background: $color-bg-card;
-  color: $color-text-body; font-size: 13px; font-weight: 600; cursor: pointer;
-  box-shadow: $shadow-sm; transition: $transition-base;
-  &.active { background: $color-primary; color: white; box-shadow: 0 4px 12px rgba(35,87,137,0.25); }
-  &:hover:not(.active) { background: $color-bg-surface; }
+.tabs-container {
+   background: white; border-radius: 16px; padding: 4px; box-shadow: $shadow-lg; margin-bottom: $space-8;
+   :deep(.p-tabs-list) { border: none; }
 }
 
-// ---- Loading & Empty ----
-.loading-state, .empty-state { text-align: center; padding: 80px 20px; background: white; border-radius: $border-radius-lg; box-shadow: $shadow-lg; }
-.spinner { width: 36px; height: 36px; border: 3px solid $color-border; border-top-color: $color-primary; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.empty-icon { font-size: 56px; margin-bottom: 16px; }
-.empty-state h3 { font-size: 22px; color: $color-text-primary; font-weight: 700; margin-bottom: 8px; }
-.empty-state p { color: $color-text-secondary; margin-bottom: 28px; font-size: 14px; }
-.explore-btn {
-  display: inline-block; background: $gradient-primary; color: white; padding: 12px 28px;
-  border-radius: $border-radius-full; text-decoration: none; font-weight: 600; font-size: 13px;
-  box-shadow: 0 4px 14px rgba(35,87,137,0.25); transition: $transition-base;
-  &:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(35,87,137,0.35); }
+.empty-state {
+   text-align: center; padding: $space-20 $space-6; background: white; border-radius: 20px; box-shadow: $shadow-xl;
+   .empty-icon { font-size: 4rem; color: #cbd5e1; margin-bottom: $space-6; }
+   h3 { font-size: 1.5rem; font-weight: 800; color: #1e293b; margin-bottom: $space-2; }
+   p { color: #64748b; margin-bottom: $space-8; max-width: 400px; margin-inline: auto; }
 }
 
-// ---- Ticket Card — Boarding Pass Style ----
-.bookings-list { display: flex; flex-direction: column; gap: 20px; }
+.bookings-list { display: flex; flex-direction: column; gap: $space-5; }
+
 .ticket-card {
-  display: flex; background: white; border-radius: $border-radius-lg;
-  box-shadow: $shadow-card; overflow: hidden; transition: $transition-base;
-  &:hover { transform: translateY(-3px); box-shadow: $shadow-card-hover; }
+  display: flex; background: white; border-radius: 20px;
+  box-shadow: $shadow-md; overflow: hidden; border: 1px solid #f1f5f9;
+  transition: all 0.3s ease;
+  &:hover { transform: translateY(-4px); box-shadow: $shadow-2xl; }
 }
 
 .ticket-left {
-  width: 130px; min-width: 130px;
-  background: $gradient-primary;
-  color: white; padding: 28px 20px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; gap: 4px;
+  width: 140px; min-width: 140px; background: linear-gradient(135deg, $color-primary, #1e40af);
+  color: white; padding: $space-8 $space-4; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: 4px; border-right: 1px dashed rgba(255,255,255,0.2);
 }
-.ticket-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6; }
-.ticket-id { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px; }
-.ticket-date-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.5; }
-.ticket-date { font-size: 12px; font-weight: 500; opacity: 0.85; }
+.ticket-label { font-size: 10px; font-weight: 800; letter-spacing: 0.2em; opacity: 0.6; }
+.ticket-id { font-size: 24px; font-weight: 900; margin-bottom: 12px; }
+.ticket-date-label { font-size: 9px; font-weight: 700; opacity: 0.5; }
+.ticket-date { font-size: 12px; font-weight: 600; opacity: 0.9; }
 
 .ticket-separator {
   width: 1px; position: relative; display: flex; flex-direction: column; align-items: center;
-  .circle-top, .circle-bottom { width: 20px; height: 20px; border-radius: 50%; background: $color-bg-page; position: absolute; z-index: 2; }
-  .circle-top { top: -10px; }
-  .circle-bottom { bottom: -10px; }
-  .dashed-line { flex: 1; width: 0; border-left: 2px dashed rgba($color-border, 0.6); margin: 10px 0; }
+  .circle-top, .circle-bottom { width: 24px; height: 24px; border-radius: 50%; background: #f8fafc; position: absolute; z-index: 2; border: 1px solid #f1f5f9; }
+  .circle-top { top: -12px; }
+  .circle-bottom { bottom: -12px; }
+  .dashed-line { flex: 1; width: 0; border-left: 2px dashed #e2e8f0; margin: 15px 0; }
 }
 
-.ticket-right {
-  flex: 1; padding: 24px 28px; display: flex; justify-content: space-between; align-items: center; gap: 24px;
-}
-.ticket-main { flex: 1; }
-.tour-name { font-size: 17px; font-weight: 700; color: $color-text-primary; margin: 0 0 12px; letter-spacing: -0.01em; }
-.tour-details { display: flex; gap: 8px; flex-wrap: wrap; }
+.ticket-right { flex: 1; padding: $space-6 $space-8; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.tour-name { font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: $space-4; letter-spacing: -0.01em; }
+.tour-details { display: flex; gap: 12px; flex-wrap: wrap; }
 .detail-pill {
-  padding: 4px 12px; background: $color-bg-surface; border-radius: $border-radius-full;
-  font-size: 12px; color: $color-text-body; font-weight: 500;
+   font-size: 12px; color: #64748b; font-weight: 600; background: #f1f5f9; padding: 4px 12px; border-radius: 8px;
+   display: flex; align-items: center;
+   &.currency { color: $color-primary; background: rgba($color-primary, 0.08); }
 }
 
-.ticket-price-block { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; min-width: 140px; }
-.ticket-status {
-  padding: 5px 14px; border-radius: $border-radius-full; font-size: 11px; font-weight: 600;
-  letter-spacing: 0.03em; text-transform: uppercase;
-}
-.status-pending { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
-.status-confirmed { background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; }
-.status-cancelled { background: linear-gradient(135deg, #fecdd3, #fda4af); color: #9f1239; }
-.status-completed { background: $color-bg-surface; color: $color-text-body; }
-.price-amount { font-size: 24px; font-weight: 700; color: $color-text-primary; letter-spacing: -0.03em; }
-.pay-now-btn {
-  background: $gradient-primary; color: white; border: none; padding: 8px 18px; border-radius: $border-radius-full;
-  font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(35,87,137,0.2);
-  transition: $transition-base;
-  &:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(35,87,137,0.3); }
+.ticket-actions { display: flex; flex-direction: column; align-items: flex-end; }
+
+@include md-max {
+   .ticket-card { flex-direction: column; }
+   .ticket-left { width: 100%; flex-direction: row; justify-content: space-between; padding: $space-4 $space-6; }
+   .ticket-separator { display: none; }
+   .ticket-right { flex-direction: column; align-items: flex-start; }
+   .ticket-actions { width: 100%; align-items: flex-start; margin-top: $space-6; border-top: 1px solid #f1f5f9; padding-top: $space-6; }
 }
 
-// Chatbot FAB
-.chatbot-fab {
-  position: fixed; bottom: 28px; right: 28px;
-  width: 56px; height: 56px; border-radius: 50%;
-  background: $color-primary; color: white;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px; cursor: pointer; box-shadow: 0 8px 24px rgba(35,87,137,0.3);
-  transition: $transition-base; z-index: 999;
-  &:hover { transform: scale(1.08); box-shadow: 0 12px 32px rgba(35,87,137,0.4); }
-  .fab-dot {
-    position: absolute; top: 2px; right: 2px; width: 12px; height: 12px;
-    background: $color-accent; border-radius: 50%; border: 2px solid white;
-  }
-}
-
-@media (max-width: 640px) {
-  .ticket-card { flex-direction: column; }
-  .ticket-left { width: 100%; min-width: unset; flex-direction: row; gap: 16px; padding: 16px 20px; }
-  .ticket-separator { display: none; }
-  .ticket-right { flex-direction: column; align-items: flex-start; }
-}
+.animate-fade-in { animation: fadeIn 0.4s ease-out both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 </style>

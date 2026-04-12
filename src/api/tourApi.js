@@ -2,7 +2,7 @@
 import apiClient from './axios'
 
 export const tourApi = {
-  getAll: () => apiClient.get('/Tour'),
+  getAll: (params) => apiClient.get('/Tour', { params }),
   getById: (id) => apiClient.get(`/Tour/${id}`),
   create: (data) => apiClient.post('/Tour', data),
   update: (id, data) => apiClient.put(`/Tour/${id}`, data),

@@ -168,6 +168,7 @@
 
       </div>
     </div>
+    <Toast position="top-right" />
   </div>
 </template>
 
@@ -185,6 +186,7 @@ import Tag from 'primevue/tag'
 import Dropdown from 'primevue/dropdown'
 import DatePicker from 'primevue/datepicker'
 import ProgressSpinner from 'primevue/progressspinner'
+import Toast from 'primevue/toast'
 
 const route = useRoute()
 const router = useRouter()
@@ -309,24 +311,31 @@ async function submitBooking() {
   }
 
   submitting.value = true
-  const payload = {
-     tourId: tour.value.id,
-     departureScheduleId: schedule.value.id,
-     contactName: form.contactName,
-     contactPhone: form.contactPhone,
-     contactEmail: form.contactEmail,
-     notes: form.notes,
-     scheduleRowVersion: schedule.value.rowVersion || '', // might be base64 from API
-     passengers: form.passengers.map(p => ({
-        fullName: p.fullName,
-        gender: p.gender,
-        dateOfBirth: p.dateOfBirth ? p.dateOfBirth.toISOString() : null,
-        idDocument: p.idDocument,
-        type: p.type
-     }))
-  }
 
   try {
+     const payload = {
+        tourId: tour.value.id,
+        departureScheduleId: schedule.value.id,
+        contactName: form.contactName,
+        contactPhone: form.contactPhone,
+        contactEmail: form.contactEmail,
+        notes: form.notes,
+        scheduleRowVersion: schedule.value.rowVersion || null,
+        passengers: form.passengers.map(p => {
+           let dob = null;
+           if (p.dateOfBirth) {
+               dob = (p.dateOfBirth instanceof Date) ? p.dateOfBirth.toISOString() : new Date(p.dateOfBirth).toISOString();
+           }
+           return {
+              fullName: p.fullName,
+              gender: p.gender,
+              dateOfBirth: dob,
+              idDocument: p.idDocument,
+              type: p.type
+           }
+        })
+     }
+
      const res = await bookingApi.create(payload)
      if (res.success || (res.data && res.data.bookingId)) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Booking created successfully!', life: 3000 })

@@ -11,6 +11,7 @@ const routes = [
       { path: 'tours',     name: 'tours',       component: () => import('@/views/public/TourListView.vue') },
       { path: 'tours/:id', name: 'tour-detail', component: () => import('@/views/public/TourDetailView.vue') },
       { path: 'checkout',  name: 'checkout',    component: () => import('@/views/public/CheckoutView.vue'), meta: { requiresAuth: true } },
+      { path: 'vnpay-return', name: 'vnpay-return', component: () => import('@/views/public/VNPayReturnView.vue'), meta: { requiresAuth: true } },
       
       // ---- AUTH (bây giờ có navbar/footer) ----
       {

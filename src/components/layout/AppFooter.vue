@@ -88,8 +88,15 @@ const aboutLinks = computed(() => [
 ])
 
 function getGalleryImg(i) {
-  // Using relative path to the moved assets
-  return new URL(`../../assets/imgs/footer/g${i}.png`, import.meta.url).href
+  const imgs = [
+    'https://images.unsplash.com/photo-1555921015-5532091f6026?w=200&q=70',
+    'https://images.unsplash.com/photo-1528127269322-539801943592?w=200&q=70',
+    'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=200&q=70',
+    'https://images.unsplash.com/photo-1573390016527-19ef6f38ebe3?w=200&q=70',
+    'https://images.unsplash.com/photo-1595959183082-7b570a7a3829?w=200&q=70',
+    'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=200&q=70',
+  ]
+  return imgs[(i - 1) % imgs.length]
 }
 </script>
 
@@ -98,10 +105,10 @@ function getGalleryImg(i) {
 @use '@/assets/styles/mixins' as *;
 
 .footer {
-  background-color: #f8f9fa; // Match light background from image
-  border-top: 1px solid #e5e7eb;
-  padding-top: $space-16;
-  color: $color-text-primary;
+  background: linear-gradient(180deg, #0d1b2b 0%, #1a2e42 100%);
+  color: rgba(255, 255, 255, 0.75);
+  border-top: none;
+  padding-top: $space-20;
 
   &__content {
     display: grid;
@@ -130,23 +137,33 @@ function getGalleryImg(i) {
     gap: $space-3;
     
     .logo-icon {
-      font-size: 1.8rem;
-      color: $color-primary;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, $color-primary, #1E6B8C);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: white;
+      box-shadow: 0 4px 12px rgba(35, 87, 137, 0.4);
     }
     
     .logo-text {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 800;
       font-family: $font-heading;
       letter-spacing: -0.02em;
+      color: white;
+      span { color: #FF6B35; }
     }
   }
 
   &__description {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: $color-text-secondary;
-    max-width: 320px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.55);
+    max-width: 300px;
   }
 
   &__socials {
@@ -155,44 +172,46 @@ function getGalleryImg(i) {
     margin-top: $space-2;
 
     .social-link {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      background: white;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: $color-text-primary;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      color: rgba(255, 255, 255, 0.6);
       transition: all 0.3s ease;
       text-decoration: none;
 
-      i { font-size: 1.2rem; }
+      i { font-size: 1rem; }
 
       &:hover {
         transform: translateY(-3px);
         background: $color-primary;
         color: white;
-        box-shadow: 0 10px 15px -3px rgba(35, 87, 137, 0.3);
+        border-color: $color-primary;
+        box-shadow: 0 8px 20px rgba(35, 87, 137, 0.4);
       }
     }
   }
 
   &__title {
-    font-size: 1.2rem;
+    font-size: 0.95rem;
     font-weight: 700;
     margin: 0;
     position: relative;
-    padding-bottom: $space-2;
+    padding-bottom: $space-3;
+    color: white;
     
     &::after {
       content: '';
       position: absolute;
       left: 0;
       bottom: 0;
-      width: 40px;
-      height: 3px;
-      background: $color-primary;
+      width: 32px;
+      height: 2px;
+      background: $color-accent;
       border-radius: $border-radius-full;
     }
   }
@@ -207,13 +226,13 @@ function getGalleryImg(i) {
 
     li {
       a {
-        color: $color-text-secondary;
+        color: rgba(255, 255, 255, 0.55);
         text-decoration: none;
         transition: $transition-fast;
-        font-size: 0.95rem;
+        font-size: 0.875rem;
 
         &:hover {
-          color: $color-primary;
+          color: white;
           padding-left: 5px;
         }
       }
@@ -224,12 +243,13 @@ function getGalleryImg(i) {
         display: flex;
         align-items: center;
         gap: $space-3;
-        color: $color-text-secondary;
-        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 0.875rem;
 
         i {
-          color: $color-primary;
-          font-size: 1rem;
+          color: $color-accent;
+          font-size: 0.9rem;
+          flex-shrink: 0;
         }
       }
     }
@@ -261,13 +281,13 @@ function getGalleryImg(i) {
   }
 
   &__bottom {
-    background-color: #f1f3f5;
-    padding: $space-6 0;
-    border-top: 1px solid #e9ecef;
+    background: rgba(0, 0, 0, 0.25);
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: $space-5 0;
     text-align: center;
-    color: $color-text-secondary;
-    font-size: 0.9rem;
-    font-weight: 500;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.82rem;
+    font-weight: 400;
   }
 }
 </style>

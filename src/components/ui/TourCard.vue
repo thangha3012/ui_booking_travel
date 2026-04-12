@@ -2,7 +2,7 @@
   <RouterLink :to="`/tours/${tour.id}`" class="tour-card" :class="`tour-card--${variant}`">
     <!-- Background Image -->
     <img
-      :src="tour.coverImage || defaultImage"
+      :src="tour.imageUrl || defaultImage"
       :alt="tour.title"
       class="tour-card__img"
       loading="lazy"
@@ -10,6 +10,7 @@
     
     <!-- Gradient Overlay for text readability at the bottom -->
     <div class="tour-card__overlay"></div>
+    <div class="tour-card__hover-overlay"></div>
 
     <!-- Rating Badge (Top Left) -->
     <div class="tour-card__badge">
@@ -107,6 +108,16 @@ const defaultImage = 'https://images.unsplash.com/photo-1528127269322-5398019435
     inset: 0;
     z-index: 2;
     background: linear-gradient(to top, rgba(0,30,60,0.9) 0%, rgba(0,30,60,0.2) 50%, rgba(0,0,0,0) 100%);
+  }
+
+  &__hover-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: rgba($color-primary, 0.4);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    .tour-card:hover & { opacity: 1; }
   }
 
   // Rating Badge
