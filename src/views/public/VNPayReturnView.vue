@@ -149,7 +149,7 @@ h1 { font-size: 2.25rem; font-weight: 800; color: #1e293b; margin-bottom: $space
    background: white; border-radius: 20px; padding: $space-6; display: flex; gap: $space-6;
    align-items: center; text-align: left; border: 1px solid #f1f5f9; box-shadow: $shadow-md;
    .advice-icon {
-      width: 48px; height: 48px; background: rgba($color-accent-rgb, 0.1); border-radius: 12px;
+      width: 48px; height: 48px; background: transparentize($color-accent, 0.9); border-radius: 12px;
       @include flex-center; color: $color-accent; font-size: 1.5rem;
    }
    h4 { font-weight: 700; color: #1e293b; margin-bottom: 4px; }

@@ -15,7 +15,7 @@
             <span>{{ $t('home.startTravelling') }}</span>
           </div>
           <h1 class="hero__title">
-            {{ $t('home.enjoyTrip') }}<br/>
+            {{ $t('home.enjoyTrip') }}<br />
             <span class="text-gradient">Việt Nam</span>
           </h1>
           <p class="hero__desc">
@@ -42,16 +42,23 @@
         <div class="hero__images">
           <div class="hero-img-grid">
             <div class="himg himg--main">
-              <img src="https://images.unsplash.com/photo-1555921015-5532091f6026?w=800&q=85" alt="Ha Giang" />
-              <div class="himg-badge">
-                <i class="pi pi-map-marker"></i> Hà Giang
-              </div>
+              <img
+                src="https://images.unsplash.com/photo-1555921015-5532091f6026?w=800&q=85"
+                alt="Ha Giang"
+              />
+              <div class="himg-badge"><i class="pi pi-map-marker"></i> Hà Giang</div>
             </div>
             <div class="himg himg--sm">
-              <img src="https://images.unsplash.com/photo-1528127269322-539801943592?w=400&q=80" alt="Sa Pa" />
+              <img
+                src="https://images.unsplash.com/photo-1528127269322-539801943592?w=400&q=80"
+                alt="Sa Pa"
+              />
             </div>
             <div class="himg himg--sm himg--bottom">
-              <img src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=400&q=80" alt="Ha Long" />
+              <img
+                src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=400&q=80"
+                alt="Ha Long"
+              />
               <div class="himg-badge himg-badge--accent">
                 <i class="pi pi-star-fill"></i> 4.9 Rating
               </div>
@@ -73,23 +80,48 @@
       <div class="container">
         <div class="search-bar">
           <div class="search-col">
-            <span class="search-label"><i class="pi pi-map-marker"></i> {{ $t('home.search.destination') }}</span>
-            <InputText v-model="searchDest" :placeholder="$t('home.searchPlaceholder')" class="search-input" />
+            <span class="search-label"
+              ><i class="pi pi-map-marker"></i> {{ $t('home.search.destination') }}</span
+            >
+            <InputText
+              v-model="searchDest"
+              :placeholder="$t('home.searchPlaceholder')"
+              class="search-input"
+            />
           </div>
           <div class="search-divider"></div>
           <div class="search-col">
-            <span class="search-label"><i class="pi pi-clock"></i> {{ $t('home.search.duration') }}</span>
-            <Select v-model="searchDuration" :options="durationOptions" :placeholder="$t('common.search')" class="search-select" />
+            <span class="search-label"
+              ><i class="pi pi-clock"></i> {{ $t('home.search.duration') }}</span
+            >
+            <Select
+              v-model="searchDuration"
+              :options="durationOptions"
+              :placeholder="$t('common.search')"
+              class="search-select"
+            />
           </div>
           <div class="search-divider"></div>
           <div class="search-col">
             <span class="search-label"><i class="pi pi-tag"></i> {{ $t('home.search.type') }}</span>
-            <Select v-model="searchType" :options="typeOptions" :placeholder="$t('common.search')" class="search-select" />
+            <Select
+              v-model="searchType"
+              :options="typeOptions"
+              :placeholder="$t('common.search')"
+              class="search-select"
+            />
           </div>
           <div class="search-divider"></div>
           <div class="search-col">
-            <span class="search-label"><i class="pi pi-users"></i> {{ $t('home.search.travellers') }}</span>
-            <Select v-model="searchTravellers" :options="travellerOptions" :placeholder="$t('common.search')" class="search-select" />
+            <span class="search-label"
+              ><i class="pi pi-users"></i> {{ $t('home.search.travellers') }}</span
+            >
+            <Select
+              v-model="searchTravellers"
+              :options="travellerOptions"
+              :placeholder="$t('common.search')"
+              class="search-select"
+            />
           </div>
           <button class="search-btn" @click="handleSearch">
             <i class="pi pi-search"></i>
@@ -129,8 +161,11 @@
           <h2 class="section-title">Điểm đến nổi bật</h2>
         </div>
         <div class="destinations-grid">
-          <RouterLink to="/tours" class="dest-card dest-card--big"
-            :style="{ backgroundImage: `url(${destinations[0].img})` }">
+          <RouterLink
+            to="/tours"
+            class="dest-card dest-card--big"
+            :style="{ backgroundImage: `url(${destinations[0].img})` }"
+          >
             <div class="dest-overlay"></div>
             <div class="dest-info">
               <span class="dest-tag">Phổ biến #1</span>
@@ -139,9 +174,13 @@
             </div>
           </RouterLink>
           <div class="dest-right">
-            <RouterLink to="/tours" class="dest-card"
-              v-for="d in destinations.slice(1)" :key="d.name"
-              :style="{ backgroundImage: `url(${d.img})` }">
+            <RouterLink
+              to="/tours"
+              class="dest-card"
+              v-for="d in destinations.slice(1)"
+              :key="d.name"
+              :style="{ backgroundImage: `url(${d.img})` }"
+            >
               <div class="dest-overlay"></div>
               <div class="dest-info">
                 <h3>{{ d.name }}</h3>
@@ -190,8 +229,16 @@
     <section class="section about-section">
       <div class="container about__inner">
         <div class="about__images">
-          <img class="img-main" src="https://images.unsplash.com/photo-1587474260584-136574528ed5?w=700&q=80" alt="About" />
-          <img class="img-overlay" src="https://images.unsplash.com/photo-1573390016527-19ef6f38ebe3?w=400&q=80" alt="About 2" />
+          <img
+            class="img-main"
+            src="https://images.unsplash.com/photo-1587474260584-136574528ed5?w=700&q=80"
+            alt="About"
+          />
+          <img
+            class="img-overlay"
+            src="https://images.unsplash.com/photo-1573390016527-19ef6f38ebe3?w=400&q=80"
+            alt="About 2"
+          />
           <div class="about-exp-badge">
             <div class="exp-number">10+</div>
             <div class="exp-text">Năm kinh nghiệm</div>
@@ -228,7 +275,9 @@
             </div>
             <p class="testimonial-text">"{{ t.text }}"</p>
             <div class="testimonial-author">
-              <div class="author-avatar" :style="{ background: t.color }">{{ t.name.charAt(0) }}</div>
+              <div class="author-avatar" :style="{ background: t.color }">
+                {{ t.name.charAt(0) }}
+              </div>
               <div>
                 <div class="author-name">{{ t.name }}</div>
                 <div class="author-tour">{{ t.tour }}</div>
@@ -248,7 +297,9 @@
       <div class="container cta-banner__content">
         <div class="cta-badge">🎉 Ưu đãi đặc biệt hôm nay</div>
         <h2 class="cta-banner__title">{{ t('hero.ctaTitle', 'Sẵn sàng khám phá chưa?') }}</h2>
-        <p class="cta-banner__desc">{{ t('hero.ctaDesc', 'Hàng trăm hành trình đang chờ bạn. Đặt tour ngay hôm nay!') }}</p>
+        <p class="cta-banner__desc">
+          {{ t('hero.ctaDesc', 'Hàng trăm hành trình đang chờ bạn. Đặt tour ngay hôm nay!') }}
+        </p>
         <div class="cta-banner__actions">
           <RouterLink to="/tours" class="cta-btn-primary">
             <i class="pi pi-map"></i> {{ $t('tour.bookNow') }}
@@ -300,19 +351,55 @@ const heroStats = [
 
 // ---- Services ----
 const services = computed(() => [
-  { icon: 'pi pi-sun', title: t('home.services.weather.title'), desc: t('home.services.weather.desc') },
-  { icon: 'pi pi-map', title: t('home.services.flight.title'), desc: t('home.services.flight.desc') },
-  { icon: 'pi pi-calendar', title: t('home.services.events.title'), desc: t('home.services.events.desc') },
-  { icon: 'pi pi-cog', title: t('home.services.custom.title'), desc: t('home.services.custom.desc') },
+  {
+    icon: 'pi pi-sun',
+    title: t('home.services.weather.title'),
+    desc: t('home.services.weather.desc'),
+  },
+  {
+    icon: 'pi pi-map',
+    title: t('home.services.flight.title'),
+    desc: t('home.services.flight.desc'),
+  },
+  {
+    icon: 'pi pi-calendar',
+    title: t('home.services.events.title'),
+    desc: t('home.services.events.desc'),
+  },
+  {
+    icon: 'pi pi-cog',
+    title: t('home.services.custom.title'),
+    desc: t('home.services.custom.desc'),
+  },
 ])
 
 // ---- Destinations ----
 const destinations = [
-  { name: 'Hà Giang', count: 24, img: 'https://images.unsplash.com/photo-1606204619745-fdf4e2a7e96a?w=800&q=80' },
-  { name: 'Sa Pa', count: 18, img: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80' },
-  { name: 'Hạ Long', count: 32, img: 'https://images.unsplash.com/photo-1528127269322-539801943592?w=600&q=80' },
-  { name: 'Ninh Bình', count: 15, img: 'https://images.unsplash.com/photo-1595959183082-7b570a7a3829?w=600&q=80' },
-  { name: 'Đà Lạt', count: 20, img: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=600&q=80' },
+  {
+    name: 'Hà Giang',
+    count: 24,
+    img: 'https://images.unsplash.com/photo-1606204619745-fdf4e2a7e96a?w=800&q=80',
+  },
+  {
+    name: 'Sa Pa',
+    count: 18,
+    img: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80',
+  },
+  {
+    name: 'Hạ Long',
+    count: 32,
+    img: 'https://images.unsplash.com/photo-1528127269322-539801943592?w=600&q=80',
+  },
+  {
+    name: 'Ninh Bình',
+    count: 15,
+    img: 'https://images.unsplash.com/photo-1595959183082-7b570a7a3829?w=600&q=80',
+  },
+  {
+    name: 'Đà Lạt',
+    count: 20,
+    img: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=600&q=80',
+  },
 ]
 
 // ---- Featured Tours ----
@@ -323,8 +410,10 @@ async function loadFeaturedTours() {
   try {
     const res = await tourApi.getAll()
     if (res.success) featuredTours.value = res.data.slice(0, 3)
-  } catch {}
-  finally { loadingTours.value = false }
+  } catch {
+  } finally {
+    loadingTours.value = false
+  }
 }
 
 // ---- About Stats ----
@@ -340,26 +429,27 @@ const testimonials = [
     name: 'Nguyễn Minh Anh',
     tour: 'Tour Hà Giang Loop 3N2Đ',
     text: 'Chuyến đi Hà Giang thực sự là trải nghiệm tuyệt vời nhất trong cuộc đời tôi. Đội ngũ hướng dẫn viên rất chuyên nghiệp và thân thiện.',
-    color: 'linear-gradient(135deg, #235789, #1E6B8C)'
+    color: 'linear-gradient(135deg, #235789, #1E6B8C)',
   },
   {
     name: 'Trần Thu Hương',
     tour: 'Tour Sa Pa Fansipan 2N1Đ',
     text: 'Dịch vụ xuất sắc từ khâu đặt tour đến khi kết thúc hành trình. Tôi sẽ giới thiệu Triptopia với tất cả bạn bè của mình!',
-    color: 'linear-gradient(135deg, #FF6B35, #f59e0b)'
+    color: 'linear-gradient(135deg, #FF6B35, #f59e0b)',
   },
   {
     name: 'Lê Văn Đức',
     tour: 'Tour Hạ Long 2N1Đ',
     text: 'Đặt tour qua app rất tiện lợi và nhanh chóng. Thanh toán dễ dàng, giá cả hợp lý. Nhất định sẽ quay lại lần nữa.',
-    color: 'linear-gradient(135deg, #10b981, #059669)'
-  }
+    color: 'linear-gradient(135deg, #10b981, #059669)',
+  },
 ]
 
 onMounted(loadFeaturedTours)
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:color';
 @use '@/assets/styles/variables' as *;
 @use '@/assets/styles/mixins' as *;
 
@@ -381,9 +471,27 @@ onMounted(loadFeaturedTours)
   border-radius: 50%;
   filter: blur(80px);
   pointer-events: none;
-  &--1 { width: 600px; height: 600px; background: rgba(255, 107, 53, 0.12); top: -200px; right: -100px; }
-  &--2 { width: 400px; height: 400px; background: rgba(35, 87, 137, 0.3); bottom: -100px; left: -50px; }
-  &--3 { width: 300px; height: 300px; background: rgba(45, 109, 163, 0.2); top: 40%; left: 50%; }
+  &--1 {
+    width: 600px;
+    height: 600px;
+    background: rgba(255, 107, 53, 0.12);
+    top: -200px;
+    right: -100px;
+  }
+  &--2 {
+    width: 400px;
+    height: 400px;
+    background: rgba(35, 87, 137, 0.3);
+    bottom: -100px;
+    left: -50px;
+  }
+  &--3 {
+    width: 300px;
+    height: 300px;
+    background: rgba(45, 109, 163, 0.2);
+    top: 40%;
+    left: 50%;
+  }
 }
 
 .hero__inner {
@@ -394,7 +502,9 @@ onMounted(loadFeaturedTours)
   position: relative;
   z-index: 1;
 
-  @include lg { grid-template-columns: 1fr 1.1fr; }
+  @include lg {
+    grid-template-columns: 1fr 1.1fr;
+  }
 }
 
 .hero__badge {
@@ -403,7 +513,7 @@ onMounted(loadFeaturedTours)
   gap: $space-2;
   background: rgba(255, 107, 53, 0.15);
   border: 1px solid rgba(255, 107, 53, 0.3);
-  color: #FFA07A;
+  color: #ffa07a;
   padding: 6px 16px;
   border-radius: $border-radius-full;
   font-size: $font-size-xs;
@@ -413,7 +523,10 @@ onMounted(loadFeaturedTours)
   margin-bottom: $space-5;
   width: fit-content;
 
-  i { font-size: 0.6rem; color: $color-accent; }
+  i {
+    font-size: 0.6rem;
+    color: $color-accent;
+  }
 }
 
 .hero__title {
@@ -456,7 +569,7 @@ onMounted(loadFeaturedTours)
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 32px rgba(255, 107, 53, 0.5);
-    background: darken(#FF6B35, 6%);
+    background: color.adjust(#ff6b35, $lightness: -6%);
   }
 }
 
@@ -544,11 +657,17 @@ onMounted(loadFeaturedTours)
     transition: transform 0.6s ease;
   }
 
-  &:hover img { transform: scale(1.05); }
+  &:hover img {
+    transform: scale(1.05);
+  }
 
-  &--main { grid-row: span 2; }
-  &--sm { }
-  &--bottom { }
+  &--main {
+    grid-row: span 2;
+  }
+  &--sm {
+  }
+  &--bottom {
+  }
 
   &-badge {
     position: absolute;
@@ -586,14 +705,28 @@ onMounted(loadFeaturedTours)
   z-index: 10;
   animation: float 3s ease-in-out infinite;
 
-  .float-icon { font-size: 1.6rem; }
-  .float-title { font-size: 0.82rem; font-weight: 700; color: #1a202c; }
-  .float-sub { font-size: 0.7rem; color: #718096; }
+  .float-icon {
+    font-size: 1.6rem;
+  }
+  .float-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #1a202c;
+  }
+  .float-sub {
+    font-size: 0.7rem;
+    color: #718096;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 // ============================================================
@@ -635,10 +768,14 @@ onMounted(loadFeaturedTours)
     display: flex;
     align-items: center;
     gap: 4px;
-    i { font-size: 0.65rem; color: $color-primary; }
+    i {
+      font-size: 0.65rem;
+      color: $color-primary;
+    }
   }
 
-  :deep(.p-inputtext), :deep(.p-select) {
+  :deep(.p-inputtext),
+  :deep(.p-select) {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -647,7 +784,10 @@ onMounted(loadFeaturedTours)
     font-weight: $font-weight-semibold;
     color: $color-text-primary;
 
-    &:focus { outline: none !important; box-shadow: none !important; }
+    &:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
   }
 }
 
@@ -657,7 +797,9 @@ onMounted(loadFeaturedTours)
   height: 40px;
   background: $color-border;
   margin: 0 $space-4;
-  @include md { display: block; }
+  @include md {
+    display: block;
+  }
 }
 
 .search-btn {
@@ -665,7 +807,7 @@ onMounted(loadFeaturedTours)
   align-items: center;
   gap: $space-2;
   padding: 14px 28px;
-  background: linear-gradient(135deg, $color-primary, #1E6B8C);
+  background: linear-gradient(135deg, $color-primary, #1e6b8c);
   color: white;
   border: none;
   border-radius: $border-radius-full;
@@ -686,7 +828,9 @@ onMounted(loadFeaturedTours)
 // ============================================================
 // COMMON
 // ============================================================
-.section { padding: $space-24 0; }
+.section {
+  padding: $space-24 0;
+}
 
 .section-header {
   text-align: center;
@@ -709,7 +853,9 @@ onMounted(loadFeaturedTours)
   font-weight: 800;
   color: $color-text-primary;
   letter-spacing: -0.03em;
-  &.text-left { text-align: left; }
+  &.text-left {
+    text-align: left;
+  }
 }
 
 // ============================================================
@@ -723,8 +869,12 @@ onMounted(loadFeaturedTours)
   display: grid;
   grid-template-columns: 1fr;
   gap: $space-5;
-  @include sm { grid-template-columns: repeat(2, 1fr); }
-  @include lg { grid-template-columns: repeat(4, 1fr); }
+  @include sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include lg {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .service-card {
@@ -750,13 +900,23 @@ onMounted(loadFeaturedTours)
   &:hover {
     transform: translateY(-8px);
     box-shadow: $shadow-card-hover;
-    &::before { height: 4px; }
+    &::before {
+      height: 4px;
+    }
   }
 
-  &:nth-child(1)::before { background: $color-primary; }
-  &:nth-child(2)::before { background: $color-accent; }
-  &:nth-child(3)::before { background: #10b981; }
-  &:nth-child(4)::before { background: #f59e0b; }
+  &:nth-child(1)::before {
+    background: $color-primary;
+  }
+  &:nth-child(2)::before {
+    background: $color-accent;
+  }
+  &:nth-child(3)::before {
+    background: #10b981;
+  }
+  &:nth-child(4)::before {
+    background: #f59e0b;
+  }
 }
 
 .service-icon-wrap {
@@ -769,10 +929,22 @@ onMounted(loadFeaturedTours)
   font-size: 1.4rem;
   margin-bottom: $space-5;
 
-  &.color-0 { background: rgba(35, 87, 137, 0.1); color: $color-primary; }
-  &.color-1 { background: rgba(255, 107, 53, 0.1); color: $color-accent; }
-  &.color-2 { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-  &.color-3 { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+  &.color-0 {
+    background: rgba(35, 87, 137, 0.1);
+    color: $color-primary;
+  }
+  &.color-1 {
+    background: rgba(255, 107, 53, 0.1);
+    color: $color-accent;
+  }
+  &.color-2 {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+  }
+  &.color-3 {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+  }
 }
 
 .service-title {
@@ -821,7 +993,9 @@ onMounted(loadFeaturedTours)
   display: grid;
   grid-template-columns: 1fr;
   gap: $space-4;
-  @include lg { grid-template-columns: 1.5fr 1fr; }
+  @include lg {
+    grid-template-columns: 1.5fr 1fr;
+  }
 }
 
 .dest-right {
@@ -853,19 +1027,23 @@ onMounted(loadFeaturedTours)
   &:hover {
     transform: scale(1.02);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    &::after { border-color: rgba(255, 255, 255, 0.4); }
+    &::after {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
   }
 
   &--big {
     min-height: 420px;
-    @include lg { min-height: 100%; }
+    @include lg {
+      min-height: 100%;
+    }
   }
 }
 
 .dest-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 60%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.1) 60%);
 }
 
 .dest-info {
@@ -894,7 +1072,7 @@ onMounted(loadFeaturedTours)
     font-size: 1.1rem;
     font-weight: 700;
     margin: 0 0 4px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 
   p {
@@ -907,14 +1085,20 @@ onMounted(loadFeaturedTours)
 // ============================================================
 // FEATURED TOURS
 // ============================================================
-.featured-tours { background: $color-bg-surface; }
+.featured-tours {
+  background: $color-bg-surface;
+}
 
 .features-header {
   display: flex;
   flex-direction: column;
   gap: $space-4;
   margin-bottom: $space-10;
-  @include md { flex-direction: row; justify-content: space-between; align-items: flex-end; }
+  @include md {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
 }
 
 .view-all-btn {
@@ -942,8 +1126,12 @@ onMounted(loadFeaturedTours)
   display: grid;
   grid-template-columns: 1fr;
   gap: $space-6;
-  @include md { grid-template-columns: repeat(2, 1fr); }
-  @include lg { grid-template-columns: repeat(3, 1fr); }
+  @include md {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include lg {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .tour-skeleton {
@@ -970,13 +1158,19 @@ onMounted(loadFeaturedTours)
     height: 14px;
     background: #f1f5f9;
     border-radius: 6px;
-    &.short { width: 60%; }
+    &.short {
+      width: 60%;
+    }
   }
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .empty-tours {
@@ -985,25 +1179,32 @@ onMounted(loadFeaturedTours)
   color: $color-text-muted;
   background: white;
   border-radius: $border-radius-xl;
-  p { margin-top: $space-3; }
+  p {
+    margin-top: $space-3;
+  }
 }
 
 // ============================================================
 // ABOUT
 // ============================================================
-.about-section { background: white; }
+.about-section {
+  background: white;
+}
 
 .about__inner {
   display: grid;
   grid-template-columns: 1fr;
   gap: $space-12;
   align-items: center;
-  @include lg { grid-template-columns: 1fr 1fr; gap: $space-16; }
+  @include lg {
+    grid-template-columns: 1fr 1fr;
+    gap: $space-16;
+  }
 }
 
 .about__images {
   position: relative;
-  
+
   .img-main {
     width: 100%;
     border-radius: $border-radius-xl;
@@ -1023,7 +1224,9 @@ onMounted(loadFeaturedTours)
     border: 6px solid white;
     box-shadow: $shadow-lg;
     display: none;
-    @include md { display: block; }
+    @include md {
+      display: block;
+    }
   }
 }
 
@@ -1038,10 +1241,20 @@ onMounted(loadFeaturedTours)
   text-align: center;
   box-shadow: 0 12px 28px rgba(255, 107, 53, 0.3);
   display: none;
-  @include md { display: block; }
+  @include md {
+    display: block;
+  }
 
-  .exp-number { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
-  .exp-text { font-size: 0.75rem; opacity: 0.85; font-weight: 600; }
+  .exp-number {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .exp-text {
+    font-size: 0.75rem;
+    opacity: 0.85;
+    font-weight: 600;
+  }
 }
 
 .about__content {
@@ -1082,7 +1295,7 @@ onMounted(loadFeaturedTours)
   align-items: center;
   gap: $space-2;
   padding: 12px 24px;
-  background: linear-gradient(135deg, $color-primary, #1E6B8C);
+  background: linear-gradient(135deg, $color-primary, #1e6b8c);
   color: white;
   border-radius: $border-radius-full;
   font-weight: 700;
@@ -1101,13 +1314,17 @@ onMounted(loadFeaturedTours)
 // ============================================================
 // TESTIMONIALS
 // ============================================================
-.testimonials-section { background: $color-bg-surface; }
+.testimonials-section {
+  background: $color-bg-surface;
+}
 
 .testimonials-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: $space-5;
-  @include md { grid-template-columns: repeat(3, 1fr); }
+  @include md {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .testimonial-card {
@@ -1130,7 +1347,10 @@ onMounted(loadFeaturedTours)
 .testimonial-stars {
   display: flex;
   gap: 4px;
-  i { color: #f59e0b; font-size: 0.85rem; }
+  i {
+    color: #f59e0b;
+    font-size: 0.85rem;
+  }
 }
 
 .testimonial-text {
@@ -1159,8 +1379,16 @@ onMounted(loadFeaturedTours)
     flex-shrink: 0;
   }
 
-  .author-name { font-weight: 700; font-size: 0.875rem; color: $color-text-primary; }
-  .author-tour { font-size: 0.75rem; color: $color-text-muted; margin-top: 2px; }
+  .author-name {
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: $color-text-primary;
+  }
+  .author-tour {
+    font-size: 0.75rem;
+    color: $color-text-muted;
+    margin-top: 2px;
+  }
 }
 
 // ============================================================
@@ -1170,13 +1398,14 @@ onMounted(loadFeaturedTours)
   position: relative;
   overflow: hidden;
   padding: $space-24 0;
-  background: linear-gradient(135deg, #0d2137 0%, #235789 60%, #1E6B8C 100%);
+  background: linear-gradient(135deg, #0d2137 0%, #235789 60%, #1e6b8c 100%);
 }
 
 .cta-banner__bg {
   position: absolute;
   inset: 0;
-  background: url('https://images.unsplash.com/photo-1528127269322-539801943592?w=1920&q=70') center/cover;
+  background: url('https://images.unsplash.com/photo-1528127269322-539801943592?w=1920&q=70')
+    center/cover;
   opacity: 0.08;
 }
 
@@ -1205,10 +1434,20 @@ onMounted(loadFeaturedTours)
 }
 
 @keyframes particle-float {
-  0% { transform: translateY(100%) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 0.5; }
-  100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+  0% {
+    transform: translateY(100%) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
 }
 
 .cta-banner__content {
@@ -1228,7 +1467,7 @@ onMounted(loadFeaturedTours)
   gap: $space-2;
   background: rgba(255, 107, 53, 0.2);
   border: 1px solid rgba(255, 107, 53, 0.4);
-  color: #FFA07A;
+  color: #ffa07a;
   padding: 6px 18px;
   border-radius: $border-radius-full;
   font-size: 0.8rem;

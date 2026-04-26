@@ -37,7 +37,7 @@
       </div>
 
       <div v-else class="bookings-list">
-        <div v-for="booking in filteredBookings" :key="booking.id" class="ticket-card animate-fade-in">
+        <div v-for="booking in pagedBookings" :key="booking.id" class="ticket-card animate-fade-in">
           <!-- Left: Ticket stub -->
           <div class="ticket-left">
             <div class="ticket-label">TICKET</div>
@@ -98,6 +98,17 @@
           </div>
         </div>
       </div>
+
+      <!-- Paginator -->
+      <div v-if="filteredBookings.length > pageSize" class="paginator-wrap">
+        <Paginator
+          v-model:first="pageFirst"
+          :rows="pageSize"
+          :totalRecords="filteredBookings.length"
+          :rowsPerPageOptions="[5, 10, 20]"
+          @page="onPageChange"
+        />
+      </div>
     </div>
     
     <!-- Confirm Dialog -->
@@ -107,7 +118,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { bookingApi } from '@/api/bookingApi'
@@ -121,6 +132,7 @@ import Tag from 'primevue/tag'
 import Skeleton from 'primevue/skeleton'
 import Toast from 'primevue/toast'
 import ConfirmDialog from 'primevue/confirmdialog'
+import Paginator from 'primevue/paginator'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 
@@ -132,6 +144,8 @@ const confirm = useConfirm()
 const bookings = ref([])
 const loading = ref(true)
 const activeTab = ref('All')
+const pageFirst = ref(0)
+const pageSize = ref(5)
 
 const tabs = computed(() => [
   { label: t('booking.myBookings.tabs.all'), value: 'All' },
@@ -155,6 +169,17 @@ const filteredBookings = computed(() => {
   const statusMap = { Upcoming: [1, 2, 3], Completed: [5], Cancelled: [4] }
   return bookings.value.filter(b => statusMap[activeTab.value]?.includes(b.status))
 })
+
+watch(activeTab, () => { pageFirst.value = 0 })
+
+const pagedBookings = computed(() => {
+  return filteredBookings.value.slice(pageFirst.value, pageFirst.value + pageSize.value)
+})
+
+function onPageChange(event) {
+  pageFirst.value = event.first
+  pageSize.value = event.rows
+}
 
 function formatDate(d) {
   if (!d) return 'N/A'
@@ -278,4 +303,21 @@ onMounted(fetchMyBookings)
 
 .animate-fade-in { animation: fadeIn 0.4s ease-out both; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.paginator-wrap {
+  margin-top: $space-8;
+  :deep(.p-paginator) {
+    background: white;
+    border-radius: 16px;
+    box-shadow: $shadow-md;
+    padding: $space-3 $space-4;
+    border: 1px solid #f1f5f9;
+  }
+  :deep(.p-paginator-page.p-highlight) {
+    background: $color-primary;
+    color: white;
+    border-radius: 8px;
+  }
+}
+
 </style>

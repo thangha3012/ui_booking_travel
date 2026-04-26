@@ -12,6 +12,14 @@ const routes = [
       { path: 'tours/:id', name: 'tour-detail', component: () => import('@/views/public/TourDetailView.vue') },
       { path: 'checkout',  name: 'checkout',    component: () => import('@/views/public/CheckoutView.vue'), meta: { requiresAuth: true } },
       { path: 'vnpay-return', name: 'vnpay-return', component: () => import('@/views/public/VNPayReturnView.vue'), meta: { requiresAuth: true } },
+      { path: 'my-bookings', name: 'my-bookings', component: () => import('@/views/customer/MyBookingsView.vue'), meta: { requiresAuth: true } },
+      { path: 'booking/:scheduleId', name: 'booking', component: () => import('@/views/customer/BookingView.vue'), meta: { requiresAuth: true } },
+      
+      // ---- STATIC PAGES ----
+      { path: 'about-us',  name: 'about-us',    component: () => import('@/views/public/AboutUsView.vue') },
+      { path: 'services',  name: 'services',    component: () => import('@/views/public/ServicesView.vue') },
+      { path: 'privacy-policy', name: 'privacy-policy', component: () => import('@/views/public/PrivacyPolicyView.vue') },
+      { path: 'terms-of-use', name: 'terms-of-use', component: () => import('@/views/public/TermsOfUseView.vue') },
       
       // ---- AUTH (bây giờ có navbar/footer) ----
       {
@@ -26,13 +34,7 @@ const routes = [
     ],
   },
 
-  // ---- CUSTOMER (cần đăng nhập) ----
-  {
-    path: '/booking/:scheduleId', name: 'booking', component: () => import('@/views/customer/BookingView.vue'), meta: { requiresAuth: true },
-  },
-  {
-    path: '/my-bookings', name: 'my-bookings', component: () => import('@/views/customer/MyBookingsView.vue'), meta: { requiresAuth: true },
-  },
+  // ---- CUSTOMER (đã chuyển vào DefaultLayout ở trên) ----
 
   // ---- ADMIN (cần đăng nhập + role Admin) ----
   {
@@ -46,6 +48,7 @@ const routes = [
       { path: 'categories', name: 'admin-categories', component: () => import('@/views/admin/AdminCategoriesView.vue') },
       { path: 'destinations', name: 'admin-destinations', component: () => import('@/views/admin/AdminDestinationsView.vue') },
       { path: 'bookings', name: 'admin-bookings', component: () => import('@/views/admin/AdminBookingsView.vue') },
+      { path: 'reviews', name: 'admin-reviews', component: () => import('@/views/admin/AdminReviewsView.vue') },
     ],
   },
 

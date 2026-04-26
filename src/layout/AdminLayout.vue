@@ -32,6 +32,10 @@
            <i class="pi pi-ticket icon"></i>
            <span v-if="!isSidebarCollapsed">{{ $t('admin.sidebar.bookings') }}</span>
         </RouterLink>
+        <RouterLink to="/admin/reviews" class="nav-item" active-class="active">
+           <i class="pi pi-star icon"></i>
+           <span v-if="!isSidebarCollapsed">Đánh giá</span>
+        </RouterLink>
       </nav>
 
       <div class="sidebar-footer">

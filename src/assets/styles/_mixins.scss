@@ -11,6 +11,10 @@
 @mixin xl { @media (min-width: #{$bp-xl}) { @content; } }
 @mixin xxl { @media (min-width: #{$bp-2xl}) { @content; } }
 
+@mixin sm-max { @media (max-width: #{$bp-sm}) { @content; } }
+@mixin md-max { @media (max-width: #{$bp-md}) { @content; } }
+@mixin lg-max { @media (max-width: #{$bp-lg}) { @content; } }
+
 // ---- GLASSMORPHISM ----
 @mixin glass($bg: $glass-bg, $border: $glass-border) {
   background: $bg;

@@ -8,7 +8,12 @@
           <span class="logo-text">Triptopia</span>
         </div>
         <p class="footer__description">
-          {{ t('footer.description', 'Triptopia - Hành trình khám phá những điểm đến tuyệt vời nhất tại Việt Nam. Chúng tôi mang đến trải nghiệm du lịch chuyên nghiệp và tận tâm.') }}
+          {{
+            t(
+              'footer.description',
+              'Triptopia - Hành trình khám phá những điểm đến tuyệt vời nhất tại Việt Nam. Chúng tôi mang đến trải nghiệm du lịch chuyên nghiệp và tận tâm.',
+            )
+          }}
         </p>
         <div class="footer__socials">
           <a v-for="s in socials" :key="s.icon" :href="s.link" class="social-link" target="_blank">
@@ -77,14 +82,14 @@ const socials = [
   { icon: 'pi-facebook', link: '#' },
   { icon: 'pi-instagram', link: '#' },
   { icon: 'pi-twitter', link: '#' },
-  { icon: 'pi-pinterest', link: '#' }
+  { icon: 'pi-pinterest', link: '#' },
 ]
 
 const aboutLinks = computed(() => [
-  { label: t('footer.aboutUs', 'Về chúng tôi'), path: '/about' },
+  { label: t('footer.aboutUs', 'Về chúng tôi'), path: '/about-us' },
   { label: t('footer.services', 'Dịch vụ'), path: '/services' },
-  { label: t('footer.privacy', 'Chính sách bảo mật'), path: '/privacy' },
-  { label: t('footer.terms', 'Điều khoản sử dụng'), path: '/terms' }
+  { label: t('footer.privacy', 'Chính sách bảo mật'), path: '/privacy-policy' },
+  { label: t('footer.terms', 'Điều khoản sử dụng'), path: '/terms-of-use' },
 ])
 
 function getGalleryImg(i) {
@@ -135,11 +140,11 @@ function getGalleryImg(i) {
     display: flex;
     align-items: center;
     gap: $space-3;
-    
+
     .logo-icon {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, $color-primary, #1E6B8C);
+      background: linear-gradient(135deg, $color-primary, #1e6b8c);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -148,14 +153,16 @@ function getGalleryImg(i) {
       color: white;
       box-shadow: 0 4px 12px rgba(35, 87, 137, 0.4);
     }
-    
+
     .logo-text {
       font-size: 1.5rem;
       font-weight: 800;
       font-family: $font-heading;
       letter-spacing: -0.02em;
       color: white;
-      span { color: #FF6B35; }
+      span {
+        color: #ff6b35;
+      }
     }
   }
 
@@ -184,7 +191,9 @@ function getGalleryImg(i) {
       transition: all 0.3s ease;
       text-decoration: none;
 
-      i { font-size: 1rem; }
+      i {
+        font-size: 1rem;
+      }
 
       &:hover {
         transform: translateY(-3px);
@@ -203,7 +212,7 @@ function getGalleryImg(i) {
     position: relative;
     padding-bottom: $space-3;
     color: white;
-    
+
     &::after {
       content: '';
       position: absolute;
@@ -266,13 +275,13 @@ function getGalleryImg(i) {
       overflow: hidden;
       border-radius: $border-radius-md;
       background: #eee;
-      
+
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         transition: transform 0.5s ease;
-        
+
         &:hover {
           transform: scale(1.15);
         }

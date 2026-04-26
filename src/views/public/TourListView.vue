@@ -21,93 +21,134 @@
         <!-- Sidebar Filter -->
         <aside class="tours-sidebar">
           <div class="filter-card">
-             <div class="filter-section">
-                <h3>{{ t('common.search') }}</h3>
-                <div class="p-input-icon-left w-full">
-                   <i class="pi pi-search" />
-                   <InputText v-model="filters.keyword" :placeholder="t('common.search') + '...'" @input="debouncedSearch" fluid />
-                </div>
-             </div>
+            <div class="filter-section">
+              <h3>{{ t('common.search') }}</h3>
+              <div class="p-input-icon-left w-full">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="filters.keyword"
+                  :placeholder="t('common.search') + '...'"
+                  @input="debouncedSearch"
+                  fluid
+                />
+              </div>
+            </div>
 
-             <div class="filter-section">
-                <h3>Category</h3>
-                <div class="flex flex-col gap-2">
-                   <div class="flex items-center gap-2">
-                      <RadioButton v-model="filters.categoryId" :value="null" inputId="cat-all" @change="loadTours" />
-                      <label for="cat-all" class="text-sm cursor-pointer">All Categories</label>
-                   </div>
-                   <div v-for="cat in categories" :key="cat.id" class="flex items-center gap-2">
-                      <RadioButton v-model="filters.categoryId" :value="cat.id" :inputId="'cat-'+cat.id" @change="loadTours" />
-                      <label :for="'cat-'+cat.id" class="text-sm cursor-pointer">{{ cat.name }}</label>
-                   </div>
+            <div class="filter-section">
+              <h3>Category</h3>
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-2">
+                  <RadioButton
+                    v-model="filters.categoryId"
+                    :value="null"
+                    inputId="cat-all"
+                    @change="loadTours"
+                  />
+                  <label for="cat-all" class="text-sm cursor-pointer">All Categories</label>
                 </div>
-             </div>
-
-             <div class="filter-section">
-                <h3>Price Range</h3>
-                <div class="px-2 pt-4 pb-2">
-                   <Slider v-model="filters.priceRange" :range="true" :min="0" :max="2000" class="w-full" />
-                   <div class="flex justify-between mt-4 text-xs font-bold text-slate-500">
-                      <span>${{ filters.priceRange[0] }}</span>
-                      <span>${{ filters.priceRange[1] }}</span>
-                   </div>
+                <div v-for="cat in categories" :key="cat.id" class="flex items-center gap-2">
+                  <RadioButton
+                    v-model="filters.categoryId"
+                    :value="cat.id"
+                    :inputId="'cat-' + cat.id"
+                    @change="loadTours"
+                  />
+                  <label :for="'cat-' + cat.id" class="text-sm cursor-pointer">{{
+                    cat.name
+                  }}</label>
                 </div>
-             </div>
+              </div>
+            </div>
 
-             <Button label="Clear Filters" icon="pi pi-filter-slash" text class="w-full mt-4" @click="clearFilters" />
+            <div class="filter-section">
+              <h3>Price Range</h3>
+              <div class="px-2 pt-4 pb-2">
+                <Slider
+                  v-model="filters.priceRange"
+                  :range="true"
+                  :min="0"
+                  :max="2000"
+                  class="w-full"
+                />
+                <div class="flex justify-between mt-4 text-xs font-bold text-slate-500">
+                  <span>${{ filters.priceRange[0] }}</span>
+                  <span>${{ filters.priceRange[1] }}</span>
+                </div>
+              </div>
+            </div>
+
+            <Button
+              label="Clear Filters"
+              icon="pi pi-filter-slash"
+              text
+              class="w-full mt-4"
+              @click="clearFilters"
+            />
           </div>
 
           <!-- Featured Offer -->
           <div class="featured-offer-card mt-6">
-             <div class="offer-badge">Special</div>
-             <h4>Summer in Sapa</h4>
-             <p>Up to 30% off on all mountain trekking tours.</p>
-             <Button label="Explore Now" size="small" outlined severity="contrast" />
+            <div class="offer-badge">Special</div>
+            <h4>Summer in Sapa</h4>
+            <p>Up to 30% off on all mountain trekking tours.</p>
+            <Button label="Explore Now" size="small" outlined severity="contrast" />
           </div>
         </aside>
 
         <!-- Tours List -->
         <div class="tours-content">
           <div class="tours-toolbar">
-             <div class="results-count">
-                Found <strong>{{ tours.length }}</strong> tours
-             </div>
-             <div class="toolbar-actions">
-                <Select v-model="sortBy" :options="sortOptions" optionLabel="label" placeholder="Sort by" class="w-48" @change="loadTours" />
-             </div>
+            <div class="results-count">
+              Found <strong>{{ tours.length }}</strong> tours
+            </div>
+            <div class="toolbar-actions">
+              <Select
+                v-model="sortBy"
+                :options="sortOptions"
+                optionLabel="label"
+                placeholder="Sort by"
+                class="w-48"
+                @change="loadTours"
+              />
+            </div>
           </div>
 
           <div v-if="loading" class="tours-grid">
             <div v-for="n in 6" :key="n" class="tour-skeleton-card">
-               <Skeleton height="200px" borderRadius="16px" class="mb-4"></Skeleton>
-               <Skeleton width="60%" height="1.5rem" class="mb-2"></Skeleton>
-               <Skeleton width="100%" height="1rem" class="mb-2"></Skeleton>
-               <Skeleton width="80%" height="1rem"></Skeleton>
+              <Skeleton height="200px" borderRadius="16px" class="mb-4"></Skeleton>
+              <Skeleton width="60%" height="1.5rem" class="mb-2"></Skeleton>
+              <Skeleton width="100%" height="1rem" class="mb-2"></Skeleton>
+              <Skeleton width="80%" height="1rem"></Skeleton>
             </div>
           </div>
-          
+
           <div v-else-if="tours.length === 0" class="empty-state">
-             <div class="empty-icon">
-                <i class="pi pi-search"></i>
-             </div>
-             <h3>No tours found</h3>
-             <p>We couldn't find any tours matching your criteria. Try adjusting your filters.</p>
-             <Button label="Clear All Filters" severity="secondary" @click="clearFilters" />
+            <div class="empty-icon">
+              <i class="pi pi-search"></i>
+            </div>
+            <h3>No tours found</h3>
+            <p>We couldn't find any tours matching your criteria. Try adjusting your filters.</p>
+            <Button label="Clear All Filters" severity="secondary" @click="clearFilters" />
           </div>
 
           <div v-else class="tours-grid">
-            <TourCard v-for="(tour, idx) in tours" :key="tour.id" :tour="tour" :variant="getVariant(idx)" />
+            <TourCard
+              v-for="(tour, idx) in tours"
+              :key="tour.id"
+              :tour="tour"
+              :variant="getVariant(idx)"
+            />
           </div>
 
           <!-- Pagination -->
           <div class="pagination-wrap" v-if="tours.length > 0">
-             <Paginator 
-               :rows="rows" 
-               :totalRecords="totalRecords" 
-               :first="first"
-               template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
-               @page="onPage($event)"
-             />
+            <Paginator
+              :rows="rows"
+              :totalRecords="totalRecords"
+              :first="first"
+              template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+              @page="onPage($event)"
+            />
           </div>
         </div>
       </div>
@@ -132,6 +173,7 @@ import { ref, reactive, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { tourApi } from '@/api/tourApi'
 import { categoryApi } from '@/api/categoryApi'
+import { destinationApi } from '@/api/destinationApi'
 import TourCard from '@/components/ui/TourCard.vue'
 
 // PrimeVue
@@ -149,6 +191,7 @@ const toast = useToast()
 
 const tours = ref([])
 const categories = ref([])
+const destinations = ref([])
 const loading = ref(true)
 
 const filters = reactive({
@@ -162,19 +205,31 @@ const sortOptions = [
   { label: 'Latest', value: 'latest' },
   { label: 'Price: Low to High', value: 'price_asc' },
   { label: 'Price: High to Low', value: 'price_desc' },
-  { label: 'Top Rated', value: 'rating' }
+  { label: 'Top Rated', value: 'rating' },
 ]
 
 // Pagination
 const first = ref(0)
 const rows = ref(9)
+const page = ref(1)
 const totalRecords = ref(0)
 
 async function loadCategories() {
   try {
     const res = await categoryApi.getAll()
     if (res.success) categories.value = res.data
-  } catch (err) { console.error(err) }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+async function loadDestinations() {
+  try {
+    const res = await destinationApi.getAll()
+    if (res.success) destinations.value = res.data
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 async function loadTours() {
@@ -183,16 +238,42 @@ async function loadTours() {
     const params = {
       keyword: filters.keyword,
       categoryId: filters.categoryId,
-      // maxPrice: filters.priceRange[1],
-      // minPrice: filters.priceRange[0]
+      page: page.value,
+      pageSize: rows.value,
+      sortBy: sortBy.value?.value || 'latest',
+      status: 2, // Chỉ lấy Tour Published
     }
+
+    // Chỉ gửi min/max price lên server nếu người dùng có thay đổi dải lọc (khác default 0 - 2000)
+    // Điều này giúp tránh bị mất các Tour chưa được cấu hình bảng giá (Pricing)
+    if (filters.priceRange[0] > 0) {
+      params.minPrice = filters.priceRange[0]
+    }
+    if (filters.priceRange[1] < 2000) {
+      params.maxPrice = filters.priceRange[1]
+    }
+
     const res = await tourApi.getAll(params)
-    if (res.success) {
-      tours.value = res.data
-      totalRecords.value = res.data.length // Since we don't have server-side pagination yet
+    if (res.success && res.data) {
+      let items = res.data.items || []
+
+      // Lấy ảnh của điểm đến làm ảnh mặc định nếu Tour không có ảnh
+      items = items.map((t) => {
+        if (!t.imageUrl) {
+          const dest = destinations.value.find((d) => d.id === t.destinationId)
+          t.imageUrl =
+            dest?.coverImageUrl ||
+            'https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80'
+        }
+        return t
+      })
+
+      tours.value = items
+      totalRecords.value = res.data.totalCount || 0
     }
   } catch (err) {
     console.error(err)
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Could not load tours', life: 3000 })
   } finally {
     loading.value = false
   }
@@ -202,6 +283,8 @@ let timeout = null
 function debouncedSearch() {
   clearTimeout(timeout)
   timeout = setTimeout(() => {
+    page.value = 1 // Reset về trang 1 khi search
+    first.value = 0
     loadTours()
   }, 500)
 }
@@ -210,12 +293,15 @@ function clearFilters() {
   filters.keyword = ''
   filters.categoryId = null
   filters.priceRange = [0, 2000]
+  page.value = 1
+  first.value = 0
   loadTours()
 }
 
 function onPage(event) {
   first.value = event.first
-  // In real app, call API with page params
+  page.value = event.page + 1 // Paginator của PrimeVue tính page từ 0
+  loadTours()
 }
 
 function getVariant(index) {
@@ -225,8 +311,8 @@ function getVariant(index) {
   return 'normal'
 }
 
-onMounted(() => {
-  loadCategories()
+onMounted(async () => {
+  await Promise.all([loadCategories(), loadDestinations()])
   loadTours()
 })
 </script>
@@ -244,7 +330,8 @@ onMounted(() => {
 .tours-hero {
   position: relative;
   height: 380px;
-  background: url('https://images.unsplash.com/photo-1518182170546-076616fd6251?w=1920&q=80') center/cover;
+  background: url('https://images.unsplash.com/photo-1518182170546-076616fd6251?w=1920&q=80')
+    center/cover;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -276,9 +363,17 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
     gap: $space-2;
-    color: rgba(255,255,255,0.7);
-    a { color: white; &:hover { color: $color-accent; } }
-    span.current { color: $color-accent; font-weight: 700; }
+    color: rgba(255, 255, 255, 0.7);
+    a {
+      color: white;
+      &:hover {
+        color: $color-accent;
+      }
+    }
+    span.current {
+      color: $color-accent;
+      font-weight: 700;
+    }
   }
 }
 
@@ -317,8 +412,10 @@ onMounted(() => {
 
   .filter-section {
     margin-bottom: $space-6;
-    &:last-child { margin-bottom: 0; }
-    
+    &:last-child {
+      margin-bottom: 0;
+    }
+
     h3 {
       font-size: 13px;
       font-weight: 800;
@@ -351,8 +448,17 @@ onMounted(() => {
     text-transform: uppercase;
   }
 
-  h4 { font-size: 1.25rem; font-weight: 700; margin-bottom: $space-2; }
-  p { font-size: 0.85rem; opacity: 0.9; margin-bottom: $space-4; line-height: 1.5; }
+  h4 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: $space-2;
+  }
+  p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-bottom: $space-4;
+    line-height: 1.5;
+  }
 }
 
 // Content List
@@ -371,16 +477,16 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
 
-  .results-count { font-size: 15px; color: #64748b; }
+  .results-count {
+    font-size: 15px;
+    color: #64748b;
+  }
 }
 
 .tours-grid {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: $space-6;
-  @include md { grid-template-columns: repeat(2, 1fr); }
-  @include lg { grid-template-columns: repeat(2, 1fr); }
-  @include xl { grid-template-columns: repeat(3, 1fr); }
 }
 
 .tour-skeleton-card {
@@ -402,8 +508,16 @@ onMounted(() => {
     color: #cbd5e1;
     margin-bottom: $space-4;
   }
-  h3 { font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: $space-2; }
-  p { color: #64748b; margin-bottom: $space-6; }
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: $space-2;
+  }
+  p {
+    color: #64748b;
+    margin-bottom: $space-6;
+  }
 }
 
 .pagination-wrap {
@@ -413,12 +527,20 @@ onMounted(() => {
   :deep(.p-paginator) {
     background: transparent;
     border: none;
-    .p-paginator-page, .p-paginator-next, .p-paginator-last, .p-paginator-first, .p-paginator-prev {
+    .p-paginator-page,
+    .p-paginator-next,
+    .p-paginator-last,
+    .p-paginator-first,
+    .p-paginator-prev {
       background: white;
       border-radius: 12px;
       margin: 0 4px;
       border: 1px solid #e2e8f0;
-      &.p-highlight { background: $color-primary; border-color: $color-primary; color: white; }
+      &.p-highlight {
+        background: $color-primary;
+        border-color: $color-primary;
+        color: white;
+      }
     }
   }
 }
@@ -444,8 +566,15 @@ onMounted(() => {
 
   &__content {
     flex: 1;
-    h2 { font-size: 2.25rem; font-weight: 800; margin-bottom: $space-2; }
-    p { opacity: 0.9; font-size: 1.1rem; }
+    h2 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: $space-2;
+    }
+    p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
   }
 
   &__form {
@@ -455,8 +584,18 @@ onMounted(() => {
     border-radius: 16px;
     width: 100%;
     max-width: 450px;
-    :deep(.p-inputtext) { border: none !important; box-shadow: none !important; flex: 1; padding-left: 1rem; }
-    button { border-radius: 12px; padding: 0.75rem 1.5rem; background: #2c7a7b !important; border: none !important; }
+    :deep(.p-inputtext) {
+      border: none !important;
+      box-shadow: none !important;
+      flex: 1;
+      padding-left: 1rem;
+    }
+    button {
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+      background: #2c7a7b !important;
+      border: none !important;
+    }
   }
 }
 </style>

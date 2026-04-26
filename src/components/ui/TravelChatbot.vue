@@ -138,7 +138,9 @@
 <script setup>
 import { ref, nextTick, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import chatApi from '@/api/chatApi'
 
+const messages = ref([])
 const router = useRouter()
 const isOpen = ref(false)
 const isMinimized = ref(false)
@@ -157,82 +159,15 @@ const quickActions = [
   { label: 'Chính sách hoàn tiền', icon: 'pi pi-shield' },
 ]
 
-// ---- Knowledge base của Chatbot ----
-const knowledgeBase = [
-  {
-    keywords: ['xin chào', 'hello', 'hi', 'chào', 'alo'],
-    response: 'Xin chào! 👋 Mình là trợ lý du lịch Triptopia. Mình có thể giúp bạn tìm tour, đặt vé, tư vấn lịch trình và giải đáp các thắc mắc về du lịch miền Bắc Việt Nam. Bạn muốn khám phá điều gì hôm nay?',
-    chips: ['Tour nổi bật', 'Giá vé', 'Đặt tour']
-  },
-  {
-    keywords: ['tour nổi bật', 'tour hot', 'tour phổ biến', 'gợi ý tour', 'tour nào hay'],
-    response: '🏔️ <strong>Các tour nổi bật của chúng tôi:</strong><br>• <b>Hà Giang Loop</b> — 3N2Đ, khám phá cao nguyên đá hùng vĩ<br>• <b>Sa Pa Fansipan</b> — 2N1Đ, chinh phục nóc nhà Đông Dương<br>• <b>Ninh Bình – Tràng An</b> — 1N, di sản thiên nhiên thế giới<br>• <b>Hạ Long Bay Cruise</b> — 2N1Đ, du thuyền vịnh Hạ Long<br><br>Bạn muốn biết thêm về tour nào?',
-    chips: ['Hà Giang', 'Sa Pa', 'Hạ Long', 'Ninh Bình']
-  },
-  {
-    keywords: ['hà giang'],
-    response: '🏔️ <strong>Tour Hà Giang Loop</strong> là một trong những hành trình xe máy đẹp nhất Đông Nam Á!<br><br>📅 Thời lượng: 3 ngày 2 đêm<br>💰 Giá từ: <b>2.200.000đ / người</b><br>🌟 Điểm nổi bật: Đồng Văn, Mèo Vạc, đèo Mã Pì Lèng<br><br>Thời gian đẹp nhất: <b>tháng 10 - tháng 11</b> (hoa tam giác mạch nở rộ).',
-    chips: ['Đặt tour Hà Giang', 'Xem lịch trình', 'Tour khác']
-  },
-  {
-    keywords: ['sa pa', 'sapa', 'fansipan'],
-    response: '⛰️ <strong>Tour Sa Pa – Fansipan</strong> - Thiên đường mây trắng!<br><br>📅 Thời lượng: 2 ngày 1 đêm<br>💰 Giá từ: <b>1.800.000đ / người</b><br>🌟 Highlights: Cáp treo Fansipan, bản Cát Cát, ruộng bậc thang Mù Cang Chải<br><br>Best time: <b>tháng 9 - tháng 10</b> (lúa chín vàng óng).',
-    chips: ['Đặt tour Sa Pa', 'Xem giá chi tiết', 'Tour khác']
-  },
-  {
-    keywords: ['hạ long', 'ha long', 'du thuyền', 'cruise'],
-    response: '🚢 <strong>Tour Hạ Long Bay</strong> - Di sản thiên nhiên thế giới!<br><br>📅 Thời lượng: 2 ngày 1 đêm<br>💰 Giá từ: <b>3.500.000đ / người</b> (du thuyền 5 sao)<br>🌟 Highlights: Hang Sửng Sốt, Đảo Ti Tốp, Làng Chài Cửa Vạn<br><br>Mùa đẹp nhất: <b>tháng 10 - tháng 4</b>.',
-    chips: ['Đặt tour Hạ Long', 'Xem giá phòng', 'Tour khác']
-  },
-  {
-    keywords: ['ninh bình', 'tràng an', 'bai dinh'],
-    response: '🛶 <strong>Tour Ninh Bình – Tràng An</strong> - "Vịnh Hạ Long trên cạn"!<br><br>📅 Thời lượng: 1 ngày<br>💰 Giá từ: <b>850.000đ / người</b><br>🌟 Highlights: Chèo thuyền Tràng An, Chùa Bái Đính, Cố đô Hoa Lư<br><br>Phù hợp đi quanh năm!',
-    chips: ['Đặt tour Ninh Bình', 'Tour khác']
-  },
-  {
-    keywords: ['giá', 'giá vé', 'bao nhiêu tiền', 'chi phí', 'phí'],
-    response: '💰 <strong>Bảng giá tham khảo các tour nổi bật:</strong><br><br>• Ninh Bình 1N: từ <b>850.000đ</b><br>• Sa Pa 2N1Đ: từ <b>1.800.000đ</b><br>• Hà Giang 3N2Đ: từ <b>2.200.000đ</b><br>• Hạ Long 2N1Đ: từ <b>3.500.000đ</b><br><br>📌 Giá đã bao gồm: xe đưa đón, khách sạn, vé tham quan. Chưa bao gồm bữa ăn cá nhân và chi tiêu riêng.',
-    chips: ['Đặt tour ngay', 'Xem tour phù hợp ngân sách']
-  },
-  {
-    keywords: ['đặt tour', 'book tour', 'mua vé', 'đặt vé', 'đặt ngay'],
-    response: '🎉 Bạn muốn đặt tour? Thật tuyệt vời!<br><br>Để đặt tour, bạn có thể:<br>1️⃣ Vào trang <b>Khám phá Tour</b> → Chọn tour yêu thích<br>2️⃣ Chọn <b>lịch khởi hành</b> → Điền thông tin hành khách<br>3️⃣ Thanh toán an toàn qua <b>VNPay</b><br><br>Cần hỗ trợ thêm? Liên hệ hotline: <b>1900 1234</b>',
-    chips: ['Xem danh sách tour', 'Liên hệ tư vấn']
-  },
-  {
-    keywords: ['liên hệ', 'hotline', 'điện thoại', 'email', 'hỗ trợ', 'support'],
-    response: '📞 <strong>Thông tin liên hệ Triptopia:</strong><br><br>🔴 Hotline: <b>1900 1234</b> (7:00 - 22:00)<br>📧 Email: support@triptopia.vn<br>💬 Zalo: <b>0901 234 567</b><br>📍 Địa chỉ: 123 Phố Huế, Hà Nội<br><br>Đội ngũ chúng mình luôn sẵn sàng hỗ trợ bạn!',
-    chips: ['Đặt tour', 'Tour nổi bật']
-  },
-  {
-    keywords: ['hoàn tiền', 'hủy tour', 'chính sách', 'refund', 'cancel'],
-    response: '🛡️ <strong>Chính sách hoàn tiền Triptopia:</strong><br><br>✅ Hủy trước <b>7 ngày</b>: Hoàn 100% phí tour<br>✅ Hủy trước <b>3–7 ngày</b>: Hoàn 70%<br>⚠️ Hủy trước <b>1–3 ngày</b>: Hoàn 50%<br>❌ Hủy trong <b>24 giờ</b>: Không hoàn tiền<br><br>* Áp dụng với các tour có phí đặt cọc dưới 50%.',
-    chips: ['Liên hệ hỗ trợ', 'Đặt tour']
-  },
-  {
-    keywords: ['thời tiết', 'mùa', 'nên đi tháng mấy', 'khi nào đẹp'],
-    response: '☀️ <strong>Gợi ý lịch trình theo mùa:</strong><br><br>🌸 <b>Tháng 3–5</b> (Xuân): Sa Pa, Mù Cang Chải – Hoa anh đào, ruộng bậc thang xanh<br>☀️ <b>Tháng 6–8</b> (Hè): Hạ Long, Cát Bà – Biển đảo rực rỡ<br>🍂 <b>Tháng 9–11</b> (Thu): Hà Giang, Ninh Bình – Tam giác mạch và lúa vàng<br>❄️ <b>Tháng 12–2</b> (Đông): Sapa tuyết rơi, Bắc Hà chợ phiên',
-    chips: ['Tour mùa hè', 'Tour mùa thu', 'Hà Giang']
-  },
-  {
-    keywords: ['cảm ơn', 'thank', 'tuyệt', 'ok', 'được rồi'],
-    response: '😊 Rất vui được hỗ trợ bạn! Chúc bạn có những chuyến du lịch thật tuyệt vời cùng Triptopia!<br><br>🌟 <i>Hãy để chúng mình biến mỗi hành trình của bạn thành kỳ ức khó quên!</i>',
-    chips: ['Xem tour ngay', 'Tạm biệt']
-  },
-  {
-    keywords: ['tạm biệt', 'bye', 'goodbye', 'thoát'],
-    response: '👋 Tạm biệt bạn! Hẹn gặp lại nhé~ Đừng quên Triptopia luôn sẵn sàng đồng hành trong mọi chuyến đi của bạn! 🧳✈️',
-    chips: []
-  }
-]
-
-const defaultResponse = (input) => ({
-  content: `🔍 Mình chưa có thông tin cụ thể về "<b>${input}</b>" ngay lúc này. Bạn có thể liên hệ trực tiếp với đội hỗ trợ qua hotline <b>1900 1234</b> để được tư vấn chi tiết nhé!`,
-  chips: ['Liên hệ hỗ trợ', 'Tour nổi bật', 'Giá vé']
-})
-
-// ---- Messages data ----
-const messages = ref([])
+// Hàm chuyển đổi Markdown cơ bản sang HTML
+function formatMarkdown(text) {
+  if (!text) return ''
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/^- (.*$)/gim, '• $1')
+    .replace(/\n/g, '<br>')
+}
 
 function getTime() {
   return new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
@@ -242,7 +177,7 @@ function addBotMessage(content, chips = []) {
   messages.value.push({
     role: 'bot',
     type: 'text',
-    content,
+    content: formatMarkdown(content),
     chips,
     time: getTime()
   })
@@ -270,19 +205,18 @@ function closeChat() {
 
 async function processResponse(text) {
   isTyping.value = true
-  await new Promise(r => setTimeout(r, 900 + Math.random() * 600))
-  isTyping.value = false
-
-  const lower = text.toLowerCase()
-  const match = knowledgeBase.find(kb =>
-    kb.keywords.some(kw => lower.includes(kw))
-  )
-
-  if (match) {
-    addBotMessage(match.response, match.chips || [])
-  } else {
-    const fallback = defaultResponse(text)
-    addBotMessage(fallback.content, fallback.chips)
+  try {
+     const res = await chatApi.sendMessage(text)
+     if (res && res.success) {
+        addBotMessage(res.reply)
+     } else {
+        addBotMessage("Sorry, I'm having trouble connecting to my brain right now. 🧠")
+     }
+  } catch(e) {
+     console.error('Chat error:', e)
+     addBotMessage("Oops! Có lỗi gì đó rồi, bạn thử lại sau nhé. 🙏")
+  } finally {
+     isTyping.value = false
   }
 }
 
@@ -321,7 +255,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/styles/variables';
+@use '@/assets/styles/variables' as *;
 
 // =============================================
 // CHATBOT WRAPPER
