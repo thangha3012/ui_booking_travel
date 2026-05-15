@@ -179,3 +179,69 @@ main {
   box-shadow: $shadow-card;
 }
 
+/* UNIFIED PAGE HERO STYLE */
+.page-hero {
+  position: relative;
+  background: linear-gradient(135deg, #0d2137, #235789);
+  color: white;
+  padding: 100px 0 80px;
+  text-align: center;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+    opacity: 0.1;
+  }
+
+  .container {
+    position: relative;
+    z-index: 10;
+  }
+
+  &__label {
+    display: block;
+    font-size: 14px;
+    font-weight: 800;
+    color: $color-primary;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 15px;
+  }
+
+  &__title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 25px;
+    line-height: 1.1;
+  }
+
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 14px;
+
+    a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: color 0.3s;
+      &:hover { color: white; }
+    }
+
+    i {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .current {
+      color: $color-primary;
+    }
+  }
+}
+
+

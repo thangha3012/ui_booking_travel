@@ -21,6 +21,8 @@
         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
         tableStyle="min-width: 50rem"
         class="p-datatable-sm"
+        scrollable
+        scrollHeight="flex"
       >
         <template #header>
           <div class="table-header">
@@ -49,10 +51,7 @@
         <Column :header="$t('admin.tours.columns.cover')" style="width: 80px">
           <template #body="{ data }">
             <img
-              :src="
-                data.coverImageUrl ||
-                'https://images.unsplash.com/photo-1555921015-5532091f6026?w=100&q=80'
-              "
+              :src="getFullImageUrl(data.coverImageUrl) || 'https://images.unsplash.com/photo-1555921015-5532091f6026?w=100&q=80'"
               alt="cover"
               class="t-thumbnail"
             />
@@ -114,7 +113,20 @@
           </div>
           <div class="form-field">
             <label>{{ $t('admin.destinations.dialog.coverUrl') }}</label>
-            <InputText v-model="form.coverImageUrl" placeholder="https://..." fluid />
+            <div class="upload-wrapper">
+               <div class="preview-area" v-if="form.coverImageUrl">
+                  <img :src="getFullImageUrl(form.coverImageUrl)" alt="Preview">
+                  <Button icon="pi pi-times" severity="danger" rounded text class="remove-btn" @click="form.coverImageUrl = ''" />
+               </div>
+               <div v-else class="upload-placeholder" @click="triggerFileInput">
+                  <i class="pi pi-cloud-upload"></i>
+                  <span>Tải ảnh lên</span>
+               </div>
+               <input type="file" ref="fileInput" class="hidden" accept="image/*" @change="onFileSelected">
+               <div v-if="uploading" class="upload-overlay">
+                  <ProgressSpinner strokeWidth="4" style="width: 30px; height: 30px;" />
+               </div>
+            </div>
           </div>
         </div>
         <div class="form-row">
@@ -164,6 +176,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { destinationApi } from '@/api/destinationApi'
+import { uploadApi } from '@/api/uploadApi'
+import { getFullImageUrl } from '@/utils/imageHelper'
 import { useI18n } from 'vue-i18n'
 
 import DataTable from 'primevue/datatable'
@@ -175,6 +189,7 @@ import Textarea from 'primevue/textarea'
 import Toast from 'primevue/toast'
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
+import ProgressSpinner from 'primevue/progressspinner'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 
@@ -188,6 +203,31 @@ const searchQuery = ref('')
 const showModal = ref(false)
 const isEditing = ref(false)
 const editingId = ref(null)
+const uploading = ref(false)
+const fileInput = ref(null)
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7001'
+
+function triggerFileInput() {
+  fileInput.value.click()
+}
+
+async function onFileSelected(event) {
+  const file = event.target.files[0]
+  if (!file) return
+
+  uploading.value = true
+  try {
+    const res = await uploadApi.uploadFile(file)
+    form.value.coverImageUrl = res.url
+    toast.add({ severity: 'success', summary: 'Thành công', detail: 'Tải ảnh lên thành công', life: 2000 })
+  } catch (err) {
+    toast.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tải ảnh lên', life: 3000 })
+  } finally {
+    uploading.value = false
+    event.target.value = '' // Reset input
+  }
+}
 
 const defaultForm = {
   name: '',
@@ -341,8 +381,12 @@ onMounted(fetchDestinations)
 
 <style lang="scss" scoped>
 @use '@/assets/styles/variables' as *;
+@use '@/assets/styles/mixins' as *;
 
 .admin-destinations-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   animation: fade-in-up 0.4s ease-out;
 }
 @keyframes fade-in-up {
@@ -412,4 +456,28 @@ onMounted(fetchDestinations)
     color: $color-danger;
   }
 }
+
+.upload-wrapper {
+   position: relative; border: 2px dashed #e2e8f0; border-radius: 12px; height: 120px;
+   @include flex-center; overflow: hidden; transition: all 0.2s;
+   &:hover { border-color: $color-primary; background: #f8fafc; }
+}
+
+.upload-placeholder {
+   display: flex; flex-direction: column; align-items: center; gap: 8px; color: #94a3b8; cursor: pointer;
+   i { font-size: 1.5rem; }
+   span { font-size: 0.8rem; font-weight: 600; }
+}
+
+.preview-area {
+   width: 100%; height: 100%; position: relative;
+   img { width: 100%; height: 100%; object-fit: cover; }
+   .remove-btn { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.5) !important; color: white !important; }
+}
+
+.upload-overlay {
+   position: absolute; inset: 0; background: rgba(255,255,255,0.7); @include flex-center;
+}
+
+.hidden { display: none; }
 </style>

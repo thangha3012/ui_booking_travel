@@ -186,7 +186,9 @@
     "status": {
       "completed": "Completed",
       "pending": "Pending",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "confirmed": "Confirmed",
+      "awaiting payment": "Awaiting Payment"
     },
     "checkout": {
       "title": "CHECKOUT",
@@ -291,6 +293,7 @@
       "destinations": "Destinations",
       "users": "Manage Users",
       "bookings": "Bookings",
+      "participants": "Participants",
       "logout": "Logout"
     },
     "header": {
@@ -311,7 +314,7 @@
       "userAccounts": "User accounts",
       "actionRequired": "Action required",
       "allCaughtUp": "All caught up",
-      "recent Bookings": "Recent Bookings",
+      "recentBookings": "Recent Bookings",
       "viewAll": "View All",
       "columns": {
         "id": "Booking ID",

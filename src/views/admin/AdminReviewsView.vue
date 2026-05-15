@@ -1,17 +1,18 @@
 <template>
   <div class="admin-reviews-page">
-    <div class="card bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-      <div class="flex justify-between items-center mb-6">
-        <div>
-          <h2 class="text-2xl font-bold text-slate-800">Quản lý Đánh giá (Reviews)</h2>
-          <p class="text-slate-500 text-sm mt-1">Quản lý và kiểm duyệt nhận xét từ khách hàng</p>
-        </div>
-        <Button icon="pi pi-refresh" rounded outlined @click="loadReviews" :loading="loading" />
+    <div class="admin-page-header">
+      <div>
+        <h1 class="page-title">Quản lý Đánh giá</h1>
+        <p class="text-slate-500 text-sm mt-1">Quản lý và kiểm duyệt nhận xét từ khách hàng</p>
       </div>
+      <Button icon="pi pi-refresh" rounded outlined @click="loadReviews" :loading="loading" />
+    </div>
 
+    <div class="admin-card">
       <DataTable :value="reviews" :loading="loading" paginator :rows="10" 
                  dataKey="id" :rowHover="true" class="p-datatable-sm"
                  v-model:filters="filters" filterDisplay="menu"
+                 scrollable scrollHeight="flex"
                  :globalFilterFields="['user.fullName', 'title', 'tour.title']">
         <template #header>
             <div class="flex justify-end">
@@ -151,3 +152,21 @@ onMounted(() => {
     loadReviews()
 })
 </script>
+<style lang="scss" scoped>
+@use '@/assets/styles/variables' as *;
+
+.admin-reviews-page { 
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: fade-in-up 0.4s ease-out; 
+}
+@keyframes fade-in-up { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
+</style>

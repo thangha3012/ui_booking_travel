@@ -1,6 +1,8 @@
 import apiClient from './axios'
 
 export const paymentApi = {
-  createVNPayUrl: (bookingId) => apiClient.post(`/Payment/create-vnpay-url/${bookingId}`),
-  vnpayReturn: (queryParams) => apiClient.get('/Payment/vnpay-return', { params: queryParams })
+  // Tạo yêu cầu thanh toán ZaloPay cho đơn hàng
+  createZaloPayOrder: (bookingId) => apiClient.post(`/Payment/create-zalopay-order/${bookingId}`),
+  // Gửi thông tin phản hồi từ ZaloPay về server để xác thực
+  zalopayReturn: (queryParams) => apiClient.get('/Payment/zalopay-return', { params: queryParams })
 }

@@ -17,6 +17,8 @@
         :globalFilterFields="['id', 'contactName', 'contactEmail', 'contactPhone', 'tourName']"
         tableStyle="min-width: 60rem"
         class="p-datatable-sm"
+        scrollable
+        scrollHeight="flex"
       >
         <template #header>
           <div class="table-header">
@@ -59,9 +61,9 @@
           </template>
         </Column>
 
-        <Column field="totalAmount" header="Amount" sortable style="width: 120px" class="text-right">
+        <Column field="totalAmount" header="Amount" sortable style="width: 140px" class="text-right">
            <template #body="{ data }">
-              <span class="font-bold text-slate-800">${{ data.totalAmount.toFixed(2) }}</span>
+              <span class="font-bold text-slate-800">{{ formatPrice(data.totalAmount) }} đ</span>
            </template>
         </Column>
 
@@ -144,11 +146,18 @@ const statusOptions = ref([
   { label: 'Completed', value: 5 }
 ])
 
+// Định dạng số tiền sang kiểu VNĐ để hiển thị trong bảng
+function formatPrice(val) {
+  return new Intl.NumberFormat('vi-VN').format(val)
+}
+
+// Lấy tên trạng thái (Label) từ giá trị Enum
 function getStatusString(val) {
    const opt = statusOptions.value.find(o => o.value === val);
    return opt ? opt.label : 'Unknown';
 }
 
+// Tải danh sách toàn bộ đơn đặt tour từ API
 async function fetchBookings() {
   loading.value = true
   try {
@@ -157,7 +166,7 @@ async function fetchBookings() {
     else if (res && res.data) bookings.value = res.data
     else bookings.value = res
   } catch {
-    primeToast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load bookings', life: 3000 })
+    primeToast.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tải danh sách đặt chỗ', life: 3000 })
   } finally {
     loading.value = false
   }
@@ -174,34 +183,38 @@ const filteredBookings = computed(() => {
   );
 })
 
+// Mở cửa sổ cập nhật trạng thái cho một đơn đặt tour cụ thể
 function openEditModal(booking) {
   selectedBooking.value = booking
   form.value.status = booking.status
   showModal.value = true
 }
 
+// Đóng cửa sổ cập nhật trạng thái
 function closeModal() { 
   showModal.value = false 
   selectedBooking.value = null
 }
 
+// Gửi yêu cầu cập nhật trạng thái mới về server thông qua API
 async function submitForm() {
   saving.value = true
   try {
     const res = await bookingApi.updateStatus(selectedBooking.value.id, form.value.status)
       
     if (res.success || res.message) {
-      primeToast.add({ severity: 'success', summary: 'Updated', detail: 'Booking status updated successfully', life: 3000 })
+      primeToast.add({ severity: 'success', summary: 'Đã cập nhật', detail: 'Cập nhật trạng thái đặt chỗ thành công', life: 3000 })
       closeModal()
       fetchBookings()
     } else {
-      primeToast.add({ severity: 'error', summary: 'Error', detail: res.message || 'Error updating', life: 3000 })
+      primeToast.add({ severity: 'error', summary: 'Lỗi', detail: res.message || 'Lỗi khi cập nhật', life: 3000 })
     }
   } catch (err) {
-    primeToast.add({ severity: 'error', summary: 'Error', detail: err.message || 'Error updating', life: 3000 })
+    primeToast.add({ severity: 'error', summary: 'Lỗi', detail: err.message || 'Lỗi khi cập nhật', life: 3000 })
   } finally { saving.value = false }
 }
 
+// Xác định màu sắc hiển thị cho Tag trạng thái dựa trên giá trị Enum
 function getStatusSeverity(status) {
   switch (status) {
     case 3: // Confirmed
@@ -222,7 +235,13 @@ onMounted(fetchBookings)
 <style lang="scss" scoped>
 @use '@/assets/styles/variables' as *;
 
-.admin-bookings-page { animation: fade-in-up 0.4s ease-out; }
+.admin-bookings-page { 
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: fade-in-up 0.4s ease-out; 
+}
+
 @keyframes fade-in-up { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
 
 .table-header {

@@ -45,6 +45,7 @@
       "duration": "Thời gian",
       "type": "Loại hình",
       "travellers": "Số người",
+      "placeholder": "Bạn muốn đi đâu?",
       "findBtn": "Tìm kiếm tour"
     },
     "services": {
@@ -63,7 +64,7 @@
     },
     "featured": {
       "label": "BÁN CHẠY NHẤT",
-      "title": "Điểm Đến Phổ Biến",
+      "title": "Tour Đánh Giá Cao Nhất",
       "viewAll": "Xem tất cả tour"
     },
     "proOffers": {
@@ -186,7 +187,9 @@
     "status": {
       "completed": "Hoàn thành",
       "pending": "Chờ xử lý",
-      "cancelled": "Đã hủy"
+      "cancelled": "Đã hủy",
+      "confirmed": "Đã xác nhận",
+      "awaiting payment": "Chờ thanh toán"
     },
     "checkout": {
       "title": "THANH TOÁN",
@@ -291,6 +294,7 @@
       "destinations": "Điểm đến",
       "users": "Quản lý Người dùng",
       "bookings": "Đặt chỗ",
+      "participants": "Hành khách Tour",
       "logout": "Đăng xuất"
     },
     "header": {
@@ -311,13 +315,13 @@
       "userAccounts": "Tài khoản người dùng",
       "actionRequired": "Cần xử lý",
       "allCaughtUp": "Đã hoàn thành hết",
-      "recent Bookings": "Recent Bookings",
-      "viewAll": "View All",
+      "recentBookings": "Đơn hàng gần đây",
+      "viewAll": "Xem tất cả",
       "columns": {
         "id": "Mã đặt chỗ",
         "customer": "Khách hàng",
         "tour": "Tour",
-        "date": "Date",
+        "date": "Ngày đặt",
         "status": "Trạng thái",
         "amount": "Tổng tiền"
       }

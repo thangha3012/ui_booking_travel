@@ -17,6 +17,8 @@
         :globalFilterFields="['name', 'description']"
         tableStyle="min-width: 50rem"
         class="p-datatable-sm"
+        scrollable
+        scrollHeight="flex"
       >
         <template #header>
           <div class="table-header">
@@ -84,6 +86,14 @@
           <label for="catDesc">{{ $t('admin.categories.columns.description') }}</label>
           <Textarea id="catDesc" v-model="form.description" rows="3" :placeholder="$t('admin.categories.dialog.descPlaceholder')" fluid />
         </div>
+        <div class="form-field">
+          <div class="flex items-center gap-3">
+            <ToggleSwitch v-model="form.isActive" inputId="catActive" />
+            <label for="catActive" class="mb-0 cursor-pointer" style="text-transform: none; letter-spacing: normal;">
+              {{ form.isActive ? $t('admin.users.status.active') : $t('admin.users.status.locked') }}
+            </label>
+          </div>
+        </div>
       </form>
 
       <template #footer>
@@ -110,6 +120,7 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import Textarea from 'primevue/textarea'
 import Tag from 'primevue/tag'
+import ToggleSwitch from 'primevue/toggleswitch'
 import Toast from 'primevue/toast'
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
@@ -126,7 +137,7 @@ const searchQuery = ref('')
 const showModal = ref(false)
 const isEditing = ref(false)
 const editingId = ref(null)
-const defaultForm = { name: '', description: '', displayOrder: 0, parentId: null }
+const defaultForm = { name: '', description: '', displayOrder: 0, parentId: null, isActive: true }
 const form = ref({ ...defaultForm })
 
 async function fetchCategories() {
@@ -153,7 +164,8 @@ function openEditModal(cat) {
     name: cat.name || '', 
     description: cat.description || '', 
     displayOrder: cat.displayOrder || 0,
-    parentId: cat.parentId || null
+    parentId: cat.parentId || null,
+    isActive: cat.isActive !== undefined ? cat.isActive : true
   }
   isEditing.value = true
   editingId.value = cat.id
@@ -211,7 +223,12 @@ onMounted(fetchCategories)
 <style lang="scss" scoped>
 @use '@/assets/styles/variables' as *;
 
-.admin-categories-page { animation: fade-in-up 0.4s ease-out; }
+.admin-categories-page { 
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: fade-in-up 0.4s ease-out; 
+}
 @keyframes fade-in-up { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
 
 .table-header {

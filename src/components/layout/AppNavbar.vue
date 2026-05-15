@@ -12,17 +12,22 @@
       <!-- MENU DESKTOP -->
       <ul class="navbar__menu">
         <li><RouterLink to="/" class="navbar__link">{{ t('nav.home') }}</RouterLink></li>
-        <li><RouterLink to="/tours" class="navbar__link">{{ t('nav.tours') }}</RouterLink></li>
-        <li><RouterLink to="/tours" class="navbar__link">{{ t('nav.destinations') }}</RouterLink></li>
+        <li>
+          <RouterLink 
+            to="/tours" 
+            class="navbar__link"
+            :class="{ 'router-link-active': $route.path.startsWith('/tours') }"
+          >
+            Tour Du lịch
+          </RouterLink>
+        </li>
+        <li><RouterLink to="/blog" class="navbar__link">{{ t('nav.blog', 'Tin tức') }}</RouterLink></li>
+        <li><RouterLink to="/about" class="navbar__link">{{ t('nav.about', 'Giới thiệu') }}</RouterLink></li>
+        <li><RouterLink to="/contact" class="navbar__link">{{ t('nav.contact', 'Liên hệ') }}</RouterLink></li>
       </ul>
 
       <!-- RIGHT ACTIONS -->
       <div class="navbar__actions">
-        <!-- Language Switcher -->
-        <button class="lang-chip" @click="toggleLang">
-          <i class="pi pi-globe"></i>
-          <span>{{ locale.toUpperCase() }}</span>
-        </button>
 
         <!-- Not logged in -->
         <template v-if="!auth.isLoggedIn">
@@ -43,7 +48,7 @@
                   <div class="dh-avatar">{{ auth.displayName.charAt(0).toUpperCase() }}</div>
                   <div>
                     <div class="dh-name">{{ auth.displayName }}</div>
-                    <div class="dh-role">{{ auth.isAdmin ? 'Administrator' : 'Member' }}</div>
+                    <div class="dh-role">{{ auth.isAdmin ? 'Quản trị viên' : 'Thành viên' }}</div>
                   </div>
                 </div>
                 <div class="dropdown-divider" />
@@ -72,11 +77,20 @@
     <!-- MOBILE MENU -->
     <Transition name="mobile-slide">
       <div v-if="mobileOpen" class="navbar__mobile">
-        <RouterLink to="/" class="mobile-link" @click="mobileOpen = false">
+        <RouterLink to="/" class="navbar__mobile-link" @click="mobileOpen = false">
           <i class="pi pi-home"></i> {{ t('nav.home') }}
         </RouterLink>
-        <RouterLink to="/tours" class="mobile-link" @click="mobileOpen = false">
-          <i class="pi pi-map"></i> {{ t('nav.tours') }}
+        <RouterLink to="/tours" class="navbar__mobile-link" @click="mobileOpen = false">
+          <i class="pi pi-map"></i> Tour Du lịch
+        </RouterLink>
+        <RouterLink to="/blog" class="navbar__mobile-link" @click="mobileOpen = false">
+          <i class="pi pi-book"></i> {{ t('nav.blog', 'Tin tức') }}
+        </RouterLink>
+        <RouterLink to="/about" class="navbar__mobile-link" @click="mobileOpen = false">
+          <i class="pi pi-info-circle"></i> {{ t('nav.about', 'Giới thiệu') }}
+        </RouterLink>
+        <RouterLink to="/contact" class="navbar__mobile-link" @click="mobileOpen = false">
+          <i class="pi pi-phone"></i> {{ t('nav.contact', 'Liên hệ') }}
         </RouterLink>
         <template v-if="!auth.isLoggedIn">
           <div class="mobile-divider" />
@@ -140,11 +154,7 @@ const vClickOutside = {
   }
 }
 
-function toggleLang() {
-  const next = locale.value === 'vi' ? 'en' : 'vi'
-  locale.value = next
-  app.setLocale(next)
-}
+// Đã bỏ chức năng chuyển ngôn ngữ - chỉ dùng tiếng Việt
 
 function handleLogout() {
   auth.logout()

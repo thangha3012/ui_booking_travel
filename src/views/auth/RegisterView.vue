@@ -12,21 +12,21 @@
              <span class="brand-name">Triptopia</span>
           </div>
           <div class="visual-text">
-            <h2 class="quote">"Adventure is worthwhile in itself."</h2>
+            <h2 class="quote">"Cuộc phiêu lưu tự nó đã là phần thưởng."</h2>
             <p class="author">— Amelia Earhart</p>
           </div>
           <div class="visual-features">
             <div class="v-feature">
               <i class="pi pi-check-circle"></i>
-              <span>Over 500+ Premium Tours</span>
+              <span>Hơn 500+ Tour cao cấp</span>
             </div>
             <div class="v-feature">
               <i class="pi pi-check-circle"></i>
-              <span>Best Price Guarantee</span>
+              <span>Cam kết giá tốt nhất</span>
             </div>
             <div class="v-feature">
               <i class="pi pi-check-circle"></i>
-              <span>24/7 Professional Support</span>
+              <span>Hỗ trợ chuyên nghiệp 24/7</span>
             </div>
           </div>
         </div>
@@ -43,8 +43,8 @@
 
           <div class="form-container">
             <div class="form-header">
-              <h1>Join Triptopia</h1>
-              <p>Create an account to start your journey with us.</p>
+              <h1>Tham gia Triptopia</h1>
+              <p>Tạo tài khoản để bắt đầu hành trình cùng chúng tôi.</p>
             </div>
 
             <form @submit.prevent="handleRegister" class="auth-form">
@@ -101,7 +101,7 @@
               </div>
 
               <div class="terms-label">
-                By registering, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                Bằng cách đăng ký, bạn đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a> của chúng tôi.
               </div>
 
               <Button type="submit" :label="t('auth.registerBtn')" :loading="loading" raised class="submit-btn" />
@@ -109,7 +109,7 @@
 
             <div class="auth-alt">
               <div class="divider">
-                <span>Or register with</span>
+                <span>Hoặc đăng ký với</span>
               </div>
               <div class="social-btns">
                 <Button icon="pi pi-google" severity="secondary" outlined class="flex-1" label="Google" />
@@ -118,7 +118,7 @@
             </div>
 
             <div class="auth-switch">
-              Already have an account? 
+              Đã có tài khoản? 
               <RouterLink to="/login">{{ t('nav.login') }}</RouterLink>
             </div>
           </div>

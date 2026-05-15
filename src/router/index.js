@@ -11,13 +11,17 @@ const routes = [
       { path: 'tours',     name: 'tours',       component: () => import('@/views/public/TourListView.vue') },
       { path: 'tours/:id', name: 'tour-detail', component: () => import('@/views/public/TourDetailView.vue') },
       { path: 'checkout',  name: 'checkout',    component: () => import('@/views/public/CheckoutView.vue'), meta: { requiresAuth: true } },
-      { path: 'vnpay-return', name: 'vnpay-return', component: () => import('@/views/public/VNPayReturnView.vue'), meta: { requiresAuth: true } },
+      { path: 'zalopay-return', name: 'zalopay-return', component: () => import('@/views/public/ZaloPayReturnView.vue'), meta: { requiresAuth: true } },
       { path: 'my-bookings', name: 'my-bookings', component: () => import('@/views/customer/MyBookingsView.vue'), meta: { requiresAuth: true } },
+      { path: 'booking-detail/:id', name: 'booking-detail', component: () => import('@/views/customer/BookingDetailView.vue'), meta: { requiresAuth: true } },
       { path: 'booking/:scheduleId', name: 'booking', component: () => import('@/views/customer/BookingView.vue'), meta: { requiresAuth: true } },
       
       // ---- STATIC PAGES ----
-      { path: 'about-us',  name: 'about-us',    component: () => import('@/views/public/AboutUsView.vue') },
-      { path: 'services',  name: 'services',    component: () => import('@/views/public/ServicesView.vue') },
+      { path: 'about',      name: 'about',       component: () => import('@/views/public/AboutUsView.vue') },
+      { path: 'contact',    name: 'contact',     component: () => import('@/views/public/ContactView.vue') },
+      { path: 'blog',       name: 'blog',        component: () => import('@/views/public/BlogView.vue') },
+      { path: 'destinations', name: 'destinations', component: () => import('@/views/public/DestinationsView.vue') },
+      { path: 'services',   name: 'services',    component: () => import('@/views/public/ServicesView.vue') },
       { path: 'privacy-policy', name: 'privacy-policy', component: () => import('@/views/public/PrivacyPolicyView.vue') },
       { path: 'terms-of-use', name: 'terms-of-use', component: () => import('@/views/public/TermsOfUseView.vue') },
       
@@ -48,6 +52,7 @@ const routes = [
       { path: 'categories', name: 'admin-categories', component: () => import('@/views/admin/AdminCategoriesView.vue') },
       { path: 'destinations', name: 'admin-destinations', component: () => import('@/views/admin/AdminDestinationsView.vue') },
       { path: 'bookings', name: 'admin-bookings', component: () => import('@/views/admin/AdminBookingsView.vue') },
+      { path: 'participants', name: 'admin-participants', component: () => import('@/views/admin/AdminParticipantsView.vue') },
       { path: 'reviews', name: 'admin-reviews', component: () => import('@/views/admin/AdminReviewsView.vue') },
     ],
   },

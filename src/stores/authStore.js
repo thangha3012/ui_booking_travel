@@ -14,6 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
   const displayName = computed(() => user.value?.fullName || user.value?.email || 'Người dùng')
 
   // ---- ACTIONS ----
+  // Xử lý logic đăng nhập, lưu trữ token và thông tin người dùng vào LocalStorage
   async function login(credentials) {
     try {
       const res = await authApi.login(credentials)
@@ -38,10 +39,12 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  // Gọi API đăng ký tài khoản mới
   async function register(userData) {
     return await authApi.register(userData)
   }
 
+  // Đăng xuất: Xóa thông tin xác thực khỏi bộ nhớ và LocalStorage
   function logout() {
     token.value = null
     user.value = null

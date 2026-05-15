@@ -6,27 +6,27 @@
         <div class="visual-overlay"></div>
         <div class="visual-content">
           <div class="brand">
-             <div class="brand-logo">
-               <i class="pi pi-compass"></i>
-             </div>
-             <span class="brand-name">Triptopia</span>
+            <div class="brand-logo">
+              <i class="pi pi-compass"></i>
+            </div>
+            <span class="brand-name">Triptopia</span>
           </div>
           <div class="visual-text">
-            <h2 class="quote">"To travel is to live."</h2>
+            <h2 class="quote">"Đi để trở về, và trở về để lại đi."</h2>
             <p class="author">— Hans Christian Andersen</p>
           </div>
           <div class="visual-features">
             <div class="v-feature">
               <i class="pi pi-check-circle"></i>
-              <span>Over 500+ Premium Tours</span>
+              <span>Hơn 500+ Tour cao cấp</span>
             </div>
             <div class="v-feature">
               <i class="pi pi-check-circle"></i>
-              <span>Best Price Guarantee</span>
+              <span>Cam kết giá tốt nhất</span>
             </div>
             <div class="v-feature">
               <i class="pi pi-check-circle"></i>
-              <span>24/7 Professional Support</span>
+              <span>Hỗ trợ chuyên nghiệp 24/7</span>
             </div>
           </div>
         </div>
@@ -36,15 +36,15 @@
       <div class="auth-form-side">
         <div class="form-scroll-outer">
           <nav class="auth-breadcrumb">
-             <RouterLink to="/">{{ t('nav.home') }}</RouterLink>
-             <i class="pi pi-chevron-right"></i>
-             <span>{{ t('nav.login') }}</span>
+            <RouterLink to="/">{{ t('nav.home') }}</RouterLink>
+            <i class="pi pi-chevron-right"></i>
+            <span>{{ t('nav.login') }}</span>
           </nav>
 
           <div class="form-container">
             <div class="form-header">
-              <h1>Welcome Back</h1>
-              <p>Login to manage your bookings and explore new destinations.</p>
+              <h1>Chào mừng trở lại</h1>
+              <p>Đăng nhập để quản lý đặt chỗ và khám phá điểm đến mới.</p>
             </div>
 
             <form @submit.prevent="handleLogin" class="auth-form">
@@ -52,8 +52,14 @@
                 <label for="email">{{ t('auth.email') }}</label>
                 <div class="input-wrapper">
                   <i class="pi pi-envelope input-icon"></i>
-                  <InputText id="email" type="email" v-model="form.email" :placeholder="t('auth.email')"
-                    :invalid="!!errors.email" fluid />
+                  <InputText
+                    id="email"
+                    type="email"
+                    v-model="form.email"
+                    :placeholder="t('auth.email')"
+                    :invalid="!!errors.email"
+                    fluid
+                  />
                 </div>
                 <small v-if="errors.email" class="p-error">{{ errors.email }}</small>
               </div>
@@ -62,34 +68,62 @@
                 <label for="password">{{ t('auth.password') }}</label>
                 <div class="input-wrapper">
                   <i class="pi pi-lock input-icon"></i>
-                  <Password id="password" v-model="form.password" :placeholder="t('auth.password')"
-                    :feedback="false" toggleMask :invalid="!!errors.password" inputClass="w-full" fluid />
+                  <Password
+                    id="password"
+                    v-model="form.password"
+                    :placeholder="t('auth.password')"
+                    :feedback="false"
+                    toggleMask
+                    :invalid="!!errors.password"
+                    inputClass="w-full"
+                    fluid
+                  />
                 </div>
                 <small v-if="errors.password" class="p-error">{{ errors.password }}</small>
               </div>
 
               <div class="form-options">
                 <div class="flex items-center gap-2">
-                   <!-- Keep it simple, but could add "Remember me" here -->
+                  <!-- Keep it simple, but could add "Remember me" here -->
                 </div>
-                <RouterLink to="/forgot-password" class="forgot-link">{{ t('auth.forgotPassword') }}</RouterLink>
+                <RouterLink to="/forgot-password" class="forgot-link">{{
+                  t('auth.forgotPassword')
+                }}</RouterLink>
               </div>
 
-              <Button type="submit" :label="t('auth.loginBtn')" :loading="loading" raised class="submit-btn" />
+              <Button
+                type="submit"
+                :label="t('auth.loginBtn')"
+                :loading="loading"
+                raised
+                class="submit-btn"
+              />
             </form>
 
             <div class="auth-alt">
               <div class="divider">
-                <span>Or login with</span>
+                <span>Hoặc đăng nhập với</span>
               </div>
               <div class="social-btns">
-                <Button icon="pi pi-google" severity="secondary" outlined class="flex-1" label="Google" />
-                <Button icon="pi pi-facebook" severity="secondary" outlined class="flex-1" label="Facebook" />
+                <Button
+                  icon="pi pi-google"
+                  severity="secondary"
+                  outlined
+                  class="flex-1"
+                  label="Google"
+                />
+                <Button
+                  icon="pi pi-facebook"
+                  severity="secondary"
+                  outlined
+                  class="flex-1"
+                  label="Facebook"
+                />
               </div>
             </div>
 
             <div class="auth-switch">
-              Don't have an account? 
+              Chưa có tài khoản?
               <RouterLink to="/register">{{ t('nav.register') }}</RouterLink>
             </div>
           </div>
@@ -127,11 +161,17 @@ function validateForm() {
   errors.password = ''
   let valid = true
 
-  if (!form.email) { errors.email = t('common.required'); valid = false }
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-    errors.email = t('common.invalidEmail'); valid = false
+  if (!form.email) {
+    errors.email = t('common.required')
+    valid = false
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    errors.email = t('common.invalidEmail')
+    valid = false
   }
-  if (!form.password) { errors.password = t('common.required'); valid = false }
+  if (!form.password) {
+    errors.password = t('common.required')
+    valid = false
+  }
   return valid
 }
 
@@ -141,18 +181,35 @@ async function handleLogin() {
   try {
     const res = await auth.login({ email: form.email, password: form.password })
     if (res.success) {
-      toast.add({ severity: 'success', summary: t('auth.loginTitle'), detail: t('auth.loginSuccess'), life: 3000 })
+      toast.add({
+        severity: 'success',
+        summary: t('auth.loginTitle'),
+        detail: t('auth.loginSuccess'),
+        life: 3000,
+      })
       let redirect = route.query.redirect
       if (!redirect) redirect = auth.isAdmin ? '/admin' : '/'
       setTimeout(() => {
         router.push(redirect)
       }, 1000)
     } else {
-      toast.add({ severity: 'error', summary: t('common.error'), detail: res.message || t('common.error'), life: 4000 })
+      toast.add({
+        severity: 'error',
+        summary: t('common.error'),
+        detail: res.message || t('common.error'),
+        life: 4000,
+      })
     }
   } catch (err) {
-    toast.add({ severity: 'error', summary: 'Error', detail: err.message || t('common.error'), life: 4000 })
-  } finally { loading.value = false }
+    toast.add({
+      severity: 'error',
+      summary: 'Lỗi',
+      detail: err.message || t('common.error'),
+      life: 4000,
+    })
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -179,7 +236,8 @@ async function handleLogin() {
     display: block;
     width: 45%;
     position: relative;
-    background: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80') center/cover no-repeat;
+    background: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80')
+      center/cover no-repeat;
   }
 }
 
@@ -203,11 +261,11 @@ async function handleLogin() {
     align-items: center;
     gap: $space-3;
     margin-bottom: auto;
-    
+
     &-logo {
       width: 44px;
       height: 44px;
-      background: rgba(255,255,255,0.2);
+      background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(10px);
       border-radius: 12px;
       @include flex-center;
@@ -245,7 +303,10 @@ async function handleLogin() {
       align-items: center;
       gap: $space-3;
       font-weight: 500;
-      i { color: #10b981; font-size: 1.2rem; }
+      i {
+        color: #10b981;
+        font-size: 1.2rem;
+      }
     }
   }
 }
@@ -253,7 +314,9 @@ async function handleLogin() {
 // Right form side
 .auth-form-side {
   width: 100%;
-  @include lg { width: 55%; }
+  @include lg {
+    width: 55%;
+  }
   background: white;
   display: flex;
   flex-direction: column;
@@ -265,7 +328,9 @@ async function handleLogin() {
   width: 100%;
   margin: 0 auto;
   padding: $space-8 $space-6;
-  @include md { padding: $space-12 $space-8; }
+  @include md {
+    padding: $space-12 $space-8;
+  }
 }
 
 .auth-breadcrumb {
@@ -275,13 +340,21 @@ async function handleLogin() {
   font-size: 0.85rem;
   color: $color-text-secondary;
   margin-bottom: $space-8;
-  
+
   a {
     color: inherit;
-    &:hover { color: $color-primary; }
+    &:hover {
+      color: $color-primary;
+    }
   }
-  i { font-size: 0.7rem; opacity: 0.5; }
-  span { font-weight: 600; color: $color-primary; }
+  i {
+    font-size: 0.7rem;
+    opacity: 0.5;
+  }
+  span {
+    font-weight: 600;
+    color: $color-primary;
+  }
 }
 
 .form-header {
@@ -309,7 +382,7 @@ async function handleLogin() {
   display: flex;
   flex-direction: column;
   gap: $space-2;
-  
+
   label {
     font-size: 13px;
     font-weight: 700;
@@ -330,12 +403,16 @@ async function handleLogin() {
     color: $color-text-secondary;
     pointer-events: none;
   }
-  :deep(.p-inputtext), :deep(.p-password-input) {
+  :deep(.p-inputtext),
+  :deep(.p-password-input) {
     padding-left: 42px !important;
     height: 48px;
     border-radius: 12px;
     border: 1.5px solid #e2e8f0;
-    &:focus { border-color: $color-primary; box-shadow: 0 0 0 2px rgba($color-primary-rgb, 0.1); }
+    &:focus {
+      border-color: $color-primary;
+      box-shadow: 0 0 0 2px rgba($color-primary-rgb, 0.1);
+    }
   }
 }
 
@@ -351,7 +428,9 @@ async function handleLogin() {
   color: $color-primary;
   font-weight: 600;
   text-decoration: none;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .submit-btn {
@@ -371,16 +450,32 @@ async function handleLogin() {
     text-align: center;
     margin-bottom: $space-6;
     &::before {
-      content: ''; position: absolute; left: 0; top: 50%; width: 100%; height: 1px; background: #f1f5f9;
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+      background: #f1f5f9;
     }
     span {
-      position: relative; background: white; padding: 0 16px; font-size: 13px; color: #94a3b8; font-weight: 500;
+      position: relative;
+      background: white;
+      padding: 0 16px;
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 500;
     }
   }
   .social-btns {
     display: flex;
     gap: $space-4;
-    button { height: 48px; border-radius: 12px; font-weight: 600; border-color: #e2e8f0; }
+    button {
+      height: 48px;
+      border-radius: 12px;
+      font-weight: 600;
+      border-color: #e2e8f0;
+    }
   }
 }
 
@@ -389,9 +484,19 @@ async function handleLogin() {
   text-align: center;
   font-size: 1rem;
   color: $color-text-secondary;
-  a { color: $color-accent; font-weight: 700; margin-left: 6px; }
+  a {
+    color: $color-accent;
+    font-weight: 700;
+    margin-left: 6px;
+  }
 }
 
-.p-error { font-size: 12px; margin-top: 4px; font-weight: 500; }
-:deep(.p-password) { width: 100%; }
+.p-error {
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+:deep(.p-password) {
+  width: 100%;
+}
 </style>

@@ -17,6 +17,8 @@
         :rowsPerPageOptions="[10, 25, 50]"
         tableStyle="min-width: 60rem"
         class="p-datatable-sm"
+        scrollable
+        scrollHeight="flex"
       >
         <template #header>
           <div class="table-header">
@@ -191,7 +193,12 @@ onMounted(fetchUsers)
 <style lang="scss" scoped>
 @use '@/assets/styles/variables' as *;
 
-.admin-users-page { animation: fade-in-up 0.4s ease-out; }
+.admin-users-page { 
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: fade-in-up 0.4s ease-out; 
+}
 @keyframes fade-in-up { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
 
 .table-header { display: flex; justify-content: flex-end; gap: 12px; align-items: center; }

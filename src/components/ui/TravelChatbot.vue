@@ -136,12 +136,13 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, nextTick, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import chatApi from '@/api/chatApi'
 
 const messages = ref([])
 const router = useRouter()
+const route = useRoute()
 const isOpen = ref(false)
 const isMinimized = ref(false)
 const isTyping = ref(false)
@@ -158,6 +159,19 @@ const quickActions = [
   { label: 'Liên hệ', icon: 'pi pi-phone' },
   { label: 'Chính sách hoàn tiền', icon: 'pi pi-shield' },
 ]
+
+// Lưu lại token lúc khởi tạo để so sánh
+const currentToken = ref(localStorage.getItem('auth_token'))
+
+// Theo dõi sự thay đổi của Route (detect Login/Logout)
+watch(() => route.path, () => {
+  const newToken = localStorage.getItem('auth_token')
+  if (newToken !== currentToken.value) {
+    currentToken.value = newToken
+    clearChat()
+    initGreeting()
+  }
+})
 
 // Hàm chuyển đổi Markdown cơ bản sang HTML
 function formatMarkdown(text) {
@@ -210,7 +224,7 @@ async function processResponse(text) {
      if (res && res.success) {
         addBotMessage(res.reply)
      } else {
-        addBotMessage("Sorry, I'm having trouble connecting to my brain right now. 🧠")
+        addBotMessage("Xin lỗi, mình đang gặp chút trục trặc. Bạn thử lại sau nhé! 🤖")
      }
   } catch(e) {
      console.error('Chat error:', e)
@@ -243,14 +257,38 @@ function sendChip(chip) {
   sendMessage()
 }
 
-// ---- Init greeting ----
-onMounted(() => {
+function clearChat() {
+  messages.value = []
+  unreadCount.value = 0
+}
+
+function initGreeting() {
+  const userStr = localStorage.getItem('auth_user')
+  let greetingName = ''
+  
+  if (userStr) {
+    try {
+      const user = JSON.parse(userStr)
+      greetingName = user.fullName || user.email || ''
+    } catch (e) { console.error(e) }
+  }
+
   setTimeout(() => {
-    addBotMessage(
-      '👋 Xin chào! Mình là <b>Trợ lý Triptopia</b> — sẵn sàng hỗ trợ bạn khám phá Việt Nam! 🗺️',
-      ['Tour nổi bật', 'Giá vé', 'Đặt tour', 'Liên hệ']
-    )
-  }, 1200)
+    if (messages.value.length === 0) {
+      const welcomeText = greetingName 
+        ? `👋 Xin chào <b>${greetingName}</b>! Mình là <b>Trợ lý Triptopia</b> — rất vui được gặp lại bạn! 🗺️`
+        : '👋 Xin chào! Mình là <b>Trợ lý Triptopia</b> — sẵn sàng hỗ trợ bạn khám phá Việt Nam! 🗺️'
+        
+      addBotMessage(welcomeText, ['Tour nổi bật', 'Giá vé', 'Đặt tour', 'Liên hệ'])
+    }
+  }, 800)
+}
+
+onMounted(() => {
+  initGreeting()
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'auth_token') location.reload() 
+  })
 })
 </script>
 

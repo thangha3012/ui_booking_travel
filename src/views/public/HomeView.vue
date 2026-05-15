@@ -1,133 +1,46 @@
 <template>
-  <div class="home">
+  <div class="home-view">
     <!-- ==================== HERO ==================== -->
     <section class="hero-section">
-      <!-- BG Shapes -->
       <div class="hero-shape hero-shape--1"></div>
       <div class="hero-shape hero-shape--2"></div>
-      <div class="hero-shape hero-shape--3"></div>
 
       <div class="container hero__inner">
-        <!-- Content Left -->
         <div class="hero__content">
           <div class="hero__badge">
-            <i class="pi pi-star-fill"></i>
-            <span>{{ $t('home.startTravelling') }}</span>
+            <span class="badge-dot"></span>
+            {{ t('hero.northernVietnam') }}
           </div>
           <h1 class="hero__title">
-            {{ $t('home.enjoyTrip') }}<br />
-            <span class="text-gradient">Việt Nam</span>
+            {{ t('home.heroTitle') }} <br />
+            <span class="text-highlight">{{ t('home.heroSubtitle') }}</span>
           </h1>
           <p class="hero__desc">
-            {{ $t('home.heroDesc') }}
+            {{ t('home.heroDesc') }}
           </p>
-          <div class="hero__cta">
-            <RouterLink to="/tours" class="hero-btn-primary">
-              <i class="pi pi-map"></i> Khám phá ngay
-            </RouterLink>
-            <button class="hero-btn-ghost" @click="scrollToFeatured">
-              <span class="play-icon"><i class="pi pi-play"></i></span>
-              Xem tour nổi bật
+          <div class="hero__actions">
+            <button class="btn-primary" @click="scrollToFeatured">
+              {{ t('home.startTravelling') }}
+              <i class="pi pi-arrow-right"></i>
             </button>
-          </div>
-          <div class="hero__stats">
-            <div class="stat-item" v-for="s in heroStats" :key="s.label">
-              <span class="stat-value">{{ s.value }}</span>
-              <span class="stat-label">{{ s.label }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Images Right -->
-        <div class="hero__images">
-          <div class="hero-img-grid">
-            <div class="himg himg--main">
-              <img
-                src="https://images.unsplash.com/photo-1555921015-5532091f6026?w=800&q=85"
-                alt="Ha Giang"
-              />
-              <div class="himg-badge"><i class="pi pi-map-marker"></i> Hà Giang</div>
-            </div>
-            <div class="himg himg--sm">
-              <img
-                src="https://images.unsplash.com/photo-1528127269322-539801943592?w=400&q=80"
-                alt="Sa Pa"
-              />
-            </div>
-            <div class="himg himg--sm himg--bottom">
-              <img
-                src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=400&q=80"
-                alt="Ha Long"
-              />
-              <div class="himg-badge himg-badge--accent">
-                <i class="pi pi-star-fill"></i> 4.9 Rating
+            <div class="hero__rating">
+              <div class="avatars">
+                <img src="https://i.pravatar.cc/100?img=1" alt="user" />
+                <img src="https://i.pravatar.cc/100?img=2" alt="user" />
+                <img src="https://i.pravatar.cc/100?img=3" alt="user" />
+                <div class="avatar-plus">+12k</div>
+              </div>
+              <div class="rating-info">
+                <div class="stars">
+                  <i class="pi pi-star-fill" v-for="i in 5" :key="i"></i>
+                </div>
+                <span>4.9/5 (2.5k {{ t('tour.detail.reviews') }})</span>
               </div>
             </div>
           </div>
-
-          <!-- Float card -->
-          <div class="hero-float-card">
-            <div class="float-icon">✈️</div>
-            <div>
-              <div class="float-title">Chuyến bay ngay hôm nay</div>
-              <div class="float-sub">Đặt trước 20% tiết kiệm</div>
-            </div>
-          </div>
         </div>
-      </div>
 
-      <!-- Search Bar -->
-      <div class="container">
-        <div class="search-bar">
-          <div class="search-col">
-            <span class="search-label"
-              ><i class="pi pi-map-marker"></i> {{ $t('home.search.destination') }}</span
-            >
-            <InputText
-              v-model="searchDest"
-              :placeholder="$t('home.searchPlaceholder')"
-              class="search-input"
-            />
-          </div>
-          <div class="search-divider"></div>
-          <div class="search-col">
-            <span class="search-label"
-              ><i class="pi pi-clock"></i> {{ $t('home.search.duration') }}</span
-            >
-            <Select
-              v-model="searchDuration"
-              :options="durationOptions"
-              :placeholder="$t('common.search')"
-              class="search-select"
-            />
-          </div>
-          <div class="search-divider"></div>
-          <div class="search-col">
-            <span class="search-label"><i class="pi pi-tag"></i> {{ $t('home.search.type') }}</span>
-            <Select
-              v-model="searchType"
-              :options="typeOptions"
-              :placeholder="$t('common.search')"
-              class="search-select"
-            />
-          </div>
-          <div class="search-divider"></div>
-          <div class="search-col">
-            <span class="search-label"
-              ><i class="pi pi-users"></i> {{ $t('home.search.travellers') }}</span
-            >
-            <Select
-              v-model="searchTravellers"
-              :options="travellerOptions"
-              :placeholder="$t('common.search')"
-              class="search-select"
-            />
-          </div>
-          <button class="search-btn" @click="handleSearch">
-            <i class="pi pi-search"></i>
-            {{ $t('home.search.findBtn') }}
-          </button>
-        </div>
+        <!-- Xóa thanh tìm kiếm theo yêu cầu -->
       </div>
     </section>
 
@@ -139,14 +52,13 @@
           <h2 class="section-title">{{ $t('home.services.title') }}</h2>
         </div>
         <div class="services-grid">
-          <div class="service-card" v-for="(item, i) in services" :key="item.title">
-            <div class="service-icon-wrap" :class="`color-${i % 4}`">
-              <i :class="item.icon"></i>
+          <div v-for="s in services" :key="s.title" class="service-card">
+            <div class="service-icon">
+              <i :class="s.icon"></i>
             </div>
-            <h3 class="service-title">{{ item.title }}</h3>
-            <p class="service-desc">{{ item.desc }}</p>
-            <div class="service-arrow">
-              <i class="pi pi-arrow-right"></i>
+            <div class="service-body">
+              <h3>{{ s.title }}</h3>
+              <p>{{ s.desc }}</p>
             </div>
           </div>
         </div>
@@ -160,45 +72,50 @@
           <p class="section-label">Khám phá ngay</p>
           <h2 class="section-title">Điểm đến nổi bật</h2>
         </div>
-        <div class="destinations-grid">
+        <div v-if="destinations.length > 0" class="destinations-grid">
           <RouterLink
             to="/tours"
             class="dest-card dest-card--big"
-            :style="{ backgroundImage: `url(${destinations[0].img})` }"
+            :style="{
+              backgroundImage: `url(${getFullImageUrl(destinations[0].coverImageUrl) || 'https://images.unsplash.com/photo-1606204619745-fdf4e2a7e96a?w=800&q=80'})`,
+            }"
           >
             <div class="dest-overlay"></div>
             <div class="dest-info">
               <span class="dest-tag">Phổ biến #1</span>
               <h3>{{ destinations[0].name }}</h3>
-              <p>{{ destinations[0].count }} tour</p>
             </div>
           </RouterLink>
           <div class="dest-right">
             <RouterLink
               to="/tours"
               class="dest-card"
-              v-for="d in destinations.slice(1)"
-              :key="d.name"
-              :style="{ backgroundImage: `url(${d.img})` }"
+              v-for="d in destinations.slice(1, 5)"
+              :key="d.id"
+              :style="{
+                backgroundImage: `url(${getFullImageUrl(d.coverImageUrl) || 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80'})`,
+              }"
             >
               <div class="dest-overlay"></div>
               <div class="dest-info">
                 <h3>{{ d.name }}</h3>
-                <p>{{ d.count }} tour</p>
               </div>
             </RouterLink>
           </div>
+        </div>
+        <div v-else-if="!loadingDest" class="destinations-empty">
+          <p>Chưa có địa điểm nào được tạo.</p>
         </div>
       </div>
     </section>
 
     <!-- ==================== FEATURED TOURS ==================== -->
-    <section class="section featured-tours" id="featured-tours">
+    <section id="featured-tours" class="section featured-section">
       <div class="container">
-        <div class="features-header">
-          <div>
+        <div class="featured-header">
+          <div class="header-left">
             <p class="section-label">{{ $t('home.featured.label') }}</p>
-            <h2 class="section-title text-left">{{ $t('home.featured.title') }}</h2>
+            <h2 class="section-title">{{ $t('home.featured.title') }}</h2>
           </div>
           <RouterLink to="/tours" class="view-all-btn">
             {{ $t('home.featured.viewAll') }} <i class="pi pi-arrow-right"></i>
@@ -206,7 +123,7 @@
         </div>
 
         <div v-if="loadingTours" class="tours-grid">
-          <div v-for="n in 3" :key="n" class="tour-skeleton">
+          <div v-for="i in 3" :key="i" class="tour-skeleton">
             <div class="skeleton-img"></div>
             <div class="skeleton-body">
               <div class="skeleton-line"></div>
@@ -215,12 +132,17 @@
             </div>
           </div>
         </div>
-        <div v-else-if="featuredTours.length === 0" class="empty-tours">
-          <i class="pi pi-map text-4xl mb-4 text-slate-300"></i>
+        <div v-else-if="featuredTours.length === 0" class="destinations-empty">
+          <i class="pi pi-map empty-icon-large"></i>
           <p>Chưa có tour nào. Hãy thêm tour từ trang Admin!</p>
         </div>
         <div v-else class="tours-grid">
-          <TourCard v-for="tour in featuredTours" :key="tour.id" :tour="tour" />
+          <TourCard
+            v-for="tour in featuredTours"
+            :key="tour.id"
+            :tour="tour"
+            displayMode="premium"
+          />
         </div>
       </div>
     </section>
@@ -228,59 +150,78 @@
     <!-- ==================== ABOUT ==================== -->
     <section class="section about-section">
       <div class="container about__inner">
-        <div class="about__images">
+        <div class="about__image">
           <img
-            class="img-main"
-            src="https://images.unsplash.com/photo-1587474260584-136574528ed5?w=700&q=80"
+            src="https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80"
             alt="About"
+            class="main-img"
           />
-          <img
-            class="img-overlay"
-            src="https://images.unsplash.com/photo-1573390016527-19ef6f38ebe3?w=400&q=80"
-            alt="About 2"
-          />
-          <div class="about-exp-badge">
-            <div class="exp-number">10+</div>
-            <div class="exp-text">Năm kinh nghiệm</div>
+          <div class="floating-card floating-card--1">
+            <i class="pi pi-check-circle"></i>
+            <div>
+              <p class="card-val">20+</p>
+              <p class="card-lab">Năm kinh nghiệm</p>
+            </div>
+          </div>
+          <div class="floating-card floating-card--2">
+            <div class="avatars-small">
+              <img src="https://i.pravatar.cc/100?img=4" alt="user" />
+              <img src="https://i.pravatar.cc/100?img=5" alt="user" />
+              <span>+2k khách</span>
+            </div>
           </div>
         </div>
         <div class="about__content">
           <p class="section-label">{{ $t('home.about.label') }}</p>
-          <h2 class="section-title text-left">{{ $t('home.about.title') }}</h2>
-          <p class="about-desc">{{ $t('home.about.desc1') }}</p>
-          <div class="about-stats-row">
-            <div class="astat" v-for="s in aboutStats" :key="s.label">
-              <div class="astat-value">{{ s.value }}</div>
-              <div class="astat-label">{{ s.label }}</div>
+          <h2 class="section-title">{{ $t('home.about.title') }}</h2>
+          <p class="about-desc">
+            {{ $t('home.about.desc1') }}
+          </p>
+          <div class="about-features">
+            <div class="feat-item">
+              <div class="feat-icon"><i class="pi pi-shield"></i></div>
+              <p>Dịch vụ an toàn & tin cậy</p>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon"><i class="pi pi-dollar"></i></div>
+              <p>Giá cả cạnh tranh nhất</p>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon"><i class="pi pi-users"></i></div>
+              <p>Hướng dẫn viên chuyên nghiệp</p>
             </div>
           </div>
-          <RouterLink to="/tours" class="about-cta">
-            {{ $t('home.about.readMore') }} <i class="pi pi-arrow-right"></i>
-          </RouterLink>
+          <div class="about-stats">
+            <div v-for="stat in aboutStats" :key="stat.label" class="stat-item">
+              <h3>{{ stat.value }}</h3>
+              <p>{{ stat.label }}</p>
+            </div>
+          </div>
+          <button class="btn-secondary">
+            {{ $t('home.about.readMore') }}
+            <i class="pi pi-arrow-right"></i>
+          </button>
         </div>
       </div>
     </section>
 
     <!-- ==================== TESTIMONIALS ==================== -->
-    <section class="section testimonials-section">
+    <section class="section test-section">
       <div class="container">
-        <div class="section-header">
-          <p class="section-label">Đánh giá</p>
-          <h2 class="section-title">Khách hàng nói gì?</h2>
+        <div class="section-header center-align">
+          <p class="section-label">KHÁCH HÀNG NÓI GÌ</p>
+          <h2 class="section-title">Trải Nghiệm Từ Du Khách</h2>
         </div>
-        <div class="testimonials-grid">
-          <div class="testimonial-card" v-for="t in testimonials" :key="t.name">
-            <div class="testimonial-stars">
-              <i class="pi pi-star-fill" v-for="i in 5" :key="i"></i>
+        <div class="test-grid">
+          <div v-for="(item, index) in testimonialsList" :key="item.id || index" class="test-card">
+            <div class="test-quote" :style="{ background: item.color || getRandomGradient(index) }">
+              <span class="avatar-initials">{{ getInitials(item.user?.fullName || item.name) }}</span>
             </div>
-            <p class="testimonial-text">"{{ t.text }}"</p>
-            <div class="testimonial-author">
-              <div class="author-avatar" :style="{ background: t.color }">
-                {{ t.name.charAt(0) }}
-              </div>
-              <div>
-                <div class="author-name">{{ t.name }}</div>
-                <div class="author-tour">{{ t.tour }}</div>
+            <p class="test-text">"{{ item.content || item.text }}"</p>
+            <div class="test-user">
+              <div class="user-info">
+                <h4>{{ item.user?.fullName || item.name }}</h4>
+                <p>{{ item.tour?.title || item.tour?.name || item.tour }}</p>
               </div>
             </div>
           </div>
@@ -290,13 +231,8 @@
 
     <!-- ==================== CTA BANNER ==================== -->
     <section class="cta-banner">
-      <div class="cta-banner__bg"></div>
-      <div class="cta-particles">
-        <span v-for="i in 6" :key="i"></span>
-      </div>
-      <div class="container cta-banner__content">
-        <div class="cta-badge">🎉 Ưu đãi đặc biệt hôm nay</div>
-        <h2 class="cta-banner__title">{{ t('hero.ctaTitle', 'Sẵn sàng khám phá chưa?') }}</h2>
+      <div class="container cta-banner__inner">
+        <h2 class="cta-banner__title">{{ t('hero.ctaTitle', 'Sẵn Sàng Khám Phá Chưa?') }}</h2>
         <p class="cta-banner__desc">
           {{ t('hero.ctaDesc', 'Hàng trăm hành trình đang chờ bạn. Đặt tour ngay hôm nay!') }}
         </p>
@@ -319,6 +255,10 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import TourCard from '@/components/ui/TourCard.vue'
 import { tourApi } from '@/api/tourApi'
+import { categoryApi } from '@/api/categoryApi'
+import { destinationApi } from '@/api/destinationApi'
+import reviewApi from '@/api/reviewApi'
+import { getFullImageUrl } from '@/utils/imageHelper'
 import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
 
@@ -330,24 +270,64 @@ const searchDest = ref('')
 const searchDuration = ref(null)
 const searchType = ref(null)
 const searchTravellers = ref(null)
-const durationOptions = ['4 ngày', '7 ngày', '14 ngày']
-const typeOptions = ['Khám phá', 'Nghỉ dưỡng', 'Văn hóa']
-const travellerOptions = ['1 người', '2 người', '4 người', '6+ người']
 
+const durationOptions = ['1-3 ngày', '4-7 ngày', 'Trên 7 ngày']
+const categoryOptions = ref([])
+const travellerOptions = ['1 người', '2 người', '3-5 người', 'Trên 5 người']
+
+// Tải danh sách các danh mục tour từ API để phục vụ tìm kiếm
+async function loadCategories() {
+  try {
+    const res = await categoryApi.getAll()
+    if (res && (res.success || Array.isArray(res))) {
+      const data = res.data || res
+      categoryOptions.value = data.map((c) => ({
+        label: c.name,
+        value: c.id,
+      }))
+    }
+  } catch (err) {
+    console.error('Failed to load categories:', err)
+  }
+}
+
+// Xử lý chuyển hướng đến trang danh sách tour với các tham số tìm kiếm
 function handleSearch() {
-  router.push({ name: 'tours', query: { q: searchDest.value } })
+  router.push({
+    name: 'tours',
+    query: {
+      q: searchDest.value,
+      duration: searchDuration.value,
+      categoryId: searchType.value?.value,
+      guests: searchTravellers.value,
+    },
+  })
 }
 
+// Cuộn mượt xuống phần các tour nổi bật
 function scrollToFeatured() {
-  document.getElementById('featured-tours')?.scrollIntoView({ behavior: 'smooth' })
+  const el = document.getElementById('featured-tours')
+  if (el) el.scrollIntoView({ behavior: 'smooth' })
 }
 
-// ---- Hero Stats ----
-const heroStats = [
-  { value: '500+', label: 'Tour khám phá' },
-  { value: '10K+', label: 'Khách hàng' },
-  { value: '4.9★', label: 'Đánh giá' },
-]
+// ---- Destinations ----
+const destinations = ref([])
+const loadingDest = ref(true)
+
+// Tải danh sách 5 điểm đến nổi bật nhất từ API
+async function loadDestinations() {
+  try {
+    const res = await destinationApi.getAll()
+    if (res && (res.success || Array.isArray(res))) {
+      const data = res.data || res
+      destinations.value = data.slice(0, 5)
+    }
+  } catch (err) {
+    console.error('Failed to load destinations:', err)
+  } finally {
+    loadingDest.value = false
+  }
+}
 
 // ---- Services ----
 const services = computed(() => [
@@ -373,44 +353,21 @@ const services = computed(() => [
   },
 ])
 
-// ---- Destinations ----
-const destinations = [
-  {
-    name: 'Hà Giang',
-    count: 24,
-    img: 'https://images.unsplash.com/photo-1606204619745-fdf4e2a7e96a?w=800&q=80',
-  },
-  {
-    name: 'Sa Pa',
-    count: 18,
-    img: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80',
-  },
-  {
-    name: 'Hạ Long',
-    count: 32,
-    img: 'https://images.unsplash.com/photo-1528127269322-539801943592?w=600&q=80',
-  },
-  {
-    name: 'Ninh Bình',
-    count: 15,
-    img: 'https://images.unsplash.com/photo-1595959183082-7b570a7a3829?w=600&q=80',
-  },
-  {
-    name: 'Đà Lạt',
-    count: 20,
-    img: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=600&q=80',
-  },
-]
-
 // ---- Featured Tours ----
 const featuredTours = ref([])
 const loadingTours = ref(true)
 
+// Tải danh sách các tour nổi bật dựa trên đánh giá cao nhất
 async function loadFeaturedTours() {
   try {
-    const res = await tourApi.getAll()
-    if (res.success) featuredTours.value = res.data.slice(0, 3)
-  } catch {
+    const res = await tourApi.getAll({ pageSize: 10, status: 2 })
+    if (res.success && res.data && res.data.items) {
+      featuredTours.value = [...res.data.items]
+        .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+        .slice(0, 3)
+    }
+  } catch (err) {
+    console.error('Failed to load featured tours:', err)
   } finally {
     loadingTours.value = false
   }
@@ -424,7 +381,8 @@ const aboutStats = [
 ]
 
 // ---- Testimonials ----
-const testimonials = [
+const realReviews = ref([])
+const fallbackTestimonials = [
   {
     name: 'Nguyễn Minh Anh',
     tour: 'Tour Hà Giang Loop 3N2Đ',
@@ -445,7 +403,48 @@ const testimonials = [
   },
 ]
 
-onMounted(loadFeaturedTours)
+const testimonialsList = computed(() => {
+  return realReviews.value.length > 0 ? realReviews.value : fallbackTestimonials
+})
+
+// Tải các đánh giá mới nhất từ khách hàng để hiển thị
+async function loadLatestReviews() {
+  try {
+    const res = await reviewApi.getLatest(3)
+    if (res.success && res.data) {
+      realReviews.value = res.data
+    }
+  } catch (err) {
+    console.error('Failed to load reviews:', err)
+  }
+}
+
+// Tạo dải màu gradient ngẫu nhiên cho avatar người dùng
+function getRandomGradient(index) {
+  const gradients = [
+    'linear-gradient(135deg, #235789, #1E6B8C)',
+    'linear-gradient(135deg, #FF6B35, #f59e0b)',
+    'linear-gradient(135deg, #10b981, #059669)',
+  ]
+  return gradients[index % gradients.length]
+}
+
+// Lấy ký tự đầu của tên người dùng để hiển thị trên avatar mặc định
+function getInitials(name) {
+  if (!name) return '??'
+  const parts = name.split(' ')
+  if (parts.length >= 2) {
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase()
+  }
+  return name.substring(0, 2).toUpperCase()
+}
+
+onMounted(() => {
+  loadFeaturedTours()
+  loadDestinations()
+  loadCategories()
+  loadLatestReviews()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -461,7 +460,7 @@ onMounted(loadFeaturedTours)
   overflow: hidden;
   background: linear-gradient(135deg, #0d2137 0%, #1a3a5c 40%, #235789 70%, #2d6da3 100%);
   padding-top: calc(#{$navbar-height} + #{$space-16});
-  padding-bottom: 140px;
+  padding-bottom: 80px;
   color: white;
 }
 
@@ -481,275 +480,169 @@ onMounted(loadFeaturedTours)
   &--2 {
     width: 400px;
     height: 400px;
-    background: rgba(35, 87, 137, 0.3);
+    background: rgba(30, 107, 140, 0.2);
     bottom: -100px;
-    left: -50px;
-  }
-  &--3 {
-    width: 300px;
-    height: 300px;
-    background: rgba(45, 109, 163, 0.2);
-    top: 40%;
-    left: 50%;
+    left: -100px;
   }
 }
 
 .hero__inner {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $space-12;
-  align-items: center;
   position: relative;
-  z-index: 1;
+  z-index: 10;
+}
 
-  @include lg {
-    grid-template-columns: 1fr 1.1fr;
-  }
+.hero__content {
+  max-width: 720px;
+  margin-bottom: $space-16;
 }
 
 .hero__badge {
   display: inline-flex;
   align-items: center;
-  gap: $space-2;
-  background: rgba(255, 107, 53, 0.15);
-  border: 1px solid rgba(255, 107, 53, 0.3);
-  color: #ffa07a;
-  padding: 6px 16px;
+  gap: $space-3;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 8px 16px;
   border-radius: $border-radius-full;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-bold;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: $space-5;
-  width: fit-content;
-
-  i {
-    font-size: 0.6rem;
-    color: $color-accent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  margin-bottom: $space-6;
+  .badge-dot {
+    width: 8px;
+    height: 8px;
+    background: $color-primary;
+    border-radius: 50%;
+    box-shadow: 0 0 12px $color-primary;
   }
 }
 
 .hero__title {
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-size: 3.5rem;
   font-weight: 800;
   line-height: 1.1;
-  letter-spacing: -0.03em;
-  margin-bottom: $space-5;
+  margin-bottom: $space-6;
+  letter-spacing: -0.02em;
+
+  @include lg {
+    font-size: 4.5rem;
+  }
+
+  .text-highlight {
+    background: linear-gradient(to right, #ff6b35, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 .hero__desc {
-  font-size: $font-size-base;
-  line-height: 1.7;
-  opacity: 0.8;
-  max-width: 460px;
-  margin-bottom: $space-8;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  opacity: 0.85;
+  margin-bottom: $space-10;
+  max-width: 600px;
 }
 
-.hero__cta {
+.hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: $space-4;
-  margin-bottom: $space-10;
-}
-
-.hero-btn-primary {
-  display: inline-flex;
   align-items: center;
-  gap: $space-2;
-  padding: 14px 28px;
-  background: $color-accent;
-  color: white;
-  border-radius: $border-radius-full;
-  font-weight: $font-weight-bold;
-  font-size: $font-size-base;
-  text-decoration: none;
-  box-shadow: 0 8px 24px rgba(255, 107, 53, 0.35);
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(255, 107, 53, 0.5);
-    background: color.adjust(#ff6b35, $lightness: -6%);
-  }
+  gap: $space-10;
 }
 
-.hero-btn-ghost {
-  display: inline-flex;
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b35, #f59e0b);
+  color: white;
+  border: none;
+  padding: 18px 36px;
+  border-radius: $border-radius-full;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  display: flex;
   align-items: center;
   gap: $space-3;
-  padding: 14px 24px;
-  color: white;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  border-radius: $border-radius-full;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  font-weight: $font-weight-medium;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3);
 
   &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(255, 107, 53, 0.4);
   }
 
-  .play-icon {
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.6rem;
+  i {
+    transition: transform 0.3s ease;
+  }
+  &:hover i {
+    transform: translateX(5px);
   }
 }
 
-.hero__stats {
-  display: flex;
-  gap: $space-8;
-  flex-wrap: wrap;
-
-  .stat-item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-
-    .stat-value {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-
-    .stat-label {
-      font-size: $font-size-xs;
-      opacity: 0.6;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-  }
-}
-
-// ---- Hero Image Grid ----
-.hero__images {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.hero-img-grid {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  grid-template-rows: 260px 200px;
-  gap: 12px;
-}
-
-.himg {
-  position: relative;
-  border-radius: $border-radius-xl;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-  }
-
-  &:hover img {
-    transform: scale(1.05);
-  }
-
-  &--main {
-    grid-row: span 2;
-  }
-  &--sm {
-  }
-  &--bottom {
-  }
-
-  &-badge {
-    position: absolute;
-    bottom: 12px;
-    left: 12px;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(8px);
-    color: white;
-    padding: 5px 12px;
-    border-radius: $border-radius-full;
-    font-size: 0.75rem;
-    font-weight: $font-weight-semibold;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    &--accent {
-      background: rgba(255, 107, 53, 0.85);
-    }
-  }
-}
-
-// Float card on hero
-.hero-float-card {
-  position: absolute;
-  bottom: -20px;
-  left: -20px;
-  background: white;
-  border-radius: $border-radius-lg;
-  padding: 14px 18px;
+.hero__rating {
   display: flex;
   align-items: center;
-  gap: 12px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
-  z-index: 10;
-  animation: float 3s ease-in-out infinite;
-
-  .float-icon {
-    font-size: 1.6rem;
-  }
-  .float-title {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #1a202c;
-  }
-  .float-sub {
-    font-size: 0.7rem;
-    color: #718096;
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-// ============================================================
-// SEARCH BAR
-// ============================================================
-.search-bar {
-  position: relative;
-  z-index: 2;
-  margin-top: $space-10;
-  background: white;
-  border-radius: $border-radius-xl;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
   gap: $space-4;
-  padding: $space-6;
 
-  @include md {
-    flex-direction: row;
+  .avatars {
+    display: flex;
+    margin-right: $space-2;
+    img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 3px solid #1a3a5c;
+      margin-left: -12px;
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+    .avatar-plus {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: $color-primary;
+      border: 3px solid #1a3a5c;
+      margin-left: -12px;
+      @include flex-center;
+      font-size: 12px;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  .rating-info {
+    .stars {
+      color: #f59e0b;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+    span {
+      font-size: 13px;
+      font-weight: $font-weight-medium;
+      opacity: 0.8;
+    }
+  }
+}
+
+// Search Bar
+.hero__search-bar {
+  position: absolute;
+  bottom: -60px;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 20px;
+  border-radius: $border-radius-2xl;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-4;
+  z-index: 100;
+
+  @include lg {
+    grid-template-columns: 1.5fr auto 1fr auto 1fr auto 1fr auto;
+    padding: 10px 10px 10px 30px;
     align-items: center;
-    padding: $space-3 $space-3 $space-3 $space-6;
-    border-radius: 60px;
-    gap: 0;
+    border-radius: $border-radius-full;
   }
 }
 
@@ -757,104 +650,125 @@ onMounted(loadFeaturedTours)
   display: flex;
   flex-direction: column;
   gap: 4px;
-  flex: 1;
+}
 
-  .search-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: $color-text-muted;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    i {
-      font-size: 0.65rem;
-      color: $color-primary;
-    }
+.search-label {
+  font-size: 11px;
+  font-weight: $font-weight-bold;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  i {
+    color: $color-primary;
   }
+}
 
-  :deep(.p-inputtext),
-  :deep(.p-select) {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 2px 0 !important;
-    font-size: 0.875rem;
-    font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+.search-input {
+  border: none !important;
+  box-shadow: none !important;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-base;
+  padding: 0 !important;
+  background: transparent;
+  width: 100%;
+}
 
-    &:focus {
-      outline: none !important;
-      box-shadow: none !important;
-    }
+.search-select {
+  border: none !important;
+  box-shadow: none !important;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-base;
+  padding: 0 !important;
+  background: transparent;
+  width: 100%;
+  :deep(.p-select-label) {
+    padding: 0;
   }
 }
 
 .search-divider {
   display: none;
-  width: 1px;
-  height: 40px;
-  background: $color-border;
-  margin: 0 $space-4;
-  @include md {
+  @include lg {
     display: block;
+    width: 1px;
+    height: 40px;
+    background: #e2e8f0;
   }
 }
 
 .search-btn {
-  display: flex;
-  align-items: center;
-  gap: $space-2;
-  padding: 14px 28px;
-  background: linear-gradient(135deg, $color-primary, #1e6b8c);
+  background: #1e3a5a;
   color: white;
   border: none;
+  padding: 16px 32px;
   border-radius: $border-radius-full;
-  font-size: $font-size-sm;
   font-weight: $font-weight-bold;
   cursor: pointer;
-  white-space: nowrap;
-  box-shadow: 0 4px 16px rgba(35, 87, 137, 0.35);
-  transition: all 0.25s ease;
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-3;
+  transition: all 0.3s ease;
+
+  @include lg {
+    height: 60px;
+  }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(35, 87, 137, 0.45);
+    background: #2d5582;
+    transform: scale(1.02);
   }
 }
 
-// ============================================================
-// COMMON
-// ============================================================
-.section {
-  padding: $space-24 0;
+.center-align {
+  text-align: center;
+  .section-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
-.section-header {
-  text-align: center;
-  margin-bottom: $space-12;
+.empty-icon-large {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+  color: #cbd5e1;
+  display: block;
 }
 
 .section-label {
-  font-size: $font-size-xs;
+  font-size: $font-size-sm;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  color: $color-primary;
   text-transform: uppercase;
-  color: $color-accent;
+  letter-spacing: 3px;
   margin-bottom: $space-3;
   display: block;
 }
 
 .section-title {
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-family: $font-heading;
+  font-size: 2.5rem;
   font-weight: 800;
-  color: $color-text-primary;
-  letter-spacing: -0.03em;
-  &.text-left {
-    text-align: left;
+  color: #0f172a;
+  line-height: 1.2;
+  position: relative;
+  padding-bottom: $space-4;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(to right, $color-primary, #f59e0b);
+    border-radius: $border-radius-full;
+  }
+
+  @include md {
+    font-size: 3rem;
   }
 }
 
@@ -862,14 +776,16 @@ onMounted(loadFeaturedTours)
 // SERVICES
 // ============================================================
 .services-section {
-  background: $color-bg-surface;
+  padding-top: 80px;
+  padding-bottom: $space-20;
 }
 
 .services-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: $space-5;
-  @include sm {
+  grid-template-columns: repeat(1, 1fr);
+  gap: $space-10;
+
+  @include md {
     grid-template-columns: repeat(2, 1fr);
   }
   @include lg {
@@ -878,107 +794,47 @@ onMounted(loadFeaturedTours)
 }
 
 .service-card {
+  padding: $space-10;
+  border-radius: $border-radius-2xl;
   background: white;
-  border: 1px solid $color-border-light;
-  border-radius: $border-radius-xl;
-  padding: $space-8 $space-6;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: default;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    transition: all 0.3s ease;
-  }
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
 
   &:hover {
-    transform: translateY(-8px);
-    box-shadow: $shadow-card-hover;
-    &::before {
-      height: 4px;
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    border-color: #f1f5f9;
+    .service-icon {
+      background: $color-primary;
+      color: white;
+      transform: rotate(10deg);
     }
   }
-
-  &:nth-child(1)::before {
-    background: $color-primary;
-  }
-  &:nth-child(2)::before {
-    background: $color-accent;
-  }
-  &:nth-child(3)::before {
-    background: #10b981;
-  }
-  &:nth-child(4)::before {
-    background: #f59e0b;
-  }
 }
 
-.service-icon-wrap {
-  width: 56px;
-  height: 56px;
-  border-radius: $border-radius-md;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  margin-bottom: $space-5;
-
-  &.color-0 {
-    background: rgba(35, 87, 137, 0.1);
-    color: $color-primary;
-  }
-  &.color-1 {
-    background: rgba(255, 107, 53, 0.1);
-    color: $color-accent;
-  }
-  &.color-2 {
-    background: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-  }
-  &.color-3 {
-    background: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
-  }
+.service-icon {
+  width: 70px;
+  height: 70px;
+  background: #fff7ed;
+  color: $color-primary;
+  border-radius: 20px;
+  @include flex-center;
+  font-size: 28px;
+  margin-bottom: $space-8;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.service-title {
-  font-size: $font-size-base;
-  font-weight: 700;
-  color: $color-text-primary;
-  margin-bottom: $space-2;
-}
-
-.service-desc {
-  font-size: $font-size-sm;
-  color: $color-text-secondary;
-  line-height: 1.6;
-}
-
-.service-arrow {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: $color-bg-surface;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  color: $color-text-muted;
-  transition: $transition-fast;
-
-  .service-card:hover & {
-    background: $color-primary;
-    color: white;
-    transform: translateX(2px);
+.service-body {
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: $space-3;
+    color: #1e293b;
+  }
+  p {
+    color: $color-text-secondary;
+    line-height: 1.6;
+    font-size: $font-size-sm;
   }
 }
 
@@ -986,56 +842,44 @@ onMounted(loadFeaturedTours)
 // DESTINATIONS
 // ============================================================
 .destinations-section {
-  background: white;
+  padding-bottom: $space-20;
 }
 
 .destinations-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: $space-4;
-  @include lg {
-    grid-template-columns: 1.5fr 1fr;
-  }
-}
+  gap: $space-6;
+  height: auto;
 
-.dest-right {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: $space-4;
+  @include lg {
+    grid-template-columns: 1.2fr 1fr;
+    height: 600px;
+  }
 }
 
 .dest-card {
   position: relative;
-  border-radius: $border-radius-xl;
-  overflow: hidden;
+  border-radius: $border-radius-2xl;
   background-size: cover;
   background-position: center;
+  overflow: hidden;
   text-decoration: none;
-  display: block;
-  min-height: 200px;
-  transition: $transition-base;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: $border-radius-xl;
-    border: 2px solid transparent;
-    transition: $transition-fast;
-  }
+  display: flex;
+  align-items: flex-end;
+  padding: $space-8;
+  transition: all 0.5s ease;
 
   &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    &::after {
-      border-color: rgba(255, 255, 255, 0.4);
+    .dest-overlay {
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2));
     }
+    transform: scale(1.02);
   }
 
   &--big {
-    min-height: 420px;
+    height: 400px;
     @include lg {
-      min-height: 100%;
+      height: 100%;
     }
   }
 }
@@ -1043,144 +887,108 @@ onMounted(loadFeaturedTours)
 .dest-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.1) 60%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+  z-index: 1;
+  transition: all 0.4s ease;
 }
 
 .dest-info {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: $space-5;
+  position: relative;
+  z-index: 2;
   color: white;
-  z-index: 1;
 
   .dest-tag {
     display: inline-block;
-    background: $color-accent;
-    color: white;
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 3px 10px;
+    background: $color-primary;
+    padding: 4px 12px;
     border-radius: $border-radius-full;
-    margin-bottom: $space-2;
+    font-size: 10px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    margin-bottom: $space-3;
   }
 
   h3 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin: 0 0 4px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: $space-1;
   }
-
   p {
-    font-size: 0.8rem;
+    font-size: $font-size-sm;
     opacity: 0.8;
-    margin: 0;
+  }
+}
+
+.dest-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-6;
+
+  .dest-card {
+    height: 280px;
+    h3 {
+      font-size: 1.5rem;
+    }
   }
 }
 
 // ============================================================
 // FEATURED TOURS
 // ============================================================
-.featured-tours {
-  background: $color-bg-surface;
+.featured-section {
+  background: #f8fafc;
+  padding: $space-24 0;
 }
 
-.features-header {
+.featured-header {
   display: flex;
-  flex-direction: column;
-  gap: $space-4;
-  margin-bottom: $space-10;
-  @include md {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: $space-12;
 }
 
 .view-all-btn {
   display: inline-flex;
   align-items: center;
   gap: $space-2;
-  padding: 10px 22px;
-  border: 1.5px solid $color-border;
-  border-radius: $border-radius-full;
-  color: $color-text-body;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  font-weight: $font-weight-bold;
   text-decoration: none;
-  transition: $transition-fast;
-  white-space: nowrap;
-
+  transition: all 0.2s;
   &:hover {
-    border-color: $color-primary;
-    color: $color-primary;
-    background: rgba(35, 87, 137, 0.05);
+    gap: $space-4;
   }
 }
 
 .tours-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(1, 1fr);
   gap: $space-6;
   @include md {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @include lg {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 .tour-skeleton {
-  border-radius: $border-radius-xl;
   background: white;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: $shadow-sm;
-
+  height: 420px;
   .skeleton-img {
-    height: 220px;
-    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
+    height: 250px;
+    background: #e2e8f0;
   }
-
   .skeleton-body {
-    padding: $space-5;
-    display: flex;
-    flex-direction: column;
-    gap: $space-3;
+    padding: 20px;
   }
-
   .skeleton-line {
-    height: 14px;
-    background: #f1f5f9;
-    border-radius: 6px;
+    height: 20px;
+    background: #e2e8f0;
+    margin-bottom: 10px;
+    border-radius: 4px;
     &.short {
       width: 60%;
     }
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-.empty-tours {
-  text-align: center;
-  padding: $space-20;
-  color: $color-text-muted;
-  background: white;
-  border-radius: $border-radius-xl;
-  p {
-    margin-top: $space-3;
   }
 }
 
@@ -1188,206 +996,216 @@ onMounted(loadFeaturedTours)
 // ABOUT
 // ============================================================
 .about-section {
-  background: white;
+  padding: $space-24 0;
 }
 
 .about__inner {
   display: grid;
   grid-template-columns: 1fr;
-  gap: $space-12;
+  gap: $space-20;
   align-items: center;
   @include lg {
-    grid-template-columns: 1fr 1fr;
-    gap: $space-16;
+    grid-template-columns: 1fr 1.1fr;
   }
 }
 
-.about__images {
+.about__image {
   position: relative;
-
-  .img-main {
+  .main-img {
     width: 100%;
-    border-radius: $border-radius-xl;
-    object-fit: cover;
-    height: 420px;
-    box-shadow: $shadow-lg;
+    border-radius: 30px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.floating-card {
+  position: absolute;
+  background: white;
+  padding: $space-5 $space-8;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+
+  &--1 {
+    top: -30px;
+    right: -20px;
+    i {
+      font-size: 40px;
+      color: #10b981;
+    }
+    .card-val {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .card-lab {
+      font-size: 12px;
+      color: #64748b;
+    }
   }
 
-  .img-overlay {
-    position: absolute;
-    bottom: -30px;
-    right: -20px;
-    width: 200px;
-    height: 200px;
-    border-radius: $border-radius-xl;
-    object-fit: cover;
-    border: 6px solid white;
-    box-shadow: $shadow-lg;
-    display: none;
-    @include md {
-      display: block;
+  &--2 {
+    bottom: -20px;
+    left: -20px;
+    .avatars-small {
+      display: flex;
+      align-items: center;
+      img {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2px solid white;
+        margin-left: -10px;
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+      span {
+        margin-left: $space-3;
+        font-size: 13px;
+        font-weight: 700;
+        color: #1e293b;
+      }
     }
   }
 }
 
-.about-exp-badge {
-  position: absolute;
-  top: 30px;
-  left: -20px;
-  background: $color-accent;
-  color: white;
-  border-radius: $border-radius-xl;
-  padding: $space-4 $space-5;
-  text-align: center;
-  box-shadow: 0 12px 28px rgba(255, 107, 53, 0.3);
-  display: none;
-  @include md {
-    display: block;
-  }
+.about-features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-4;
+  margin: $space-8 0;
 
-  .exp-number {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-  }
-  .exp-text {
-    font-size: 0.75rem;
-    opacity: 0.85;
-    font-weight: 600;
+  .feat-item {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    .feat-icon {
+      width: 36px;
+      height: 36px;
+      background: #eff6ff;
+      color: #3b82f6;
+      border-radius: 10px;
+      @include flex-center;
+      font-size: 18px;
+    }
+    p {
+      font-weight: 600;
+      color: #334155;
+    }
   }
 }
 
-.about__content {
-  display: flex;
-  flex-direction: column;
-  gap: $space-5;
-}
-
-.about-desc {
-  color: $color-text-secondary;
-  line-height: 1.7;
-  font-size: $font-size-base;
-}
-
-.about-stats-row {
-  display: flex;
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: $space-8;
-  flex-wrap: wrap;
+  margin-top: $space-10;
+  padding-top: $space-10;
+  border-top: 1px solid #f1f5f9;
 
-  .astat-value {
-    font-size: 2rem;
-    font-weight: 800;
-    color: $color-primary;
-    letter-spacing: -0.04em;
-  }
-
-  .astat-label {
-    font-size: 0.75rem;
-    color: $color-text-muted;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-top: 2px;
+  .stat-item {
+    h3 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: $color-primary;
+    }
+    p {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 600;
+    }
   }
 }
 
-.about-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: $space-2;
-  padding: 12px 24px;
-  background: linear-gradient(135deg, $color-primary, #1e6b8c);
+.btn-secondary {
+  margin-top: $space-10;
+  background: #1e293b;
   color: white;
+  border: none;
+  padding: 16px 32px;
   border-radius: $border-radius-full;
   font-weight: 700;
-  text-decoration: none;
-  font-size: $font-size-sm;
-  box-shadow: 0 4px 16px rgba(35, 87, 137, 0.3);
-  transition: all 0.25s ease;
-  width: fit-content;
-
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  cursor: pointer;
+  transition: all 0.3s;
   &:hover {
+    background: #0f172a;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(35, 87, 137, 0.4);
   }
 }
 
 // ============================================================
 // TESTIMONIALS
 // ============================================================
-.testimonials-section {
-  background: $color-bg-surface;
+.test-section {
+  padding: $space-24 0;
+  background: #f8fafc;
 }
 
-.testimonials-grid {
+.test-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: $space-5;
-  @include md {
+  grid-template-columns: repeat(1, 1fr);
+  gap: $space-10;
+  margin-top: $space-16; // Tránh đè tiêu đề khi hover
+  @include lg {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.testimonial-card {
+.test-card {
   background: white;
-  border-radius: $border-radius-xl;
-  padding: $space-8;
-  border: 1px solid $color-border-light;
-  box-shadow: $shadow-sm;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  gap: $space-4;
+  padding: $space-10;
+  border-radius: 30px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.03);
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #f1f5f9;
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: $shadow-card-hover;
+    transform: translateY(-20px); // Đẩy cao hơn để trông chuyên nghiệp
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08);
+    border-color: rgba($color-primary-rgb, 0.2);
   }
 }
 
-.testimonial-stars {
-  display: flex;
-  gap: 4px;
-  i {
-    color: #f59e0b;
-    font-size: 0.85rem;
-  }
+.test-quote {
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  @include flex-center;
+  color: white;
+  font-size: 20px;
+  margin-bottom: $space-6;
 }
 
-.testimonial-text {
-  font-size: $font-size-sm;
+.test-text {
+  font-size: 1.1rem;
   line-height: 1.7;
-  color: $color-text-secondary;
-  flex: 1;
+  color: #475569;
   font-style: italic;
+  margin-bottom: $space-8;
 }
 
-.testimonial-author {
+.test-user {
   display: flex;
   align-items: center;
-  gap: $space-3;
-
-  .author-avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    color: white;
-    font-size: 1rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .author-name {
-    font-weight: 700;
-    font-size: 0.875rem;
-    color: $color-text-primary;
-  }
-  .author-tour {
-    font-size: 0.75rem;
-    color: $color-text-muted;
-    margin-top: 2px;
+  gap: $space-4;
+  .user-info {
+    h4 {
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 2px;
+    }
+    p {
+      font-size: 12px;
+      color: $color-primary;
+      font-weight: 600;
+    }
   }
 }
 
@@ -1395,121 +1213,62 @@ onMounted(loadFeaturedTours)
 // CTA BANNER
 // ============================================================
 .cta-banner {
-  position: relative;
-  overflow: hidden;
-  padding: $space-24 0;
-  background: linear-gradient(135deg, #0d2137 0%, #235789 60%, #1e6b8c 100%);
-}
+  margin: $space-20 0;
+  &__inner {
+    background: linear-gradient(135deg, #235789, #1a3a5c);
+    border-radius: 40px;
+    padding: $space-20;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
 
-.cta-banner__bg {
-  position: absolute;
-  inset: 0;
-  background: url('https://images.unsplash.com/photo-1528127269322-539801943592?w=1920&q=70')
-    center/cover;
-  opacity: 0.08;
-}
-
-.cta-particles {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-
-  span {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 50%;
-    animation: particle-float 8s infinite linear;
-
-    @for $i from 1 through 6 {
-      &:nth-child(#{$i}) {
-        left: #{$i * 15}%;
-        animation-delay: #{$i * -1.5}s;
-        width: #{4 + $i}px;
-        height: #{4 + $i}px;
-      }
+    &::after {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
     }
   }
-}
 
-@keyframes particle-float {
-  0% {
-    transform: translateY(100%) rotate(0deg);
-    opacity: 0;
+  &__title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: $space-6;
   }
-  10% {
-    opacity: 1;
+  &__desc {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    max-width: 600px;
+    margin: 0 auto $space-10;
   }
-  90% {
-    opacity: 0.5;
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: $space-6;
+    flex-wrap: wrap;
   }
-  100% {
-    transform: translateY(-100vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-.cta-banner__content {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: $space-5;
-  color: white;
-}
-
-.cta-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: $space-2;
-  background: rgba(255, 107, 53, 0.2);
-  border: 1px solid rgba(255, 107, 53, 0.4);
-  color: #ffa07a;
-  padding: 6px 18px;
-  border-radius: $border-radius-full;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.cta-banner__title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-
-.cta-banner__desc {
-  opacity: 0.75;
-  font-size: $font-size-lg;
-  max-width: 480px;
-  line-height: 1.6;
-}
-
-.cta-banner__actions {
-  display: flex;
-  gap: $space-4;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 .cta-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: $space-2;
-  padding: 14px 30px;
-  background: $color-accent;
-  color: white;
+  background: white;
+  color: #1a3a5c;
+  padding: 16px 36px;
   border-radius: $border-radius-full;
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 8px 24px rgba(255, 107, 53, 0.4);
-  transition: all 0.25s ease;
-
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  transition: all 0.3s;
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(255, 107, 53, 0.55);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   }
 }
 

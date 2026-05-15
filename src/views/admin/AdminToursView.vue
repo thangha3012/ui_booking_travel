@@ -22,6 +22,8 @@
         :rowsPerPageOptions="[10, 25, 50]"
         tableStyle="min-width: 60rem"
         class="p-datatable-sm"
+        scrollable
+        scrollHeight="flex"
       >
         <template #header>
           <div class="table-header">
@@ -56,7 +58,7 @@
         <Column :header="$t('admin.tours.columns.cover')" style="width: 80px">
           <template #body="{ data }">
             <img
-              :src="data.imageUrl || getDestinationImage(data.destinationId)"
+              :src="getTourCover(data)"
               alt="tour"
               class="t-thumbnail"
             />
@@ -128,30 +130,19 @@
       :breakpoints="{ '768px': '95vw' }"
       :draggable="false"
     >
-      <form @submit.prevent="submitForm" class="dialog-form">
-        <div class="form-row">
-          <div class="form-field">
-            <label>{{ $t('admin.tours.dialog.tourTitle') }} <span class="req">*</span></label>
-            <InputText
-              v-model="form.title"
-              :placeholder="$t('admin.tours.dialog.enterName')"
-              fluid
-            />
+      <form @submit.prevent="submitForm" class="admin-tour-form">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="form-field md:col-span-1">
+            <label>{{ $t('admin.tours.dialog.tourTitle') }} <span class="text-red-500">*</span></label>
+            <InputText v-model="form.title" :placeholder="$t('admin.tours.dialog.enterName')" fluid />
           </div>
-          <div class="form-field" v-if="isEditing" style="max-width: 160px">
-            <label>{{ $t('admin.tours.columns.status') }}</label>
-            <Select
-              v-model="form.status"
-              :options="statusOptions"
-              optionLabel="label"
-              optionValue="value"
-              fluid
-            />
+          <div class="form-field md:col-span-1">
+            <label>Trạng thái</label>
+            <Select v-model="form.status" :options="statusOptions" optionLabel="label" optionValue="value" placeholder="Chọn trạng thái" fluid />
           </div>
-        </div>
-        <div class="form-row">
+
           <div class="form-field">
-            <label>{{ $t('admin.tours.dialog.category') }} <span class="req">*</span></label>
+            <label>{{ $t('admin.tours.dialog.category') }} <span class="text-red-500">*</span></label>
             <Select
               v-model="form.categoryId"
               :options="categories"
@@ -162,7 +153,7 @@
             />
           </div>
           <div class="form-field">
-            <label>{{ $t('admin.tours.dialog.destination') }} <span class="req">*</span></label>
+            <label>{{ $t('admin.tours.dialog.destination') }} <span class="text-red-500">*</span></label>
             <Select
               v-model="form.destinationId"
               :options="destinations"
@@ -172,87 +163,74 @@
               fluid
             />
           </div>
-        </div>
-        <div class="form-row">
+
           <div class="form-field">
-            <label>Nơi khởi hành <span class="req">*</span></label>
-            <InputText
-              v-model="form.departureLocation"
-              placeholder="vd: Hà Nội, Hồ Chí Minh"
-              fluid
-            />
+            <label>Nơi khởi hành <span class="text-red-500">*</span></label>
+            <InputText v-model="form.departureLocation" placeholder="vd: Hà Nội" fluid />
           </div>
           <div class="form-field">
-            <label>Phương tiện <span class="req">*</span></label>
-            <InputText v-model="form.transport" placeholder="vd: Máy bay, Ô tô" fluid />
+            <label>Phương tiện <span class="text-red-500">*</span></label>
+            <InputText v-model="form.transport" placeholder="vd: Ô tô, Máy bay" fluid />
           </div>
-        </div>
-        <div class="form-row border p-3 rounded-lg bg-slate-50 mt-2 mb-2">
+
           <div class="form-field">
-            <label
-              >Mã Tour <span class="text-xs text-slate-400 normal-case">(Tùy chọn)</span></label
-            >
+            <label>Mã Tour (tùy chọn)</label>
             <InputText v-model="form.tourCode" placeholder="vd: VTR-1234" fluid />
           </div>
           <div class="form-field">
-            <label
-              >Thời gian <span class="text-xs text-slate-400 normal-case">(Tùy chọn)</span></label
-            >
+            <label>Thời gian (tùy chọn)</label>
             <InputText v-model="form.duration" placeholder="vd: 3 Ngày 2 Đêm" fluid />
           </div>
-          <div class="form-field">
-            <label
-              >Giá Base <span class="text-xs text-slate-400 normal-case">(Tùy chọn)</span></label
-            >
-            <InputNumber
-              v-model="form.basePrice"
-              mode="currency"
-              currency="VND"
-              placeholder="Giá mốc..."
+
+          <div class="form-field md:col-span-1">
+            <label>Giá Base (tùy chọn)</label>
+            <InputNumber v-model="form.basePrice" mode="currency" currency="VND" locale="vi-VN" fluid />
+          </div>
+          <div class="form-field md:col-span-1">
+             <label>Ảnh bìa Tour</label>
+             <div class="upload-wrapper">
+                <div class="preview-area" v-if="form.imageUrl">
+                   <img :src="getFullImageUrl(form.imageUrl)" alt="Preview">
+                   <Button icon="pi pi-times" severity="danger" rounded text class="remove-btn" @click="form.imageUrl = ''" />
+                </div>
+                <div v-else class="upload-placeholder" @click="triggerFileInput">
+                   <i class="pi pi-cloud-upload"></i>
+                   <span>Tải ảnh lên</span>
+                </div>
+                <input type="file" ref="fileInput" class="hidden" accept="image/*" @change="onFileSelected">
+                <div v-if="uploading" class="upload-overlay">
+                   <ProgressSpinner strokeWidth="4" style="width: 30px; height: 30px;" />
+                </div>
+             </div>
+          </div>
+
+          <div class="form-field md:col-span-2">
+            <label>{{ $t('admin.tours.dialog.description') }}</label>
+            <Textarea
+              v-model="form.description"
+              :placeholder="$t('admin.tours.dialog.overview')"
+              rows="3"
               fluid
             />
           </div>
-        </div>
-        <div class="form-field">
-          <label>{{ $t('admin.tours.dialog.description') }}</label>
-          <Textarea
-            v-model="form.description"
-            rows="3"
-            :placeholder="$t('admin.tours.dialog.overview')"
-            fluid
-          />
-        </div>
-        <div class="form-row">
-          <div class="form-field">
+
+          <div class="form-field md:col-span-1">
             <label>{{ $t('admin.tours.dialog.highlights') }}</label>
-            <Textarea
-              v-model="form.highlights"
-              rows="2"
-              :placeholder="$t('admin.tours.dialog.highlights')"
-              fluid
-            />
+            <Textarea v-model="form.highlights" placeholder="Mỗi điểm một dòng..." rows="4" fluid />
           </div>
-          <div class="form-field">
+          <div class="form-field md:col-span-1">
             <label>{{ $t('admin.tours.dialog.policies') }}</label>
-            <Textarea
-              v-model="form.policies"
-              rows="2"
-              :placeholder="$t('admin.tours.dialog.policies')"
-              fluid
-            />
+            <Textarea v-model="form.policies" placeholder="Chính sách tour..." rows="4" fluid />
           </div>
-        </div>
-        <div class="form-field">
-          <label>{{ $t('admin.tours.dialog.itinerary') }}</label>
-          <Textarea
-            v-model="form.itinerary"
-            rows="3"
-            :placeholder="$t('admin.tours.dialog.itinerary')"
-            fluid
-          />
+
+          <div class="form-field md:col-span-2">
+            <label>{{ $t('admin.tours.dialog.itinerary') }}</label>
+            <Textarea v-model="form.itinerary" placeholder="Mô tả lịch trình..." rows="4" fluid />
+          </div>
         </div>
       </form>
       <template #footer>
+        <Button v-if="isEditing" label="Quản lý Lịch khởi hành" icon="pi pi-calendar" severity="info" outlined @click="openSchedulesFromEdit" class="mr-auto" />
         <Button :label="$t('common.cancel')" severity="secondary" text @click="closeModal" />
         <Button
           :label="saving ? $t('admin.tours.dialog.saving') : $t('admin.tours.dialog.save')"
@@ -293,17 +271,23 @@
           <Column :header="$t('admin.tours.schedules.seats')">
             <template #body="{ data }">{{ data.availableSeats }} / {{ data.totalSeats }}</template>
           </Column>
-          <Column :header="$t('admin.tours.schedules.prices')">
+          <Column header="GIÁ VÉ" style="min-width: 180px">
             <template #body="{ data }">
-              <div v-for="p in data.pricings" :key="p.passengerType" style="font-size: 12px">
-                {{
-                  p.passengerType === 1
-                    ? $t('admin.tours.schedules.adult')
-                    : p.passengerType === 2
-                      ? $t('admin.tours.schedules.child')
-                      : $t('admin.tours.schedules.infant')
-                }}: ${{ p.price }}
+              <div v-if="data.pricings?.length" class="flex flex-col gap-1">
+                <div v-for="p in data.pricings" :key="p.passengerType" class="flex justify-between text-xs border-b border-slate-50 pb-1">
+                  <span class="text-slate-500">
+                    {{
+                      p.passengerType === 1
+                        ? 'Người lớn'
+                        : p.passengerType === 2
+                          ? 'Trẻ em'
+                          : 'Em bé'
+                    }}:
+                  </span>
+                  <span class="font-bold text-slate-700">{{ p.price?.toLocaleString('vi-VN') }} đ</span>
+                </div>
               </div>
+              <div v-else class="text-xs text-slate-400 italic">Chưa có bảng giá</div>
             </template>
           </Column>
           <Column header="" style="width: 60px">
@@ -326,53 +310,55 @@
       <!-- Add New Schedule -->
       <form @submit.prevent="submitScheduleForm" class="dialog-form">
         <h4><i class="pi pi-plus-circle"></i> {{ $t('admin.tours.schedules.addNew') }}</h4>
-        <div class="form-row">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <div class="form-field">
             <label>{{ $t('admin.tours.schedules.departure') }}</label>
-            <InputText type="date" v-model="schForm.departureDate" fluid />
+            <DatePicker v-model="schForm.departureDate" dateFormat="dd/mm/yy" showIcon fluid />
           </div>
           <div class="form-field">
             <label>{{ $t('admin.tours.schedules.return') }}</label>
-            <InputText type="date" v-model="schForm.returnDate" fluid />
+            <DatePicker v-model="schForm.returnDate" dateFormat="dd/mm/yy" showIcon fluid />
           </div>
-          <div class="form-field" style="max-width: 120px">
+          <div class="form-field">
             <label>{{ $t('admin.tours.schedules.totalSeats') }}</label>
             <InputNumber v-model="schForm.totalSeats" :min="1" fluid />
           </div>
-        </div>
-        <div class="form-row">
+
           <div class="form-field">
-            <label>{{ $t('admin.tours.schedules.adult') }} ($)</label>
+            <label>{{ $t('admin.tours.schedules.adult') }} (VND)</label>
             <InputNumber
               v-model="schForm.adultPrice"
               :min="0"
               mode="currency"
-              currency="USD"
+              currency="VND"
+              locale="vi-VN"
               fluid
             />
           </div>
           <div class="form-field">
-            <label>{{ $t('admin.tours.schedules.child') }} ($)</label>
+            <label>{{ $t('admin.tours.schedules.child') }} (VND)</label>
             <InputNumber
               v-model="schForm.childPrice"
               :min="0"
               mode="currency"
-              currency="USD"
+              currency="VND"
+              locale="vi-VN"
               fluid
             />
           </div>
           <div class="form-field">
-            <label>{{ $t('admin.tours.schedules.infant') }} ($)</label>
+            <label>{{ $t('admin.tours.schedules.infant') }} (VND)</label>
             <InputNumber
               v-model="schForm.infantPrice"
               :min="0"
               mode="currency"
-              currency="USD"
+              currency="VND"
+              locale="vi-VN"
               fluid
             />
           </div>
         </div>
-        <div style="text-align: right">
+        <div style="text-align: right; margin-top: 1rem">
           <Button
             type="submit"
             :label="
@@ -391,10 +377,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { tourApi } from '@/api/tourApi'
 import { destinationApi } from '@/api/destinationApi'
 import { categoryApi } from '@/api/categoryApi'
+import { uploadApi } from '@/api/uploadApi'
+import { getFullImageUrl } from '@/utils/imageHelper'
 import { useI18n } from 'vue-i18n'
 
 import DataTable from 'primevue/datatable'
@@ -405,11 +393,13 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import Textarea from 'primevue/textarea'
 import Select from 'primevue/select'
+import DatePicker from 'primevue/datepicker'
 import Tag from 'primevue/tag'
 import Toast from 'primevue/toast'
 import Divider from 'primevue/divider'
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
+import ProgressSpinner from 'primevue/progressspinner'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 
@@ -432,6 +422,31 @@ const statusOptions = computed(() => [
 const showModal = ref(false)
 const isEditing = ref(false)
 const editingId = ref(null)
+const uploading = ref(false)
+const fileInput = ref(null)
+
+// getFullImageUrl is now imported from shared helper
+
+function triggerFileInput() {
+  fileInput.value.click()
+}
+
+async function onFileSelected(event) {
+  const file = event.target.files[0]
+  if (!file) return
+
+  uploading.value = true
+  try {
+    const res = await uploadApi.uploadFile(file)
+    form.value.imageUrl = res.url
+    toast.add({ severity: 'success', summary: 'Thành công', detail: 'Tải ảnh lên thành công', life: 2000 })
+  } catch (err) {
+    toast.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tải ảnh lên', life: 3000 })
+  } finally {
+    uploading.value = false
+    event.target.value = '' // Reset input
+  }
+}
 const defaultForm = {
   title: '',
   categoryId: '',
@@ -461,7 +476,7 @@ async function fetchInitialData() {
     if (destRes.success) destinations.value = destRes.data
     if (catRes && catRes.success !== false) categories.value = catRes.data || catRes
   } catch {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load data', life: 3000 })
+    toast.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tải dữ liệu', life: 3000 })
   } finally {
     loading.value = false
   }
@@ -485,11 +500,10 @@ function getStatusSeverity(s) {
   return { 1: 'warn', 2: 'success', 3: 'secondary' }[s] || 'info'
 }
 
-function getDestinationImage(destinationId) {
-  const dest = destinations.value.find((d) => d.id === destinationId)
-  return (
-    dest?.coverImageUrl || 'https://images.unsplash.com/photo-1528127269322-539801943592?w=100&q=80'
-  )
+function getTourCover(data) {
+  if (data.imageUrl) return getFullImageUrl(data.imageUrl)
+  const dest = destinations.value.find((d) => d.id === data.destinationId)
+  return getFullImageUrl(dest?.coverImageUrl) || 'https://images.unsplash.com/photo-1528127269322-539801943592?w=100&q=80'
 }
 
 function openCreateModal() {
@@ -603,8 +617,8 @@ const showSchedulesModal = ref(false)
 const selectedTour = ref(null)
 const addingSchedule = ref(false)
 const defaultSchForm = {
-  departureDate: '',
-  returnDate: '',
+  departureDate: null,
+  returnDate: null,
   totalSeats: 20,
   adultPrice: 0,
   childPrice: 0,
@@ -618,6 +632,22 @@ function openSchedulesModal(tour) {
   showSchedulesModal.value = true
 }
 
+function openSchedulesFromEdit() {
+  const tour = tours.value.find(t => t.id === editingId.value)
+  if (tour) {
+    showModal.value = false
+    openSchedulesModal(tour)
+  }
+}
+
+// Watch Adult price to suggest Child/Infant prices (75% and 30%)
+watch(() => schForm.value.adultPrice, (newVal) => {
+  if (newVal > 0) {
+    if (schForm.value.childPrice === 0) schForm.value.childPrice = Math.floor(newVal * 0.75)
+    if (schForm.value.infantPrice === 0) schForm.value.infantPrice = Math.floor(newVal * 0.3)
+  }
+})
+
 async function submitScheduleForm() {
   if (!schForm.value.departureDate || !schForm.value.returnDate) {
     toast.add({
@@ -630,7 +660,18 @@ async function submitScheduleForm() {
   }
   addingSchedule.value = true
   try {
-    const res = await tourApi.addSchedule(selectedTour.value.id, { ...schForm.value })
+    const payload = {
+      departureDate: schForm.value.departureDate,
+      returnDate: schForm.value.returnDate,
+      totalSeats: schForm.value.totalSeats,
+      isActive: true,
+      pricings: [
+        { passengerType: 1, price: schForm.value.adultPrice },
+        { passengerType: 2, price: schForm.value.childPrice },
+        { passengerType: 3, price: schForm.value.infantPrice }
+      ]
+    }
+    const res = await tourApi.addSchedule(selectedTour.value.id, payload)
     if (res.success || res.message) {
       toast.add({
         severity: 'success',
@@ -708,8 +749,12 @@ onMounted(fetchInitialData)
 
 <style lang="scss" scoped>
 @use '@/assets/styles/variables' as *;
+@use '@/assets/styles/mixins' as *;
 
 .admin-tours-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   animation: fade-in-up 0.4s ease-out;
 }
 @keyframes fade-in-up {
@@ -797,4 +842,28 @@ onMounted(fetchInitialData)
     gap: 8px;
   }
 }
+
+.upload-wrapper {
+   position: relative; border: 2px dashed #e2e8f0; border-radius: 12px; height: 120px;
+   @include flex-center; overflow: hidden; transition: all 0.2s;
+   &:hover { border-color: $color-primary; background: #f8fafc; }
+}
+
+.upload-placeholder {
+   display: flex; flex-direction: column; align-items: center; gap: 8px; color: #94a3b8; cursor: pointer;
+   i { font-size: 1.5rem; }
+   span { font-size: 0.8rem; font-weight: 600; }
+}
+
+.preview-area {
+   width: 100%; height: 100%; position: relative;
+   img { width: 100%; height: 100%; object-fit: cover; }
+   .remove-btn { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.5) !important; color: white !important; }
+}
+
+.upload-overlay {
+   position: absolute; inset: 0; background: rgba(255,255,255,0.7); @include flex-center;
+}
+
+.hidden { display: none; }
 </style>

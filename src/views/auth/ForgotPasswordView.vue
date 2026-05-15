@@ -116,7 +116,7 @@ async function sendOtp() {
 
 async function verifyOtp() {
   errors.otp = ''
-  if (!otpCode.value || otpCode.value.length < 6) { errors.otp = 'Please enter 6-digit OTP'; return }
+  if (!otpCode.value || otpCode.value.length < 6) { errors.otp = 'Vui lòng nhập mã OTP 6 chữ số'; return }
   loading.value = true
   try {
     const res = await authApi.verifyOtp({ email: email.value, token: otpCode.value })
