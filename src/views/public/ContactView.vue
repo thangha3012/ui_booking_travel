@@ -141,6 +141,7 @@ function handleSubmit() {
 </script>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use '@/assets/styles/variables' as *;
 @use '@/assets/styles/mixins' as *;
 
@@ -313,7 +314,7 @@ function handleSubmit() {
   transition: all 0.3s;
 
   &:hover {
-    background: darken($color-primary, 5%);
+    background: color.adjust($color-primary, $lightness: -5%);
     transform: translateY(-2px);
   }
   &:disabled { opacity: 0.7; cursor: not-allowed; }

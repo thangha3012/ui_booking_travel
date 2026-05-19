@@ -156,6 +156,7 @@ const team = [
 </script>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use '@/assets/styles/variables' as *;
 @use '@/assets/styles/mixins' as *;
 
@@ -482,7 +483,7 @@ const team = [
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 15px 30px rgba($color-primary-rgb, 0.4);
-    background: darken($color-primary, 5%);
+    background: color.adjust($color-primary, $lightness: -5%);
   }
 }
 

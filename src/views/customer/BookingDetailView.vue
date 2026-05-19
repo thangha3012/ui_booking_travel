@@ -187,6 +187,7 @@ function formatDate(d) {
   if (!d) return 'N/A'
   return new Date(d).toLocaleDateString('vi-VN', { 
     month: 'long', day: 'numeric', year: 'numeric' 
+    
   })
 }
 
